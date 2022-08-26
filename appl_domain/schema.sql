@@ -7,12 +7,15 @@ CREATE TABLE users (
   last_name TEXT NOT NULL,
   active INTEGER NOT NULL,
   picture BLOB,
-  password text NOT NULL,
+  password TEXT NOT NULL,
   address TEXT NOT NULL,
   DOB TEXT NOT NULL,
   old_passwords BLOB NOT NULL,
   password_refresh_date TEXT NOT NULL,
-  suspend_start_date TEXT NOT NULL,
-  suspend_end_date TEXT NOT NULL,
-  creation_date TEXT NOT NULL
+  suspend_start_date TEXT,
+  suspend_end_date TEXT,
+  creation_date TEXT NOT NULL,
+  first_pet TEXT NOT NULL,
+  city_born TEXT NOT NULL,
+  year_graduated_hs INTEGER NOT NULL
 );
