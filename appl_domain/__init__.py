@@ -43,4 +43,7 @@ def create_app(test_config=None):
     import appl_domain.list_users as list_users
     app.register_blueprint(list_users.bp)
 
+    import appl_domain.auth as auth
+    app.register_blueprint(auth.bp)
+
     return app
