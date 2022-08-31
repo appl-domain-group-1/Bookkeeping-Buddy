@@ -31,14 +31,14 @@ def create_app(test_config=None):
 
     @app.route('/')
     def mainpage():
-        return flask.render_template('login_test.html', z="This is the main page")
+        return flask.render_template('index.html', z="This is the main page")
 
     @app.route('/login')
     def login_page():
         x = 5
         y = 6
         z = x + y
-        return flask.render_template("login_test.html", z=z)
+        return flask.render_template("auth/login.html", z=z)
 
     import appl_domain.list_users as list_users
     app.register_blueprint(list_users.bp)

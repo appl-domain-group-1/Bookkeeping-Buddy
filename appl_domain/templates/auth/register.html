@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Register for a new account{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <label for="username">Username</label>
+        <input name="username" id="username" required>
+        <br>
+        <label for="email_address">Email Address</label>
+        <input name="email_address" id="email_address" required>
+        <br>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+        <br>
+        <label for="first_name">First Name</label>
+        <input name="first_name" id="first_name" required>
+        <label for="last_name">Last Name</label>
+        <input name="last_name" id="last_name" required>
+        <br>
+        <label for="address">Address</label>
+        <input name="address" id="address" required>
+        <br>
+        <label for="DOB">Date of birth (YYYY-MM-DD)</label>
+        <input name="DOB" id="DOB" required>
+        <br>
+        <label for="first_pet">Name of your first pet</label>
+        <input name="first_pet" id="first_pet" required>
+        <br>
+        <label for="city_born">City you were born in</label>
+        <input name="city_born" id="city_born" required>
+        <br>
+        <label for="year_graduated_hs">Year you graduated highschool</label>
+        <input name="year_graduated_hs" id="year_graduated_hs" required>
+        <br>
+        <input type="submit" value="Register">
+    </form>
+{% endblock %}

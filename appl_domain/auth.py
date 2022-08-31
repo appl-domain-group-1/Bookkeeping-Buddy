@@ -1,7 +1,8 @@
 import functools
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
-from db import get_db
+from appl_domain.db import get_db
+from datetime import datetime
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -14,7 +15,15 @@ def register():
     if request.method == 'POST':
         # TODO: the tutorial allows the username to be set by the user, but we'll set it automatically. Change this.
         username = request.form['username']
-        password = request.form['username']
+        password = request.form['password']
+        email_address = request.form['email_address']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        address = request.form['address']
+        DOB = request.form['DOB']
+        first_pet = request.form['first_pet']
+        city_born = request.form['city_born']
+        year_graduated_hs = request.form['year_graduated_hs']
         db = get_db()
         error = None
 
@@ -25,14 +34,20 @@ def register():
         if not password:
             error = 'Password is required'
         # TODO: perform other password validation here (number of characters, number of digits, etc.)
+        # Other field validation
+        if not (email_address or first_name or last_name or address or DOB or first_pet or city_born or year_graduated_hs):
+            error = 'Please fill out all information'
 
         # If we got no error, we're good to proceed
         if error is None:
             try:
                 # Insert a new row into the DB with the new values
-                db.execute(  # TODO: This only stores username and password in the DB. We want lots more info.
-                    "INSERT INTO users (username, password) VALUES (?, ?)",
-                    (username, generate_password_hash(password))
+                db.execute(
+                    "INSERT INTO users (username, email_address, first_name, last_name, active, password, address, DOB, "
+                    "old_passwords, password_refresh_date, creation_date, first_pet, city_born, year_graduated_hs) "
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (username, email_address, first_name, last_name, 0, generate_password_hash(password), address, DOB,
+                     bytes([]), datetime.now(), datetime.now(), first_pet, city_born, year_graduated_hs)
                 )
                 # Write the change to the database
                 db.commit()
@@ -63,7 +78,7 @@ def login():
         error = None
         # Get the matching row from the database
         user = db.execute(
-            "SELECT * FROM users WHERE username = ?", (username)
+            "SELECT * FROM users WHERE username = ?", (username,)
         ).fetchone()
 
         # If we are given a blank username, throw an error
@@ -80,7 +95,7 @@ def login():
             # Add the logged-in user's ID to the cookie
             session['username'] = user['username']
             # Send the logged-in user back to the main screen of the application
-            return redirect(url_for('index'))
+            return redirect(url_for('mainpage'))
 
         # Display any errors we encountered on the page
         flash(error)
@@ -116,7 +131,7 @@ def logout():
     # Clear the user's cookie
     session.clear()
     # Send them back to the main page (but now logged out)
-    return redirect(url_for('index'))
+    return redirect(url_for('mainpage'))
 
 
 def login_required(view):

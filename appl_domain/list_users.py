@@ -9,4 +9,4 @@ def list_users():
     users = db.execute(
         'SELECT * from users'
     ).fetchall()
-    return render_template('login_test.html', z="List of all users", users=users)
+    return render_template('index.html', z="List of all users", users=users)
