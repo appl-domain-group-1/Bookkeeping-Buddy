@@ -13,8 +13,10 @@ def register():
     View to allow a user to register for a new account
     """
     if request.method == 'POST':
-        # TODO: the tutorial allows the username to be set by the user, but we'll set it automatically. Change this.
-        username = request.form['username']
+        # Get today's date
+        today = datetime.now()
+
+        # Get elements from form
         password = request.form['password']
         email_address = request.form['email_address']
         first_name = request.form['first_name']
@@ -24,19 +26,29 @@ def register():
         first_pet = request.form['first_pet']
         city_born = request.form['city_born']
         year_graduated_hs = request.form['year_graduated_hs']
+
+        # Generate username: First initial, last name, account created MM, account created YY
+        username = f"{first_name[0]}{last_name}{today.month:02d}{str(today.year)[2:]}"
+
+        # Format today's date for the database (YYYY-MM-DD)
+        today = f"{today.year}-{today.month:02d}-{today.day}"
+
         db = get_db()
         error = None
 
-        # If username is blank, return an error
-        if not username:  # TODO: This won't be required in the final version
-            error = 'Username is required'
-        # If password is blank, return an error
+        # If password is blank or does not meet requirements, return an error
         if not password:
             error = 'Password is required'
-        # TODO: perform other password validation here (number of characters, number of digits, etc.)
+        if (len(password) < 8) or \
+            not(password[0].isalpha()) or \
+            not (any(character.isdigit() for character in password)) or \
+            not (any(character not in "!@#$%^&*") for character in password):
+            error = 'Password must contain at least 8 characters, start with a letter, contain a number, and contain ' \
+                    'a special character'
+
         # Other field validation
         if not (email_address or first_name or last_name or address or DOB or first_pet or city_born or year_graduated_hs):
-            error = 'Please fill out all information'
+            error = 'Please fill out all information'  # TODO: Perform other field validation
 
         # If we got no error, we're good to proceed
         if error is None:
