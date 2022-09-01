@@ -31,7 +31,7 @@ def register():
         username = f"{first_name[0]}{last_name}{today.month:02d}{str(today.year)[2:]}"
 
         # Format today's date for the database (YYYY-MM-DD)
-        today = f"{today.year}-{today.month:02d}-{today.day}"
+        today = f"{today.year}-{today.month:02d}-{today.day:02d}"
 
         db = get_db()
         error = None
@@ -80,7 +80,7 @@ def register():
                     "old_passwords, password_refresh_date, creation_date, first_pet, city_born, year_graduated_hs) "
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (username, email_address, first_name, last_name, 0, 0, generate_password_hash(password), address, DOB,
-                     bytes([]), datetime.now(), datetime.now(), first_pet, city_born, year_graduated_hs)
+                     bytes([]), today, today, first_pet, city_born, year_graduated_hs)
                 )
                 # Write the change to the database
                 db.commit()
