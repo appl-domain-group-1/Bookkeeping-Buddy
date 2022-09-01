@@ -136,6 +136,21 @@ def login():
     return render_template('auth/login.html')
 
 
+@bp.route('/manage_users', methods=('GET', 'POST'))
+def manage_users():
+    """
+    Allows administrators to manage users of the system
+    """
+    user_list = None
+    if request.method == 'GET':
+        # Get all users from the DB
+        db = get_db()
+        user_list = db.execute(
+            "SELECT * FROM users"
+        ).fetchall()
+        # Display them on the page
+    return render_template('auth/manage_users.html', users=user_list)
+
 # This decorator registers a function that runs before the view function regardless of what URL is requested
 @bp.before_app_request
 def load_logged_in_user():
