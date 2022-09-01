@@ -5,20 +5,40 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
 <nav>
-    <h1>Bookkeeping Buddy</h1>
-    <ul>
+    <div id="navbar">
         {%  if g.user %}
-            <li><span>{{ g.user['username'] }}</span></li>
-            <li><span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}" style="width:250px;height:250px;" /></span></li>
-            <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+            <div id="logged_in_header">
+                <div id="user_pic" style="text-align: right">
+            {% if g.user['picture'] %}
+                <span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}" style="width:100px;height:100px;"  alt="User's profile picture"/></span>
+            {% else %}
+                <span><img src="../static/no_photo.png" style="width:100px;height:100px;"  alt="Placeholder profile picture"/></span>
+            {% endif %}
+                </div>
+                <div id="username" style="text-align: right">Logged in as {{ g.user['username'] }}</div>
+                {% if g.user['role'] == 2 %}
+                <div id="account_type" style="text-align: right">Account type: Administrator</div>
+                <div id="admin_functions" style="text-align: right">
+                    <a href="{{ url_for('auth.manage_users')}}">Manage Users</a>
+                </div>
+                {% elif g.user['role'] == 1 %}
+                <div id="account_type" style="text-align: right">Account type: Manager</div>
+                {% else %}
+                <div id="account_type" style="text-align: right">Account type: User</div>
+                {% endif %}
+                <div id="logout" style="text-align: right"><a href="{{ url_for('auth.logout') }}">Log Out</a></div>
+            </div>
         {% else %}
-            <li><a href="{{ url_for('auth.register') }}">Register</a></li>
-            <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+            <div>
+                <div style="text-align: right"><a href="{{ url_for('auth.register') }}">Register</a></div>
+                <div style="text-align: right"><a href="{{ url_for('auth.login') }}">Log In</a></div>
+            </div>
         {% endif %}
-    </ul>
+    </div>
 </nav>
 
 <section class="content">
+
     <header>
         {% block header %}{% endblock %}
     </header>
