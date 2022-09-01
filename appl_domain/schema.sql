@@ -6,6 +6,7 @@ CREATE TABLE users (
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   active INTEGER NOT NULL,
+  role INTEGER NOT NULL,
   picture BLOB,
   password TEXT NOT NULL,
   address TEXT NOT NULL,
