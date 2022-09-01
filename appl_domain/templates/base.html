@@ -16,6 +16,13 @@
             {% endif %}
                 </div>
                 <div id="username" style="text-align: right">Logged in as {{ g.user['username'] }}</div>
+                {% if g.user['role'] == 2 %}
+                <div id="account_type" style="text-align: right">Account type: Administrator</div>
+                {% elif g.user['role'] == 1 %}
+                <div id="account_type" style="text-align: right">Account type: Manager</div>
+                {% else %}
+                <div id="account_type" style="text-align: right">Account type: User</div>
+                {% endif %}
                 <div id="logout" style="text-align: right"><a href="{{ url_for('auth.logout') }}">Log Out</a></div>
             </div>
         {% else %}
