@@ -9,8 +9,13 @@
     <ul>
         {%  if g.user %}
             <li><span>{{ g.user['username'] }}</span></li>
-            <li><span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}" style="width:250px;height:250px;" /></span></li>
+            {% if g.user['picture'] %}
+                <li><span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}" style="width:250px;height:250px;" /></span></li>
+            {% else %}
+                <li><span><img src="../static/no_photo.png" style="width:100px;height:100px;" /></span></li>
+            {% endif %}
             <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+            <li>{{ g.user }}</li>
         {% else %}
             <li><a href="{{ url_for('auth.register') }}">Register</a></li>
             <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
