@@ -1,6 +1,7 @@
 import os
 
 import flask
+import base64
 from flask import Flask
 
 
@@ -24,6 +25,10 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+
+    @app.template_filter('make_image')
+    def make_image(image):
+        return str(base64.b64encode(image), "utf-8")
 
     # Initialize the database
     import appl_domain.db as db
