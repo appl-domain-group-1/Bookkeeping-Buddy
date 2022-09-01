@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+</head>
+<body>
+{% block content %}
+    <h1>User management</h1>
+    <h3>Current users:</h3>
+    <table style="border:1px solid black;width: 100%">
+        <tr>
+            <th  style="border:1px solid black">Username</th>
+            <th  style="border:1px solid black">Email</th>
+            <th  style="border:1px solid black">First Name</th>
+            <th  style="border:1px solid black">Last Name</th>
+            <th  style="border:1px solid black">Active?</th>
+            <th  style="border:1px solid black">Role</th>
+            <th  style="border:1px solid black">Picture</th>
+            <th  style="border:1px solid black">Address</th>
+            <th  style="border:1px solid black">DOB</th>
+            <th  style="border:1px solid black">Password Refreshed Date</th>
+            <th  style="border:1px solid black">Suspend Start Date</th>
+            <th  style="border:1px solid black">Suspend End Date</th>
+            <th  style="border:1px solid black">Account Creation Date</th>
+        </tr>
+    {% if users %}
+        {% for user in users %}
+            <tr>
+                <td>{{user['username']}}</td>
+                <td><a href="mailto:{{user['email_address']}}">{{user['email_address']}}</a></td>
+                <td>{{user['first_name']}}</td>
+                <td>{{user['last_name']}}</td>
+                {% if user['active'] == 1 %}
+                    <td>
+                        Yes
+                    </td>
+                {% else %}
+                    <td>
+                        No
+                    </td>
+                {% endif %}
+                {% if user['role'] == 2 %}
+                    <td>
+                        Administrator
+                    </td>
+                {% elif user['role'] == 1 %}
+                    <td>
+                        Manager
+                    </td>
+                {% else %}
+                    <td>
+                        User
+                    </td>
+                {% endif %}
+                <td>{{user['picture']}}</td>
+                <td>{{user['address']}}</td>
+                <td>{{user['DOB']}}</td>
+                <td>{{user['password_refresh_date']}}</td>
+                <td>{{user['suspend_start_date']}}</td>
+                <td>{{user['suspend_end_date']}}</td>
+                <td>{{user['creation_date']}}</td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td>No users found!</td>
+        </tr>
+    {% endif %}
+    </table>
+
+{% endblock %}
+</body>
+</html>
