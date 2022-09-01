@@ -44,7 +44,7 @@ def register():
             not (any(character.isdigit() for character in password)) or \
             not (any(character not in "!@#$%^&*") for character in password):
             error = 'Password must contain at least 8 characters, start with a letter, contain a number, and contain ' \
-                    'a special character'
+                    'a special character from this list: !@#$%^&*'
 
         # Other field validation
         if not (email_address or first_name or last_name or address or DOB or first_pet or city_born or year_graduated_hs):
