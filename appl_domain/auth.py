@@ -120,6 +120,9 @@ def login():
         # If the password hash in the form doesn't match what's in the database, throw an error
         elif not check_password_hash(user['password'], password):
             error = "Incorrect password"
+        # If the account is inactive, throw an error
+        elif not user['active']:
+            error = "Account not activated. Contact your administrator."
 
         # If we don't have any errors, we're good to proceed
         if error is None:
