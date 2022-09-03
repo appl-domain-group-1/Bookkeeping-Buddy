@@ -6,18 +6,22 @@
 
 <nav>
     <div id="navbar">
+
         {%  if g.user %}
-            <div id="logged_in_header">
-                <div id="user_pic" style="text-align: right">
+            <div id="logged_in_header" style="display: inline-block; width:100%">
+                <img src="../static/logo_cropped.png" style="height: 150px" alt="BookkeepingBuddy logo">
+                <div id="user_pic" style="text-align: right; display: inline-block">
             {% if g.user['picture'] %}
                 <span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}" style="width:100px;height:100px;"  alt="User's profile picture"/></span>
             {% else %}
                 <span><img src="../static/no_photo.png" style="width:100px;height:100px;"  alt="Placeholder profile picture"/></span>
             {% endif %}
-                </div>
                 <div id="username" style="text-align: right">Logged in as {{ g.user['username'] }}</div>
                 {% if g.user['role'] == 2 %}
                 <div id="account_type" style="text-align: right">Account type: Administrator</div>
+                <div id="admin_functions" style="text-align: right">
+                    <a href="{{ url_for('auth.manage_users')}}">Manage Users</a>
+                </div>
                 {% elif g.user['role'] == 1 %}
                 <div id="account_type" style="text-align: right">Account type: Manager</div>
                 {% else %}
@@ -26,8 +30,9 @@
                 <div id="logout" style="text-align: right"><a href="{{ url_for('auth.logout') }}">Log Out</a></div>
             </div>
         {% else %}
-            <li><a href="{{ url_for('auth.register') }}">Register</a></li>
-            <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+                <img src="../static/logo_cropped.png" style="height: 150px" alt="BookkeepingBuddy logo">
+                <a href="{{ url_for('auth.register') }}" style="text-align: right">Register</a>
+                <a href="{{ url_for('auth.login') }}" style="text-align: right">Log In</a>
         {% endif %}
     </div>
 </nav>

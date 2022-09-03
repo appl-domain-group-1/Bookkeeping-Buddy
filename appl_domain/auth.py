@@ -31,7 +31,7 @@ def register():
         username = f"{first_name[0]}{last_name}{today.month:02d}{str(today.year)[2:]}"
 
         # Format today's date for the database (YYYY-MM-DD)
-        today = f"{today.year}-{today.month:02d}-{today.day}"
+        today = f"{today.year}-{today.month:02d}-{today.day:02d}"
 
         db = get_db()
         error = None
@@ -80,7 +80,7 @@ def register():
                     "old_passwords, password_refresh_date, creation_date, first_pet, city_born, year_graduated_hs) "
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (username, email_address, first_name, last_name, 0, 0, generate_password_hash(password), address, DOB,
-                     bytes([]), datetime.now(), datetime.now(), first_pet, city_born, year_graduated_hs)
+                     bytes([]), today, today, first_pet, city_born, year_graduated_hs)
                 )
                 # Write the change to the database
                 db.commit()
@@ -120,6 +120,9 @@ def login():
         # If the password hash in the form doesn't match what's in the database, throw an error
         elif not check_password_hash(user['password'], password):
             error = "Incorrect password"
+        # If the account is inactive, throw an error
+        elif not user['active']:
+            error = "Account not activated. Contact your administrator."
 
         # If we don't have any errors, we're good to proceed
         if error is None:
@@ -135,6 +138,21 @@ def login():
 
     return render_template('auth/login.html')
 
+
+@bp.route('/manage_users', methods=('GET', 'POST'))
+def manage_users():
+    """
+    Allows administrators to manage users of the system
+    """
+    user_list = None
+    if request.method == 'GET':
+        # Get all users from the DB
+        db = get_db()
+        user_list = db.execute(
+            "SELECT * FROM users"
+        ).fetchall()
+        # Display them on the page
+    return render_template('auth/manage_users.html', users=user_list)
 
 # This decorator registers a function that runs before the view function regardless of what URL is requested
 @bp.before_app_request

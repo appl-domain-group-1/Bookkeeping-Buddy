@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+</head>
+<body>
+{% block content %}
+    <h1>User management</h1>
+    <h3>Current users:</h3>
+    <table style="border:1px solid black;width: 100%">
+        <tr>
+            <th style="border:1px solid black">Full Name</th>
+            <th style="border:1px solid black">Username</th>
+            <th style="border:1px solid black">Email</th>
+            <th style="border:1px solid black">Active?</th>
+            <th style="border:1px solid black">Role</th>
+
+
+        </tr>
+    {% if users %}
+        {% set row = namespace(counter = 0) %}
+        {% for user in users %}
+            {% set row.counter = row.counter + 1 %}
+            {% if row.counter % 2 == 1 %}
+            <tr style="background-color:#CFCFCF">
+            {% else %}
+            <tr>
+            {% endif %}
+                <td>{{user['first_name']}} {{user['last_name']}} counter: {{ row.counter }}</td>
+                <td>{{user['username']}}</td>
+                <td><a href="mailto:{{user['email_address']}}">{{user['email_address']}}</a></td>
+
+                {% if user['active'] == 1 %}
+                    <td style="background-color: green">
+                        Yes
+                    </td>
+                {% else %}
+                    <td style="background-color: firebrick">
+                        No
+                    </td>
+                {% endif %}
+                {% if user['role'] == 2 %}
+                    <td>
+                        Administrator
+                    </td>
+                {% elif user['role'] == 1 %}
+                    <td>
+                        Manager
+                    </td>
+                {% else %}
+                    <td>
+                        User
+                    </td>
+                {% endif %}
+                <td style="background-color: white"><button type="button" style="display: block; margin: auto">Edit</button></td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td>No users found!</td>
+        </tr>
+    {% endif %}
+    </table>
+
+{% endblock %}
+</body>
+</html>
