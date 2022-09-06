@@ -105,7 +105,10 @@ def register():
                 error = f"User with username {username} already exists."
             else:
                 # TODO: Should show the new user a page saying their account is awaiting approval from an admin
-                return redirect(url_for("auth.login"))
+                if g.user and g.user['role'] == 2:
+                    return redirect(url_for("auth.manage_users"))
+                else:
+                    return redirect(url_for("auth.login"))
         # Display any errors we encountered on the page
         flash(error)
     return render_template('auth/register.html')
