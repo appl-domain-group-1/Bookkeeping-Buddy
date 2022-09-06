@@ -159,6 +159,7 @@ def login():
 
 
 @bp.route('/manage_users', methods=('GET', 'POST'))
+@login_required
 def manage_users():
     """
     Allows administrators to manage users of the system
@@ -175,6 +176,7 @@ def manage_users():
 
 
 @bp.route('/edit_user/<username>', methods=('GET', 'POST'))
+@login_required
 def edit_user(username):
     """
     Allows administrators to edit info of a single user
@@ -260,17 +262,4 @@ def logout():
     return redirect(url_for('mainpage'))
 
 
-def login_required(view):
-    """
-    Called on a view to make it force the user to log in first. Checks if the current session of the app has a valid
-    user. If not, sends them to the login page.
-    """
 
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.login'))
-
-        return view(**kwargs)
-
-    return wrapped_view
