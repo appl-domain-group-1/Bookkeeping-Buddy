@@ -101,8 +101,8 @@ def register():
                 # Write the change to the database
                 db.commit()
             # Catch cases where a username already exists
-            except db.InternalError:  # TODO: Probably won't need this error since usernames are not user-supplied.
-                error = f"User {username} is already registered."
+            except (db.InternalError, db.IntegrityError):  # TODO: Probably won't need this error since usernames are not user-supplied.
+                error = f"User with username {username} already exists."
             else:
                 # TODO: Should show the new user a page saying their account is awaiting approval from an admin
                 return redirect(url_for("auth.login"))
