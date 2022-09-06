@@ -181,6 +181,7 @@ def edit_user(username):
             active = 1
         else:
             active = 0
+        role = request.form['role']
         address = request.form['address']
         DOB = request.form['DOB']
         first_pet = request.form['first_pet']
@@ -191,9 +192,9 @@ def edit_user(username):
         try:
             # Update columns
             db.execute(
-                "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, active = ?, address = ?, DOB = ?, "
+                "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, active = ?, role = ?, address = ?, DOB = ?, "
                 "first_pet = ?, city_born = ?, year_graduated_hs = ? WHERE username = ?", (email, first_name, last_name,
-                                                                                           active, address,DOB,
+                                                                                           active, role, address,DOB,
                                                                                            first_pet, city_born,
                                                                                            yr_graduated, username)
             )
