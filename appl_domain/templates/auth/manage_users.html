@@ -29,7 +29,7 @@
             {% else %}
             <tr>
             {% endif %}
-                <td>{{user['first_name']}} {{user['last_name']}} counter: {{ row.counter }}</td>
+                <td>{{user['first_name']}} {{user['last_name']}}</td>
                 <td>{{user['username']}}</td>
                 <td><a href="mailto:{{user['email_address']}}">{{user['email_address']}}</a></td>
 
@@ -55,7 +55,7 @@
                         User
                     </td>
                 {% endif %}
-                <td style="background-color: white"><button type="button" style="display: block; margin: auto">Edit</button></td>
+                <td style="background-color: white"><button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('auth.edit_user', username=user['username'])}}'">Edit</button></td>
             </tr>
         {% endfor %}
     {% else %}
