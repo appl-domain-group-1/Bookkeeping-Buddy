@@ -40,14 +40,15 @@ def register():
         if not password:
             error = 'Password is required'
         if (len(password) < 8) or \
-            not(password[0].isalpha()) or \
-            not (any(character.isdigit() for character in password)) or \
-            not (any(character not in "!@#$%^&*") for character in password):
+                not (password[0].isalpha()) or \
+                not (any(character.isdigit() for character in password)) or \
+                not (any(character not in "!@#$%^&*") for character in password):
             error = 'Password must contain at least 8 characters, start with a letter, contain a number, and contain ' \
                     'a special character from this list: !@#$%^&*'
 
         # Other field validation
-        if not (email_address or first_name or last_name or address or DOB or first_pet or city_born or year_graduated_hs):
+        if not (
+                email_address or first_name or last_name or address or DOB or first_pet or city_born or year_graduated_hs):
             error = 'Please fill out all information'  # TODO: Perform other field validation
 
         # If we got no error, we're good to proceed
@@ -79,7 +80,8 @@ def register():
                     "INSERT INTO users (username, email_address, first_name, last_name, active, role, password, address, DOB, "
                     "old_passwords, password_refresh_date, creation_date, first_pet, city_born, year_graduated_hs) "
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    (username, email_address, first_name, last_name, 0, 0, generate_password_hash(password), address, DOB,
+                    (username, email_address, first_name, last_name, 0, 0, generate_password_hash(password), address,
+                     DOB,
                      bytes([]), today, today, first_pet, city_born, year_graduated_hs)
                 )
                 # Write the change to the database
@@ -154,6 +156,61 @@ def manage_users():
         # Display them on the page
     return render_template('auth/manage_users.html', users=user_list)
 
+
+@bp.route('/edit_user/<username>', methods=('GET', 'POST'))
+def edit_user(username):
+    """
+    Allows administrators to edit info of a single user
+    """
+    # Get matching user from the DB
+    db = get_db()
+    user = db.execute(
+        "SELECT * FROM users WHERE username = ?", (username,)
+    ).fetchone()
+
+    if request.method == 'GET':
+        # Display user info on the page
+        return render_template('auth/edit_user.html', user=user)
+
+    if request.method == 'POST':
+        # Get the info from the form fields
+        email = request.form['email_address']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        if request.form.get("active"):
+            active = 1
+        else:
+            active = 0
+        address = request.form['address']
+        DOB = request.form['DOB']
+        first_pet = request.form['first_pet']
+        city_born = request.form['city_born']
+        yr_graduated = request.form['year_graduated_hs']
+        # Get a handle on the database
+        db = get_db()
+        try:
+            # Update columns
+            db.execute(
+                "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, active = ?, address = ?, DOB = ?, "
+                "first_pet = ?, city_born = ?, year_graduated_hs = ? WHERE username = ?", (email, first_name, last_name,
+                                                                                           active, address,DOB,
+                                                                                           first_pet, city_born,
+                                                                                           yr_graduated, username)
+            )
+            # Write changes
+            db.commit()
+            flash("Record updated!")
+        except Exception:
+            print(f"Error: {Exception.__traceback__.tb_next}")
+        # Get fresh info from the DB
+        user = db.execute(
+            "SELECT * FROM users WHERE username = ?", (username,)
+        ).fetchone()
+        return render_template('auth/edit_user.html', user=user)
+
+
+
+
 # This decorator registers a function that runs before the view function regardless of what URL is requested
 @bp.before_app_request
 def load_logged_in_user():
@@ -190,6 +247,7 @@ def login_required(view):
     Called on a view to make it force the user to log in first. Checks if the current session of the app has a valid
     user. If not, sends them to the login page.
     """
+
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
