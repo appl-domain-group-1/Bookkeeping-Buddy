@@ -6,11 +6,25 @@ from datetime import datetime
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
+def login_required(view):
+    """
+    Called on a view to make it force the user to log in first. Checks if the current session of the app has a valid
+    user. If not, sends them to the login page.
+    """
+
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+
+        return view(**kwargs)
+
+    return wrapped_view
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     """
-    View to allow a user to register for a new account
+    Allow a user to register for a new account
     """
     if request.method == 'POST':
         # Get today's date
