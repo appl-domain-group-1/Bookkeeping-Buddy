@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}{% endblock %} - Bookkeeping Buddy</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
@@ -9,10 +10,10 @@
 
         {%  if g.user %}
             <div id="logged_in_header" style="display: inline-block; width:100%">
-                <img src="../static/logo_cropped.png" style="height: 150px" alt="BookkeepingBuddy logo">
+                <img src="../static/b (1).png" id ="site-logo" alt="BookkeepingBuddy logo">
                 <div id="user_pic" style="text-align: right; display: inline-block">
             {% if g.user['picture'] %}
-                <span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}" style="width:100px;height:100px;"  alt="User's profile picture"/></span>
+                <span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" alt="User's profile picture"/></span>
             {% else %}
                 <span><img src="../static/no_photo.png" style="width:100px;height:100px;"  alt="Placeholder profile picture"/></span>
             {% endif %}

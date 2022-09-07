@@ -1,15 +1,19 @@
 {% extends 'base.html' %}
-
+<link href="form.css" rel="stylesheet" type = text/css>
 {% block header %}
   <h1>{% block title %}Log In{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
+<div id = loginbox>
   <form method="post">
     <label for="username">Username</label>
     <input name="username" id="username" required>
     <label for="password">Password</label>
     <input type="password" name="password" id="password" required>
     <input type="submit" value="Log In">
+    <a href="#" >Forgot password?</a><br>
+    <a href="register.html" >Craete a new user account</a><br>
   </form>
+</div>
 {% endblock %}
