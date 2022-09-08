@@ -46,5 +46,6 @@
         <br>
         <input type="submit" value="Save changes">
         <button type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'">Back</button>
+        <button type="button" onclick="window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'">Delete user</button>
     </form>
 {% endblock %}
