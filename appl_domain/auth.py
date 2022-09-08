@@ -185,7 +185,13 @@ def delete_user(username):
     """
     error = None
     if request.method == 'GET':
-        if g.user['role'] == 2:
+        if g.user['role'] != 2:
+            flash("Operation not permitted")
+            return redirect(url_for('mainpage'))
+        elif g.user['username'] == username:
+            flash(f"Can't delete yourself!")
+            return redirect(url_for('auth.manage_users'))
+        else:
             # Get a handle on the database
             db = get_db()
             # Delete the row
@@ -200,9 +206,6 @@ def delete_user(username):
             if error is None:
                 flash(f"User {username} deleted!")
             return redirect(url_for('auth.manage_users'))
-        else:
-            flash("Operation not permitted")
-            return redirect(url_for('mainpage'))
 
 
 
