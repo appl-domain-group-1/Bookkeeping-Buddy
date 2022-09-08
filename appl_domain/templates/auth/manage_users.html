@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Management</title>
+    {% block title %}User Management{% endblock %}
 </head>
 <body>
 {% block content %}
@@ -64,6 +64,7 @@
         </tr>
     {% endif %}
     </table>
+    <button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('auth.register')}}'">Create user</button>
 
 {% endblock %}
 </body>

@@ -7,10 +7,25 @@ from datetime import datetime
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
+def login_required(view):
+    """
+    Called on a view to make it force the user to log in first. Checks if the current session of the app has a valid
+    user. If not, sends them to the login page.
+    """
+
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+        return view(**kwargs)
+
+    return wrapped_view
+
+
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     """
-    View to allow a user to register for a new account
+    Allow a user to register for a new account
     """
     if request.method == 'POST':
         # Get today's date
@@ -69,29 +84,31 @@ def register():
                     - DOB [str]: Input by user. Should be in YYYY-MM-DD format
                     - old_passwords [bytes]: List of old passwords used by this user. SQLite cannot handle a Python list
                         datatype, so this must be converted to bytes.
-                    - password_refresh_date [str]: Date when password was last updated (YYYY-MM-DD). Set to the date account was
-                        created, then is updated each time a user updates their password
+                    - password_refresh_date [str]: Date when password was last updated (YYYY-MM-DD). Set to the date 
+                        account was created, then is updated each time a user updates their password
                     - creation_date [str]: Date when account was created (YYYY-MM-DD)
                     - first_pet [str]: Name of first pet. Security question #1
                     - city_born [str]: City where user was born. Security question #2
                     - year_graduated_hs [str]: Year user graduated highschool. Security question #3
                 """
                 db.execute(
-                    "INSERT INTO users (username, email_address, first_name, last_name, active, role, password, address, DOB, "
-                    "old_passwords, password_refresh_date, creation_date, first_pet, city_born, year_graduated_hs) "
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO users (username, email_address, first_name, last_name, active, role, password, "
+                    "address, DOB, old_passwords, password_refresh_date, creation_date, first_pet, city_born, "
+                    "year_graduated_hs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (username, email_address, first_name, last_name, 0, 0, generate_password_hash(password), address,
-                     DOB,
-                     bytes([]), today, today, first_pet, city_born, year_graduated_hs)
+                     DOB, bytes([]), today, today, first_pet, city_born, year_graduated_hs)
                 )
                 # Write the change to the database
                 db.commit()
             # Catch cases where a username already exists
-            except db.InternalError:  # TODO: Probably won't need this error since usernames are not user-supplied.
-                error = f"User {username} is already registered."
+            except (db.InternalError, db.IntegrityError):  # TODO: Probably won't need this error since usernames are not user-supplied.
+                error = f"User with username {username} already exists."
             else:
                 # TODO: Should show the new user a page saying their account is awaiting approval from an admin
-                return redirect(url_for("auth.login"))
+                if g.user and g.user['role'] == 2:
+                    return redirect(url_for("auth.manage_users"))
+                else:
+                    return redirect(url_for("auth.login"))
         # Display any errors we encountered on the page
         flash(error)
     return render_template('auth/register.html')
@@ -132,6 +149,8 @@ def login():
             session.clear()
             # Add the logged-in user's ID to the cookie
             session['username'] = user['username']
+            # Add the logged-in user's role to the cookie
+            session['role'] = user['role']
             # Send the logged-in user back to the main screen of the application
             return redirect(url_for('mainpage'))
 
@@ -142,6 +161,7 @@ def login():
 
 
 @bp.route('/manage_users', methods=('GET', 'POST'))
+@login_required
 def manage_users():
     """
     Allows administrators to manage users of the system
@@ -157,7 +177,40 @@ def manage_users():
     return render_template('auth/manage_users.html', users=user_list)
 
 
+@bp.route('/delete_user/<username>', methods=('GET', 'POST'))
+@login_required
+def delete_user(username):
+    """
+    Allows administrators to delete users
+    """
+    error = None
+    if request.method == 'GET':
+        if g.user['role'] != 2:
+            flash("Operation not permitted")
+            return redirect(url_for('mainpage'))
+        elif g.user['username'] == username:
+            flash(f"Can't delete yourself!")
+            return redirect(url_for('auth.manage_users'))
+        else:
+            # Get a handle on the database
+            db = get_db()
+            # Delete the row
+            try:
+                db.execute(
+                    "DELETE FROM users WHERE username = ?", (username,)
+                )
+                # Commit the change
+                db.commit()
+            except (db.InternalError, db.IntegrityError):
+                error = f"User with username {username} not found!"
+            if error is None:
+                flash(f"User {username} deleted!")
+            return redirect(url_for('auth.manage_users'))
+
+
+
 @bp.route('/edit_user/<username>', methods=('GET', 'POST'))
+@login_required
 def edit_user(username):
     """
     Allows administrators to edit info of a single user
@@ -194,7 +247,7 @@ def edit_user(username):
             db.execute(
                 "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, active = ?, role = ?, address = ?, DOB = ?, "
                 "first_pet = ?, city_born = ?, year_graduated_hs = ? WHERE username = ?", (email, first_name, last_name,
-                                                                                           active, role, address,DOB,
+                                                                                           active, role, address, DOB,
                                                                                            first_pet, city_born,
                                                                                            yr_graduated, username)
             )
@@ -208,8 +261,6 @@ def edit_user(username):
             "SELECT * FROM users WHERE username = ?", (username,)
         ).fetchone()
         return render_template('auth/edit_user.html', user=user)
-
-
 
 
 # This decorator registers a function that runs before the view function regardless of what URL is requested
@@ -241,19 +292,3 @@ def logout():
     session.clear()
     # Send them back to the main page (but now logged out)
     return redirect(url_for('mainpage'))
-
-
-def login_required(view):
-    """
-    Called on a view to make it force the user to log in first. Checks if the current session of the app has a valid
-    user. If not, sends them to the login page.
-    """
-
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.login'))
-
-        return view(**kwargs)
-
-    return wrapped_view
