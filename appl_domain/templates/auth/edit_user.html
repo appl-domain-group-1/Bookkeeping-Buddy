@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Edit account for user {{ user['username'] }}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <label for="email_address">Email Address</label>
+        <input name="email_address" id="email_address" required value="{{ user['email_address'] }}">
+        <br>
+        <label for="first_name">First Name</label>
+        <input name="first_name" id="first_name" required value="{{ user['first_name'] }}">
+        <label for="last_name">Last Name</label>
+        <input name="last_name" id="last_name" required value="{{ user['last_name'] }}">
+        <br>
+        {% if user['active'] == 1 %}
+            <label for="active">Active?</label>
+            <input type="checkbox" id="active" name= "active" value="active" checked>
+        {% else %}
+            <label for="active">Active?</label>
+            <input type="checkbox" id="active" name="active" value="active">
+        {% endif %}
+        <br>
+        <label for="role">Role</label>
+        <select name="role" id="role">
+            <option value="0" {% if user['role'] == 0 %} selected {% endif %}>User</option>
+            <option value="1" {% if user['role'] == 1 %} selected {% endif %}>Manager</option>
+            <option value="2" {% if user['role'] == 2 %} selected {% endif %}>Administrator</option>
+        </select>
+        <br>
+        <label for="address">Address</label>
+        <input name="address" id="address" required value="{{ user['address'] }}">
+        <br>
+        <label for="DOB">Date of birth (YYYY-MM-DD)</label>
+        <input name="DOB" id="DOB" required value="{{ user['DOB'] }}">
+        <br>
+        <label for="first_pet">Name of your first pet</label>
+        <input name="first_pet" id="first_pet" required value="{{ user['first_pet'] }}">
+        <br>
+        <label for="city_born">City you were born in</label>
+        <input name="city_born" id="city_born" required value="{{ user['city_born'] }}">
+        <br>
+        <label for="year_graduated_hs">Year you graduated highschool</label>
+        <input name="year_graduated_hs" id="year_graduated_hs" required value="{{ user['year_graduated_hs'] }}">
+        <br>
+        <input type="submit" value="Save changes">
+        <button type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'">Back</button>
+        <button type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
+    </form>
+{% endblock %}

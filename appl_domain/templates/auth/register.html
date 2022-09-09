@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Register for a new account{% endblock %}</h1>
+    {% block title %}
+    {% if (g.user) and (g.user['role'] == 2) %}
+        <h1>Create a new account</h1>
+    {% else %}
+        <h1>Register for a new account</h1>
+    {% endif %}
+    {% endblock %}
 {% endblock %}
 
 {% block content %}
@@ -32,6 +38,11 @@
         <label for="year_graduated_hs">Year you graduated highschool</label>
         <input name="year_graduated_hs" id="year_graduated_hs" required>
         <br>
-        <input type="submit" value="Register">
+        {% if (g.user) and (g.user['role'] == 2) %}
+            <input type="submit" value="Create">
+        {% else %}
+            <input type="submit" value="Register">
+        {% endif %}
+
     </form>
 {% endblock %}
