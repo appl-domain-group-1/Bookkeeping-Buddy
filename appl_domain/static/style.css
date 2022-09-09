@@ -1,0 +1,26 @@
+.site-logo{
+    width: 70px;
+    height: 75px;
+    border-radius: 50%;
+    position: absolute;   
+    left: 0;
+    top:0;
+  }
+  nav{
+    height:fit-content;
+    width: 100%;
+    position: fixed;  
+    background: white;
+    padding: 10px 0;
+    color:#185DFF;  
+    padding-left: 100px;
+    font-size: large; 
+  }
+  .userImage{
+    width: 70px;
+    height: 75px;
+    border-radius: 50%;
+    position: absolute;   
+    right: 0;
+    top:0;
+  }
