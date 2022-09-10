@@ -32,13 +32,13 @@
   }
 </style>
 
-    <div id="navbar" style="height:120px; width:100%; border-bottom: 1px solid #F89E19;">
+    <div id="navbar" style="height:110px; width:100%; border-bottom: 1px solid #F89E19;">
         {%  if g.user %}
         <div style = "flex:50%">
                 <a href = {{ url_for('mainpage') }} > <img src="{{ url_for('static', filename='logo_cropped.png') }}" style = "width: 70px;height: 75px;"  alt="BookkeepingBuddy logo"></a>
                    <p style ="text-align: center; color: #185DFF; font-size: 20px; margin-top: -40px"><b>Bookkeeping Buddy</b></p>
-                  <a href="{{ url_for('auth.register') }}" style="right:0; top:0;">Register</a>
-                <a href="{{ url_for('auth.login') }}" style="right:0; top:0;">Log In</a>
+                  <!--<a href="{{ url_for('auth.register') }}" style="right:0; top:0;">Register</a>
+                <a href="{{ url_for('auth.login') }}" style="right:0; top:0;">Log In</a>-->
                </div>
            <div id="logged_in_header" style="display: flex; width:100%;">
                 <div id="user_pic" style="text-align: right; flex: 50%">
