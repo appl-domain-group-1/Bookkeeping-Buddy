@@ -1,19 +1,66 @@
 {% extends 'base.html' %}
 <link href="form.css" rel="stylesheet" type = text/css>
 {% block header %}
-  <h1>{% block title %}Log In{% endblock %}</h1>
+
 {% endblock %}
 
 {% block content %}
-<div id = loginbox>
+<div id = loginbox style ="width: 380px;
+    height: 450px;
+    background: black;
+    color: #185DFF;
+    position: absolute;
+    left: 50%;
+    top : 50%;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transform: translate(-50%, -50%);
+    padding: 40px 30px;">
+  <h1 style = "padding:0; text-align:center; color: white">{% block title %}Log In{% endblock %}</h1>
   <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log In">
-    <a href="#" >Forgot password?</a><br>
-    <a href="register.html" >Craete a new user account</a><br>
+    <label for="username" style="margin: 0;
+        padding: 0;
+        font-weight: bold;">Username</label>
+        <input name="username" id="username" placeholder="Enter username" style="width: 100%;
+        border: none;
+        border-bottom: 1px solid #F89E19;
+        background:transparent;
+        outline: none;
+        padding-bottom: 5px;
+        height: 40px;
+        color: aliceblue; margin-bottom: 10px;" required>
+    <label for="password" style="
+        padding: 0;
+        font-weight: bold;">Password</label>
+    <input type="password" name="password" placeholder="Enter password" id="password" required style="width: 100%;
+        border: none;
+        border-bottom: 1px solid #F89E19;
+        background:transparent;
+        padding-bottom: 5px;
+        outline: none;
+        height: 40px;
+        color: aliceblue;">
+    <input type="submit" value="Log In" style="background-color: #185DFF;
+        color: white;
+        padding: 16px 20px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+        font-size: 14px;">
+    <a href="#" style="text-decoration: none;
+        font-size: 14px;
+        line-height: 10px;
+        color: white;
+        display: block;" >Forgot password?</a><br>
+    <a href="{{ url_for('auth.register') }}" style="text-decoration: none;
+        font-size: 14px;
+        line-height: 10px;
+        color: white;
+        display: block;" >Create a new user account</a><br>
   </form>
 </div>
 {% endblock %}
