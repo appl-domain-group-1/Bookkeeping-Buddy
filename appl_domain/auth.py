@@ -101,7 +101,8 @@ def register():
                 # Write the change to the database
                 db.commit()
             # Catch cases where a username already exists
-            except (db.InternalError, db.IntegrityError):  # TODO: Probably won't need this error since usernames are not user-supplied.
+            except (db.InternalError,
+                    db.IntegrityError):  # TODO: Probably won't need this error since usernames are not user-supplied.
                 error = f"User with username {username} already exists."
             else:
                 # TODO: Should show the new user a page saying their account is awaiting approval from an admin
@@ -182,22 +183,18 @@ def forgot_password():
             "SELECT * FROM users WHERE username = ?", (username,)
         ).fetchone()
 
-        year = user['year_graduated_hs']
-        print(f"Username: {username == user['username']}")
-        print(f"email: { email_address == user['email_address']}")
-        print(f"pet: {first_pet == user['first_pet']}")
-        print(f"city: {city_born == user['city_born']}")
-        print(f"Year: {year_graduated_hs == year}")
-
         # Check the credentials
-        if user and (username == user['username']) and \
-                (email_address == user['email_address']) and \
-                (first_pet == user['first_pet']) and \
-                (city_born == user['city_born']) and \
-                (year_graduated_hs == str(user['year_graduated_hs'])):
-            print("$$$$$$$$$ DATA CHECKS OUT $$$$$$$$$") #  TODO: What happens now?
+        if user:
+            if email_address != user['email_address']:
+                flash("Email address incorrect")
+                return render_template('auth/forgot_password.html')
+            if (first_pet != user['first_pet']) or (city_born != user['city_born']) or (
+                    year_graduated_hs != str(user['year_graduated_hs'])):
+                flash("Security questions incorrect")
+                return render_template('auth/forgot_password.html')
+            print("$$$$$$$$$ DATA CHECKS OUT $$$$$$$$$")  # TODO: What happens now?
         else:
-            flash("Could not verify information.")
+            flash("Could not find user with that login.")
     return render_template('auth/forgot_password.html')
 
 
@@ -247,7 +244,6 @@ def delete_user(username):
             if error is None:
                 flash(f"User {username} deleted!")
             return redirect(url_for('auth.manage_users'))
-
 
 
 @bp.route('/edit_user/<username>', methods=('GET', 'POST'))
