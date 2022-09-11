@@ -3,6 +3,7 @@ from flask import Blueprint, flash, g, redirect, render_template, request, sessi
 from werkzeug.security import check_password_hash, generate_password_hash
 from appl_domain.db import get_db
 from datetime import datetime
+import json
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -82,8 +83,8 @@ def register():
                     - password [str]: Hashed representation of user input. Never stored in plain text.
                     - address [str]: Input by user
                     - DOB [str]: Input by user. Should be in YYYY-MM-DD format
-                    - old_passwords [bytes]: List of old passwords used by this user. SQLite cannot handle a Python list
-                        datatype, so this must be converted to bytes.
+                    - old_passwords [str]: List of old passwords used by this user. SQLite cannot handle a Python list
+                        datatype, so this must be converted to JSON
                     - password_refresh_date [str]: Date when password was last updated (YYYY-MM-DD). Set to the date 
                         account was created, then is updated each time a user updates their password
                     - creation_date [str]: Date when account was created (YYYY-MM-DD)
@@ -96,7 +97,7 @@ def register():
                     "address, DOB, old_passwords, password_refresh_date, creation_date, first_pet, city_born, "
                     "year_graduated_hs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (username, email_address, first_name, last_name, 0, 0, generate_password_hash(password), address,
-                     DOB, bytes([]), today, today, first_pet, city_born, year_graduated_hs)
+                     DOB, json.dumps([]), today, today, first_pet, city_born, year_graduated_hs)
                 )
                 # Write the change to the database
                 db.commit()
