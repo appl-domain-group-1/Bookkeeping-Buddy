@@ -160,6 +160,47 @@ def login():
     return render_template('auth/login.html')
 
 
+@bp.route('forgot_password', methods=('GET', 'POST'))
+def forgot_password():
+    """
+    View to allow a user to reset forgotten password
+    """
+    if request.method == 'POST':
+        # Get username from the form
+        username = request.form['username']
+        # Get email from the form
+        email_address = request.form['email_address']
+        # Get security questions from the form
+        first_pet = request.form['first_pet']
+        city_born = request.form['city_born']
+        year_graduated_hs = request.form['year_graduated_hs']
+
+        # Get a handle on the database
+        db = get_db()
+        # Get the row for this user
+        user = db.execute(
+            "SELECT * FROM users WHERE username = ?", (username,)
+        ).fetchone()
+
+        year = user['year_graduated_hs']
+        print(f"Username: {username == user['username']}")
+        print(f"email: { email_address == user['email_address']}")
+        print(f"pet: {first_pet == user['first_pet']}")
+        print(f"city: {city_born == user['city_born']}")
+        print(f"Year: {year_graduated_hs == year}")
+
+        # Check the credentials
+        if user and (username == user['username']) and \
+                (email_address == user['email_address']) and \
+                (first_pet == user['first_pet']) and \
+                (city_born == user['city_born']) and \
+                (year_graduated_hs == str(user['year_graduated_hs'])):
+            print("$$$$$$$$$ DATA CHECKS OUT $$$$$$$$$") #  TODO: What happens now?
+        else:
+            flash("Could not verify information.")
+    return render_template('auth/forgot_password.html')
+
+
 @bp.route('/manage_users', methods=('GET', 'POST'))
 @login_required
 def manage_users():
