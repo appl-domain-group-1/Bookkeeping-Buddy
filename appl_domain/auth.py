@@ -164,7 +164,8 @@ def login():
 @bp.route('forgot_password', methods=('GET', 'POST'))
 def forgot_password():
     """
-    View to allow a user to reset forgotten password
+    View to allow a user to begin the password reset process. Asks them to provide username, email address, and answer
+    three security questions
     """
     if request.method == 'POST':
         # Get username from the form
@@ -183,19 +184,76 @@ def forgot_password():
             "SELECT * FROM users WHERE username = ?", (username,)
         ).fetchone()
 
-        # Check the credentials
+        # Ensure that a user with that username was found in the database
         if user:
+            # Check the provided email address against what's in the database
             if email_address != user['email_address']:
                 flash("Email address incorrect")
                 return render_template('auth/forgot_password.html')
-            if (first_pet != user['first_pet']) or (city_born != user['city_born']) or (
-                    year_graduated_hs != str(user['year_graduated_hs'])):
+            # Check security question answers against the database
+            if (first_pet != user['first_pet']) or \
+                    (city_born != user['city_born']) or \
+                    (year_graduated_hs != str(user['year_graduated_hs'])):
                 flash("Security questions incorrect")
                 return render_template('auth/forgot_password.html')
-            print("$$$$$$$$$ DATA CHECKS OUT $$$$$$$$$")  # TODO: What happens now?
+            # If the checks pass begin to reset the password
+            # First, clear the cookie
+            session.clear()
+            # Add the logged-in user's ID to the cookie
+            session['username'] = user['username']
+            # Set the user in the current session
+            g.user = user
+            # Send the user to a new page to reset their password
+            return render_template('auth/reset_password.html')
+        # If there was no matching record in the database for that user, boot them back to the previous screen
         else:
             flash("Could not find user with that login.")
     return render_template('auth/forgot_password.html')
+
+
+@bp.route('reset_password', methods=('GET', 'POST'))
+@login_required
+def reset_password():
+    """
+    View to allow logged-in users to reset their password
+    """
+    error = None
+    if request.method == 'POST':
+        # Placeholder in case an error occurs during the process
+        # Get the entries from the page
+        password1 = request.form['password1']
+        password2 = request.form['password2']
+        # Ensure that they match
+        if password1 != password2:
+            error = "Passwords must match!"
+        # Ensure new passwords are not blank
+        if not password1 or not password2:
+            error = "You must enter a new password"
+        # Ensure that passwords meet requirements
+        for password in (password1, password2):
+            if (len(password) < 8) or \
+                    not (password[0].isalpha()) or \
+                    not (any(character.isdigit() for character in password)) or \
+                    not (any(character not in "!@#$%^&*") for character in password):
+                error = 'Password must contain at least 8 characters, start with a letter, contain a number, and ' \
+                        'contain a special character from this list: !@#$%^&*'
+        # If we didn't get an error, reset the password
+        if error is None:
+            # Get a handle on the DB
+            db = get_db()
+            try:
+                # Move current password to old passwords list
+
+                # Set new password in the DB
+
+                # Log user out
+
+                # Send them to the login page
+                pass
+            except (db.InternalError, db.IntegrityError):
+                error = "Database error. Contact an administrator."
+    flash(error)
+    return render_template('auth/login.html')
 
 
 @bp.route('/manage_users', methods=('GET', 'POST'))
