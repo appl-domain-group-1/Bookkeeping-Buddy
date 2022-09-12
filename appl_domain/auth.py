@@ -207,7 +207,7 @@ def forgot_password():
             # Set the user in the current session
             g.user = user
             # Send the user to a new page to reset their password
-            return render_template('auth/reset_password.html')
+            return redirect(url_for('auth.reset_password'))
         # If there was no matching record in the database for that user, boot them back to the previous screen
         else:
             flash("Could not find user with that login.")
@@ -220,9 +220,9 @@ def reset_password():
     """
     View to allow logged-in users to reset their password
     """
+    # Placeholder in case an error occurs during the process
     error = None
     if request.method == 'POST':
-        # Placeholder in case an error occurs during the process
         # Get the entries from the page
         password1 = request.form['password1']
         password2 = request.form['password2']
@@ -245,18 +245,55 @@ def reset_password():
             # Get a handle on the DB
             db = get_db()
             try:
-                # Move current password to old passwords list
-
-                # Set new password in the DB
-
-                # Log user out
-
+                # Fetch the row for this user
+                user = db.execute(
+                    "SELECT * FROM users WHERE username = ?", (g.user['username'],)
+                ).fetchone()
+                # Get list of old passwords and decode it from JSON
+                old_passwords = json.loads(user['old_passwords'])
+                # Ensure the new password isn't in the list of old passwords
+                found = False
+                for password in old_passwords:
+                    if check_password_hash(password, password1):
+                        found = True
+                        break
+                # If the password is in the list of old passwords, throw an error
+                if found:
+                    flash("Old passwords may not be reused!")
+                    return render_template('auth/reset_password.html')
+                # If the new password was not in the old_passwords list, add it and set it as the new current password
+                else:
+                    # Hash the new password
+                    new_password = generate_password_hash(password1)
+                    # Add it to the list
+                    old_passwords.append(new_password)
+                    # Convert the list to JSON
+                    old_passwords = json.dumps(old_passwords)
+                    # Get today's date so we can update password refresh date to today
+                    today = datetime.now()
+                    # Format today's date for the database (YYYY-MM-DD)
+                    today = f"{today.year}-{today.month:02d}-{today.day:02d}"
+                    # Update the database
+                    try:
+                        db.execute(
+                            "UPDATE users SET password = ?, old_passwords = ?, password_refresh_date = ? WHERE username = ?",
+                            (new_password, old_passwords, today, user['username'])
+                        )
+                        # Write changes
+                        db.commit()
+                    except (db.InternalError, db.IntegrityError):
+                        error = "Database error. Contact an administrator for assistance."
+                # Clear the user's cookie to log them out
+                session.clear()
+                # Tell user to log in with new password
+                flash("Password changed! Please log in with your new password")
                 # Send them to the login page
-                pass
+                return redirect(url_for('auth.login'))
             except (db.InternalError, db.IntegrityError):
-                error = "Database error. Contact an administrator."
-    flash(error)
-    return render_template('auth/login.html')
+                error = "Database error. Contact an administrator for assistance."
+    if error:
+        flash(error)
+    return render_template('auth/reset_password.html')
 
 
 @bp.route('/manage_users', methods=('GET', 'POST'))
