@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Account settings for {{ g.user['username'] }}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <label for="first_name">First Name</label>
+        <input name="first_name" id="first_name" required value="{{ g.user['first_name'] }}">
+        <label for="last_name">Last Name</label>
+        <input name="last_name" id="last_name" required value="{{ g.user['last_name'] }}">
+        <br>
+        <label for="email_address">Email Address</label>
+        <input name="email_address" id="email_address" required value="{{ g.user['email_address'] }}">
+        <br>
+        <label for="address">Address</label>
+        <input name="address" id="address" required value="{{ g.user['address'] }}">
+        <br>
+        <label for="profile_pic">Profile picture</label>
+        <br>
+        {% if g.user['picture'] %}
+            <span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" alt="User's profile picture"/></span>
+        {% else %}
+            <span><img src="{{ url_for('static', filename='no_photo.png') }}" style="width:100px;height:100px;"  alt="Placeholder profile picture"/></span>
+        {% endif %}
+        <button type="button">Upload new photo</button>
+        <br>
+        <input type="submit" value="Save changes">
+    </form>
+        <br>
+        Password last reset on {{ g.user['password_refresh_date'] }} <br>
+        Your password will expire on {{ password_expires }}<br>
+        <button type="button" onclick="window.location.href='{{ url_for('auth.reset_password')}}'">Change Password</button>
+{% endblock %}

@@ -2,7 +2,7 @@ import functools
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from appl_domain.db import get_db
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -397,6 +397,29 @@ def edit_user(username):
         ).fetchone()
         return render_template('auth/edit_user.html', user=user)
 
+
+@bp.route('/my_account', methods=('GET', 'POST'))
+@login_required
+def my_account():
+     """
+     View to allow a user to edit information about their account (change password, upload photo, etc.)
+     """
+     # Get handle on DB
+     db = get_db()
+     # Get the date the user's password will expire. This is a string.
+     password_refresh_date = g.user['password_refresh_date']
+     # Convert each piece of the date to integers
+     year = int(password_refresh_date[:4])
+     month = int(password_refresh_date[5:7])
+     day = int(password_refresh_date[8:])
+     # Convert the string to a datetime object
+     password_refresh_date = datetime(year, month, day)
+     # Calculate the date when it will expire
+     password_expires = password_refresh_date + timedelta(days=180)
+     # Convert this date to a string for use on the page
+     password_expires = password_expires.date().__str__()
+     # render the template
+     return render_template('auth/my_account.html', password_expires=password_expires)
 
 # This decorator registers a function that runs before the view function regardless of what URL is requested
 @bp.before_app_request

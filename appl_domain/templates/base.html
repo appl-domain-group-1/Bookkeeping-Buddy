@@ -27,6 +27,7 @@
                 {% else %}
                 <div id="account_type" style="text-align: right">Account type: User</div>
                 {% endif %}
+                <div id="my_account" style="text-align: right"><a href="{{ url_for('auth.my_account') }}">My Account</a></div>
                 <div id="logout" style="text-align: right"><a href="{{ url_for('auth.logout') }}">Log Out</a></div>
             </div>
         {% else %}
