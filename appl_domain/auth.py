@@ -398,6 +398,17 @@ def edit_user(username):
         return render_template('auth/edit_user.html', user=user)
 
 
+@bp.route('/my_account', methods=('GET', 'POST'))
+@login_required
+def my_account():
+     """
+     View to allow a user to edit information about their account (change password, upload photo, etc.)
+     """
+     # Get handle on DB
+     db = get_db()
+     # render the template
+     return render_template('auth/my_account.html')
+
 # This decorator registers a function that runs before the view function regardless of what URL is requested
 @bp.before_app_request
 def load_logged_in_user():
