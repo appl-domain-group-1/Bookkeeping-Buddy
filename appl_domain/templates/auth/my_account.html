@@ -26,8 +26,10 @@
         {% endif %}
         <button type="button">Upload new photo</button>
         <br>
-        <br>
-        <button type="button" onclick="window.location.href='{{ url_for('auth.reset_password')}}'">Change Password</button>
         <input type="submit" value="Save changes">
     </form>
+        <br>
+        Password last reset on {{ g.user['password_refresh_date'] }} <br>
+        Your password will expire on {{ password_expires }}<br>
+        <button type="button" onclick="window.location.href='{{ url_for('auth.reset_password')}}'">Change Password</button>
 {% endblock %}
