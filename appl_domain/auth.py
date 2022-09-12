@@ -92,12 +92,14 @@ def register():
                     - city_born [str]: City where user was born. Security question #2
                     - year_graduated_hs [str]: Year user graduated highschool. Security question #3
                 """
+                # Hash the new password
+                password = generate_password_hash(password)
                 db.execute(
                     "INSERT INTO users (username, email_address, first_name, last_name, active, role, password, "
                     "address, DOB, old_passwords, password_refresh_date, creation_date, first_pet, city_born, "
                     "year_graduated_hs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    (username, email_address, first_name, last_name, 0, 0, generate_password_hash(password), address,
-                     DOB, json.dumps([]), today, today, first_pet, city_born, year_graduated_hs)
+                    (username, email_address, first_name, last_name, 0, 0, password, address,
+                     DOB, json.dumps([password]), today, today, first_pet, city_born, year_graduated_hs)
                 )
                 # Write the change to the database
                 db.commit()
