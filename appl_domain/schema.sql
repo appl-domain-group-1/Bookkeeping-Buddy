@@ -11,7 +11,7 @@ CREATE TABLE users (
   password TEXT NOT NULL,
   address TEXT NOT NULL,
   DOB TEXT NOT NULL,
-  old_passwords BLOB NOT NULL,
+  old_passwords TEXT NOT NULL,
   password_refresh_date TEXT NOT NULL,
   suspend_start_date TEXT,
   suspend_end_date TEXT,
