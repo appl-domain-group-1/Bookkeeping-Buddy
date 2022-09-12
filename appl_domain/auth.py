@@ -1,9 +1,12 @@
+import base64
 import functools
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from appl_domain.db import get_db
 from datetime import datetime, timedelta
 import json
+from PIL import Image
+from io import BytesIO
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -401,25 +404,72 @@ def edit_user(username):
 @bp.route('/my_account', methods=('GET', 'POST'))
 @login_required
 def my_account():
-     """
+    """
      View to allow a user to edit information about their account (change password, upload photo, etc.)
      """
-     # Get handle on DB
-     db = get_db()
-     # Get the date the user's password will expire. This is a string.
-     password_refresh_date = g.user['password_refresh_date']
-     # Convert each piece of the date to integers
-     year = int(password_refresh_date[:4])
-     month = int(password_refresh_date[5:7])
-     day = int(password_refresh_date[8:])
-     # Convert the string to a datetime object
-     password_refresh_date = datetime(year, month, day)
-     # Calculate the date when it will expire
-     password_expires = password_refresh_date + timedelta(days=180)
-     # Convert this date to a string for use on the page
-     password_expires = password_expires.date().__str__()
-     # render the template
-     return render_template('auth/my_account.html', password_expires=password_expires)
+
+    if request.method == 'GET':
+        # Get the date the user's password will expire. This is a string.
+        password_refresh_date = g.user['password_refresh_date']
+        # Convert each piece of the date to integers
+        year = int(password_refresh_date[:4])
+        month = int(password_refresh_date[5:7])
+        day = int(password_refresh_date[8:])
+        # Convert the string to a datetime object
+        password_refresh_date = datetime(year, month, day)
+        # Calculate the date when it will expire
+        password_expires = password_refresh_date + timedelta(days=180)
+        # Convert this date to a string for use on the page
+        password_expires = password_expires.date().__str__()
+        # render the template
+        return render_template('auth/my_account.html', password_expires=password_expires)
+
+    if request.method == 'POST':
+        # Get handle on DB
+        db = get_db()
+        # Get the info from the form fields
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email_address']
+        address = request.form['address']
+        uploaded_pic = request.files['uploaded_pic']
+        # Make sure a picture was supplied
+        if uploaded_pic.filename:
+            # Ensure that the pic uploaded is of the correct type
+            if uploaded_pic.mimetype not in ['image/jpeg', 'image/png']:
+                flash("Improper profile picture format. Profile pictures must be JPEG or PNG")
+                return redirect(url_for('auth.my_account'))
+            # Ensure we know what type of image it is
+            image_type = None
+            if uploaded_pic.mimetype == 'image/jpeg':
+                image_type = "JPEG"
+            if uploaded_pic.mimetype == 'image/png':
+                image_type = "PNG"
+            # Open image using Pillow library for manipulation
+            uploaded_pic = Image.open(uploaded_pic)
+            # Resize the picture to save DB size
+            uploaded_pic.thumbnail((200, 200))
+            # Create a temporary byte buffer for the image
+            temp_buffer = BytesIO()
+            # Write the uploaded image to the temporary byte buffer
+            uploaded_pic.save(temp_buffer, format=image_type)
+            # Save the new image in the database
+            uploaded_pic = temp_buffer.getvalue()
+            db.execute(
+                "UPDATE users SET picture = ?, email_address = ?, first_name = ?, last_name = ?, address = ? WHERE username = ?",
+                (uploaded_pic, email, first_name, last_name, address, g.user['username'])
+            )
+            db.commit()
+        else:
+            db.execute(
+                "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, address = ? WHERE username = ?",
+                (email, first_name, last_name, address, g.user['username'])
+            )
+            db.commit()
+        # Tell the user it worked
+        flash("Profile updated!")
+        return redirect(url_for('auth.my_account'))
+
 
 # This decorator registers a function that runs before the view function regardless of what URL is requested
 @bp.before_app_request
