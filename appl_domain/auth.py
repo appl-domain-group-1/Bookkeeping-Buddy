@@ -6,7 +6,7 @@ from appl_domain.db import get_db
 from datetime import datetime, timedelta
 import json
 from PIL import Image
-import base64
+from io import BytesIO
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -428,27 +428,45 @@ def my_account():
         # Get handle on DB
         db = get_db()
         # Get the info from the form fields
-        email = request.form['email_address']
         first_name = request.form['first_name']
         last_name = request.form['last_name']
+        email = request.form['email_address']
+        address = request.form['address']
         uploaded_pic = request.files['uploaded_pic']
-        # Ensure that the pic uploaded is of the correct type
-        if uploaded_pic.mimetype not in ['image/jpeg', 'image/png']:
-            flash("Improper profile picture formate. Profile pictures must be JPEG or PNG")
-            return redirect(url_for('auth.my_account'))
-        # Open image using Pillow library for manipulation
-        uploaded_pic = Image.open(uploaded_pic)
-        # Resize the picture to save DB size
-        # uploaded_pic.thumbnail((200, 200))
-        # Convert to bytes for storage in the database
-        uploaded_pic = uploaded_pic.tobytes()
-        # current_pic = g.user['picture']
-        # current_pic_encoded = str(base64.b64encode(current_pic), "utf-8")
-        uploaded_pic = str(base64.b64encode(uploaded_pic), "utf-8")
-        db.execute(
-            "UPDATE users SET picture = ? WHERE username = ?", (uploaded_pic, g.user['username'])
-        )
-        db.commit()
+        # Make sure a picture was supplied
+        if uploaded_pic.filename:
+            # Ensure that the pic uploaded is of the correct type
+            if uploaded_pic.mimetype not in ['image/jpeg', 'image/png']:
+                flash("Improper profile picture format. Profile pictures must be JPEG or PNG")
+                return redirect(url_for('auth.my_account'))
+            # Ensure we know what type of image it is
+            image_type = None
+            if uploaded_pic.mimetype == 'image/jpeg':
+                image_type = "JPEG"
+            if uploaded_pic.mimetype == 'image/png':
+                image_type = "PNG"
+            # Open image using Pillow library for manipulation
+            uploaded_pic = Image.open(uploaded_pic)
+            # Resize the picture to save DB size
+            uploaded_pic.thumbnail((200, 200))
+            # Create a temporary byte buffer for the image
+            temp_buffer = BytesIO()
+            # Write the uploaded image to the temporary byte buffer
+            uploaded_pic.save(temp_buffer, format=image_type)
+            # Save the new image in the database
+            uploaded_pic = temp_buffer.getvalue()
+            db.execute(
+                "UPDATE users SET picture = ?, email_address = ?, first_name = ?, last_name = ?, address = ? WHERE username = ?",
+                (uploaded_pic, email, first_name, last_name, address, g.user['username'])
+            )
+            db.commit()
+        else:
+            db.execute(
+                "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, address = ? WHERE username = ?",
+                (email, first_name, last_name, address, g.user['username'])
+            )
+            db.commit()
+        # Tell the user it worked
         flash("Profile updated!")
         return redirect(url_for('auth.my_account'))
 

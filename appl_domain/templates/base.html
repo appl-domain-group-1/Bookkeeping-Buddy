@@ -10,10 +10,10 @@
 
         {%  if g.user %}
             <div id="logged_in_header" style="display: inline-block; width:100%">
+                <a href = {{ url_for('mainpage') }}> <img src="{{ url_for('static', filename='logo_cropped.png') }}" style="height: 150px" alt="BookkeepingBuddy logo"></a>
                 <div id="user_pic" style="text-align: right; display: inline-block">
             {% if g.user['picture'] %}
-{#                <span><img src="data:image/jpeg;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" style="width:100px;height:100px;" alt="User's profile picture"/></span>#}
-                <span><img src="data:image/jpeg;base64, {{ g.user["picture"] }}"  id = "userImage2" style="width:100px;height:100px;" alt="User's profile picture"/></span>
+                <span><img src="data:image/jpeg;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" style="width:100px;height:100px;" alt="User's profile picture"/></span>
             {% else %}
                 <span><img src="{{ url_for('static', filename='no_photo.png') }}" style="width:100px;height:100px;"  alt="Placeholder profile picture"/></span>
             {% endif %}
