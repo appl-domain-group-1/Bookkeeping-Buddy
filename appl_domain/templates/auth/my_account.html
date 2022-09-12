@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <label for="first_name">First Name</label>
         <input name="first_name" id="first_name" required value="{{ g.user['first_name'] }}">
         <label for="last_name">Last Name</label>
@@ -20,11 +20,13 @@
         <label for="profile_pic">Profile picture</label>
         <br>
         {% if g.user['picture'] %}
-            <span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" alt="User's profile picture"/></span>
+            <span><img src="data:image/png;base64, {{ g.user["picture"] }}"  id = "userImage" style="width:100px;height:100px;" alt="User's profile picture"/></span>
         {% else %}
             <span><img src="{{ url_for('static', filename='no_photo.png') }}" style="width:100px;height:100px;"  alt="Placeholder profile picture"/></span>
         {% endif %}
-        <button type="button">Upload new photo</button>
+        <br>
+        <label for="uploaded_pic">Upload new photo</label>
+        <input type="file" name="uploaded_pic" id="uploaded_pic">
         <br>
         <input type="submit" value="Save changes">
     </form>
