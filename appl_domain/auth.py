@@ -3,7 +3,7 @@ import functools
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from appl_domain.db import get_db
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 import json
 from PIL import Image
 from io import BytesIO
@@ -94,6 +94,8 @@ def register():
                     - first_pet [str]: Name of first pet. Security question #1
                     - city_born [str]: City where user was born. Security question #2
                     - year_graduated_hs [str]: Year user graduated highschool. Security question #3
+                    - incorrect_login_attempts [int]: Number of times login has been attempted to this account with
+                        incorrect password. Default: 0. When == 3, account is suspended
                 """
                 # Hash the new password
                 password = generate_password_hash(password)
@@ -148,6 +150,10 @@ def login():
             error = "Account suspended due to too many incorrect login attempts. Contact an administrator."
             db.execute("UPDATE users SET active = ? WHERE username = ?", (0, username))
             db.commit()
+        # Ensure that the account isn't suspended
+        elif (date.fromisoformat(user['suspend_start_date']) <= date.today()) and (date.today() < date.fromisoformat(user['suspend_end_date'])):
+            error = f"Account suspended until {date.fromisoformat(user['suspend_end_date'])}. Contact an " \
+                    f"administrator for assistance. "
         # If the password hash in the form doesn't match what's in the database, throw an error
         elif not check_password_hash(user['password'], password):
             if user['incorrect_login_attempts'] < 2:
