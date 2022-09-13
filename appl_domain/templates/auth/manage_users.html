@@ -24,10 +24,12 @@
         {% set row = namespace(counter = 0) %}
         {% for user in users %}
             {% set row.counter = row.counter + 1 %}
-            {% if row.counter % 2 == 1 %}
-            <tr style="background-color:#CFCFCF">
+            {% if user['incorrect_login_attempts'] >= 3 %}
+                <tr style="background-color:goldenrod">
+            {% elif row.counter % 2 == 1 %}
+                <tr style="background-color:#CFCFCF">
             {% else %}
-            <tr>
+                <tr>
             {% endif %}
                 <td>{{user['first_name']}} {{user['last_name']}}</td>
                 <td>{{user['username']}}</td>
