@@ -47,16 +47,6 @@ def create_app(test_config=None):
     import appl_domain.auth as auth
     app.register_blueprint(auth.bp)
 
-    @app.route('/email/<username>')
-    def email(username):
-        # Get matching user from the DB
-        db = get_db()
-        user = db.execute(
-            "SELECT * FROM users WHERE username = ?", (username,)
-        ).fetchone()
-        # Generate email body
-        email_body = flask.render_template('email.html', user=user)
-        # Send email
-        return flask.render_template('email.html', user=user)
+
 
     return app

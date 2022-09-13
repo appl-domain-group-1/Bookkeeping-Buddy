@@ -1,4 +1,5 @@
 import functools
+from appl_domain.autoemail import email_registration
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from appl_domain.db import get_db
@@ -100,6 +101,9 @@ def register():
                 )
                 # Write the change to the database
                 db.commit()
+
+                email_registration(username, first_name, last_name)
+
             # Catch cases where a username already exists
             except (db.InternalError, db.IntegrityError):  # TODO: Probably won't need this error since usernames are not user-supplied.
                 error = f"User with username {username} already exists."
