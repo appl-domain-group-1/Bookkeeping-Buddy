@@ -151,9 +151,11 @@ def login():
             db.execute("UPDATE users SET active = ? WHERE username = ?", (0, username))
             db.commit()
         # Ensure that the account isn't suspended
-        elif (date.fromisoformat(user['suspend_start_date']) <= date.today()) and (date.today() < date.fromisoformat(user['suspend_end_date'])):
-            error = f"Account suspended until {date.fromisoformat(user['suspend_end_date'])}. Contact an " \
-                    f"administrator for assistance. "
+        elif user['suspend_start_date']:
+            if (date.fromisoformat(user['suspend_start_date']) <= date.today()) and \
+                    (date.today() < date.fromisoformat(user['suspend_end_date'])):
+                error = f"Account suspended until {date.fromisoformat(user['suspend_end_date'])}. Contact an " \
+                        f"administrator for assistance. "
         # If the password hash in the form doesn't match what's in the database, throw an error
         elif not check_password_hash(user['password'], password):
             if user['incorrect_login_attempts'] < 2:
