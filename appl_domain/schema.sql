@@ -13,6 +13,7 @@ CREATE TABLE users (
   DOB TEXT NOT NULL,
   old_passwords TEXT NOT NULL,
   password_refresh_date TEXT NOT NULL,
+  incorrect_login_attempts INTEGER NOT NULL,
   suspend_start_date TEXT,
   suspend_end_date TEXT,
   creation_date TEXT NOT NULL,
