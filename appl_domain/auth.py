@@ -367,6 +367,35 @@ def delete_user(username):
             return redirect(url_for('auth.manage_users'))
 
 
+@bp.route('/reset_user/<username>', methods=('GET', 'POST'))
+@login_required
+def reset_user(username):
+    """
+    Allows administrators to reset status of suspended users
+    """
+    error = None
+    if request.method == 'GET':
+        # Only allow admins to do this
+        if g.user['role'] != 2:
+            flash("Operation not permitted")
+            return redirect(url_for('mainpage'))
+        else:
+            # Get a handle on the database
+            db = get_db()
+            # Update the row
+            try:
+                db.execute(
+                    "UPDATE users SET active = ?, incorrect_login_attempts = ? WHERE username = ?", (1, 0, username)
+                )
+                # Commit the change
+                db.commit()
+            except (db.InternalError, db.IntegrityError):
+                error = f"User with username {username} not found!"
+            if error is None:
+                flash(f"User {username} reactivated!")
+            return redirect(url_for('auth.manage_users'))
+
+
 @bp.route('/edit_user/<username>', methods=('GET', 'POST'))
 @login_required
 def edit_user(username):
