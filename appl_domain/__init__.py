@@ -2,9 +2,7 @@ import os
 
 import flask
 import base64
-from flask import Flask, redirect, url_for
-
-from appl_domain.db import get_db
+from flask import Flask
 
 
 def create_app(test_config=None):
@@ -46,7 +44,5 @@ def create_app(test_config=None):
 
     import appl_domain.auth as auth
     app.register_blueprint(auth.bp)
-
-
 
     return app

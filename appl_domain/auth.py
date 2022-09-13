@@ -1,3 +1,4 @@
+import base64
 import functools
 from appl_domain.autoemail import email_registration
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
