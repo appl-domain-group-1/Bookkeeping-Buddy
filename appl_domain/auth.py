@@ -150,12 +150,20 @@ def login():
             error = "Account suspended due to too many incorrect login attempts. Contact an administrator."
             db.execute("UPDATE users SET active = ? WHERE username = ?", (0, username))
             db.commit()
-        # Ensure that the account isn't suspended
+        # Ensure that the account doesn't have a suspend start date
         elif user['suspend_start_date']:
+            # If today's date is between the start and end dates, do not allow user to log in
             if (date.fromisoformat(user['suspend_start_date']) <= date.today()) and \
                     (date.today() < date.fromisoformat(user['suspend_end_date'])):
                 error = f"Account suspended until {date.fromisoformat(user['suspend_end_date'])}. Contact an " \
                         f"administrator for assistance. "
+            # If the end date is in the past, wipe the start and end dates
+            elif date.today() > date.fromisoformat(user['suspend_end_date']):
+                db.execute(
+                    "UPDATE users SET suspend_start_date = NULL, suspend_end_date = NULL WHERE username = ?",
+                    (username,)
+                )
+                db.commit()
         # If the password hash in the form doesn't match what's in the database, throw an error
         elif not check_password_hash(user['password'], password):
             if user['incorrect_login_attempts'] < 2:
