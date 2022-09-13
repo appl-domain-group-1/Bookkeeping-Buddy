@@ -440,25 +440,37 @@ def edit_user(username):
         role = request.form['role']
         address = request.form['address']
         DOB = request.form['DOB']
-        first_pet = request.form['first_pet']
-        city_born = request.form['city_born']
-        yr_graduated = request.form['year_graduated_hs']
-        # Get a handle on the database
-        db = get_db()
-        try:
-            # Update columns
-            db.execute(
-                "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, active = ?, role = ?, address = ?, DOB = ?, "
-                "first_pet = ?, city_born = ?, year_graduated_hs = ? WHERE username = ?", (email, first_name, last_name,
-                                                                                           active, role, address, DOB,
-                                                                                           first_pet, city_born,
-                                                                                           yr_graduated, username)
-            )
-            # Write changes
-            db.commit()
-            flash("Record updated!")
-        except Exception:
-            print(f"Error: {Exception.__traceback__.tb_next}")
+
+        # Placeholder variables
+        error = None
+        suspend_start_date = None
+        suspend_end_date = None
+        # If we got both suspend dates, add them to the database
+        if request.form['suspend_start_date'] and request.form['suspend_end_date']:
+            suspend_start_date = request.form['suspend_start_date']
+            suspend_end_date = request.form['suspend_end_date']
+        # If user doesn't give us both a start and an end date, don't commit either
+        if (request.form['suspend_start_date'] and not request.form['suspend_end_date']) or (request.form['suspend_end_date'] and not request.form['suspend_start_date']):
+            error = "To set a suspension period, you must supply both a start date and an end date."
+        # Only write to the database if there are no errors
+        if error is None:
+            # Get a handle on the database
+            db = get_db()
+            try:
+                # Update columns
+                db.execute(
+                    "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, active = ?, role = ?, "
+                    "address = ?, DOB = ?, suspend_start_date = ?, suspend_end_date = ? WHERE username = ?",
+                    (email, first_name, last_name, active, role, address, DOB, suspend_start_date, suspend_end_date,
+                     username)
+                )
+                # Write changes
+                db.commit()
+                flash("Record updated!")
+            except Exception:
+                print(f"Error: {Exception.__traceback__.tb_next}")
+        else:
+            flash(error)
         # Get fresh info from the DB
         user = db.execute(
             "SELECT * FROM users WHERE username = ?", (username,)
