@@ -3,7 +3,7 @@ import functools
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from appl_domain.db import get_db
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 import json
 from PIL import Image
 from io import BytesIO
@@ -94,6 +94,8 @@ def register():
                     - first_pet [str]: Name of first pet. Security question #1
                     - city_born [str]: City where user was born. Security question #2
                     - year_graduated_hs [str]: Year user graduated highschool. Security question #3
+                    - incorrect_login_attempts [int]: Number of times login has been attempted to this account with
+                        incorrect password. Default: 0. When == 3, account is suspended
                 """
                 # Hash the new password
                 password = generate_password_hash(password)
@@ -148,6 +150,20 @@ def login():
             error = "Account suspended due to too many incorrect login attempts. Contact an administrator."
             db.execute("UPDATE users SET active = ? WHERE username = ?", (0, username))
             db.commit()
+        # Ensure that the account doesn't have a suspend start date
+        elif user['suspend_start_date']:
+            # If today's date is between the start and end dates, do not allow user to log in
+            if (date.fromisoformat(user['suspend_start_date']) <= date.today()) and \
+                    (date.today() < date.fromisoformat(user['suspend_end_date'])):
+                error = f"Account suspended until {date.fromisoformat(user['suspend_end_date'])}. Contact an " \
+                        f"administrator for assistance. "
+            # If the end date is in the past, wipe the start and end dates
+            elif date.today() > date.fromisoformat(user['suspend_end_date']):
+                db.execute(
+                    "UPDATE users SET suspend_start_date = NULL, suspend_end_date = NULL WHERE username = ?",
+                    (username,)
+                )
+                db.commit()
         # If the password hash in the form doesn't match what's in the database, throw an error
         elif not check_password_hash(user['password'], password):
             if user['incorrect_login_attempts'] < 2:
@@ -424,25 +440,37 @@ def edit_user(username):
         role = request.form['role']
         address = request.form['address']
         DOB = request.form['DOB']
-        first_pet = request.form['first_pet']
-        city_born = request.form['city_born']
-        yr_graduated = request.form['year_graduated_hs']
-        # Get a handle on the database
-        db = get_db()
-        try:
-            # Update columns
-            db.execute(
-                "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, active = ?, role = ?, address = ?, DOB = ?, "
-                "first_pet = ?, city_born = ?, year_graduated_hs = ? WHERE username = ?", (email, first_name, last_name,
-                                                                                           active, role, address, DOB,
-                                                                                           first_pet, city_born,
-                                                                                           yr_graduated, username)
-            )
-            # Write changes
-            db.commit()
-            flash("Record updated!")
-        except Exception:
-            print(f"Error: {Exception.__traceback__.tb_next}")
+
+        # Placeholder variables
+        error = None
+        suspend_start_date = None
+        suspend_end_date = None
+        # If we got both suspend dates, add them to the database
+        if request.form['suspend_start_date'] and request.form['suspend_end_date']:
+            suspend_start_date = request.form['suspend_start_date']
+            suspend_end_date = request.form['suspend_end_date']
+        # If user doesn't give us both a start and an end date, don't commit either
+        if (request.form['suspend_start_date'] and not request.form['suspend_end_date']) or (request.form['suspend_end_date'] and not request.form['suspend_start_date']):
+            error = "To set a suspension period, you must supply both a start date and an end date."
+        # Only write to the database if there are no errors
+        if error is None:
+            # Get a handle on the database
+            db = get_db()
+            try:
+                # Update columns
+                db.execute(
+                    "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, active = ?, role = ?, "
+                    "address = ?, DOB = ?, suspend_start_date = ?, suspend_end_date = ? WHERE username = ?",
+                    (email, first_name, last_name, active, role, address, DOB, suspend_start_date, suspend_end_date,
+                     username)
+                )
+                # Write changes
+                db.commit()
+                flash("Record updated!")
+            except Exception:
+                print(f"Error: {Exception.__traceback__.tb_next}")
+        else:
+            flash(error)
         # Get fresh info from the DB
         user = db.execute(
             "SELECT * FROM users WHERE username = ?", (username,)
