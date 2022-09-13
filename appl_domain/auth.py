@@ -100,9 +100,9 @@ def register():
                 db.execute(
                     "INSERT INTO users (username, email_address, first_name, last_name, active, role, password, "
                     "address, DOB, old_passwords, password_refresh_date, creation_date, first_pet, city_born, "
-                    "year_graduated_hs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "year_graduated_hs, incorrect_login_attempts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (username, email_address, first_name, last_name, 0, 0, password, address,
-                     DOB, json.dumps([password]), today, today, first_pet, city_born, year_graduated_hs)
+                     DOB, json.dumps([password]), today, today, first_pet, city_born, year_graduated_hs, 0)
                 )
                 # Write the change to the database
                 db.commit()
@@ -143,9 +143,25 @@ def login():
         # If we are given a blank username, throw an error
         if user is None:
             error = "Incorrect username"
+        # Ensure that user account isn't locked
+        elif user['incorrect_login_attempts'] >= 3:
+            error = "Account suspended due to too many incorrect login attempts. Contact an administrator."
+            db.execute("UPDATE users SET active = ? WHERE username = ?", (0, username))
+            db.commit()
         # If the password hash in the form doesn't match what's in the database, throw an error
         elif not check_password_hash(user['password'], password):
-            error = "Incorrect password"
+            if user['incorrect_login_attempts'] < 2:
+                error = f"Incorrect password. {2 - user['incorrect_login_attempts']} attempts remaining."
+                db.execute(
+                    "UPDATE users SET incorrect_login_attempts = ? WHERE username = ?",
+                    (user['incorrect_login_attempts'] + 1, username))
+                db.commit()
+            else:
+                error = "Account suspended due to too many incorrect login attempts. Contact an administrator."
+                db.execute(
+                    "UPDATE users SET incorrect_login_attempts = ?, active = ? WHERE username = ?",
+                    (user['incorrect_login_attempts'] + 1, 0, username))
+                db.commit()
         # If the account is inactive, throw an error
         elif not user['active']:
             error = "Account not activated. Contact your administrator."
@@ -158,6 +174,10 @@ def login():
             session['username'] = user['username']
             # Add the logged-in user's role to the cookie
             session['role'] = user['role']
+            # Reset the user's incorrect login attempts
+            db.execute(
+                "UPDATE users SET incorrect_login_attempts = ? WHERE username = ?", (0, username))
+            db.commit()
             # Send the logged-in user back to the main screen of the application
             return redirect(url_for('mainpage'))
 
