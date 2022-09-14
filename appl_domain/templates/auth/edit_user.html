@@ -5,64 +5,163 @@
 {% endblock %}
 
 {% block content %}
+<style>
+    body{
+    align-items:center;
+    justify-content: center;
+}
+.box{
+    position: relative;
+    max-width: 900px;
+    width: 100%;
+    border-radius: 6px;
+    padding: 30px;
+    margin-left: 275px;
+    margin-right: 15px;
+    margin-bottom: 0px;
+    margin-top: 40px;
+    background-color: black;
+}
+.box header{
+    font-size : x-large;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+.box form{
+    position: relative;
+    margin-top:16px;
+    min-height: 400px;
+    background: black;
+}
+.box form .details{
+    margin-top: 30px;
+}
+.box form .category{
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+form .category .information{
+    display: flex;
+    width: calc(100%/3 - 15px);
+    flex-direction: column;
+    margin: 4px 0;
+}
+.information label{
+    font-size: 14px;
+    font-weight: bold;
+    color: #185DFF;
+}
+.information input{
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    border-radius: 5px;
+    border: 1px solid #F89E19;
+    padding:  0 15px;
+    height: 42px;
+    margin: 8px 0;
+}
+.box form button{
+
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid #F89E19;
+    padding:  0 15px;
+    height: 42px;
+    margin: 8px 0;
+    width: 200px;
+    background-color: #185DFF;
+}
+.box form .submit{
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    width: 200px;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid #F89E19;
+    padding:  0 15px;
+    height: 42px;
+    margin: 8px 0;
+    background-color: #185DFF;
+}
+</style>
+<div class="box">
+    <header>Edit account for user {{ user['username'] }}</header>
     <form method="post">
-        <label for="first_name">First Name</label>
-        <input name="first_name" id="first_name" required value="{{ user['first_name'] }}">
-        <label for="last_name">Last Name</label>
-        <input name="last_name" id="last_name" required value="{{ user['last_name'] }}">
-        <br>
-        <label for="email_address">Email Address</label>
-        <input name="email_address" id="email_address" required value="{{ user['email_address'] }}">
-        <br>
-        {% if user['active'] == 1 %}
-            <label for="active">Active?</label>
-            <input type="checkbox" id="active" name= "active" value="active" checked>
-        {% else %}
-            <label for="active">Active?</label>
-            <input type="checkbox" id="active" name="active" value="active">
-        {% endif %}
-        {% if user['incorrect_login_attempts'] >= 3 %}
-            User account suspended for too many incorrect logins.
-            <br>
-            Reset login attempts and activate account?
-            <button type="button" onclick="if (confirm('Are you sure you want to reactivate user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.reset_user', username=user['username'])}}'}">Reset</button>
-        {% endif %}
-        <br>
-        <label for="role">Role</label>
-        <select name="role" id="role">
-            <option value="0" {% if user['role'] == 0 %} selected {% endif %}>User</option>
-            <option value="1" {% if user['role'] == 1 %} selected {% endif %}>Manager</option>
-            <option value="2" {% if user['role'] == 2 %} selected {% endif %}>Administrator</option>
-        </select>
-        <br>
-        <label for="address">Address</label>
-        <input name="address" id="address" required value="{{ user['address'] }}">
-        <br>
-        <label for="DOB">Date of birth (YYYY-MM-DD)</label>
-        <input name="DOB" id="DOB" required value="{{ user['DOB'] }}">
-        <br>
-        Suspend user account from:
-        <br>
-        <label for="suspend_start_date">Start</label>
-        {% if user['suspend_start_date'] %}
-        <input name="suspend_start_date" id="suspend_start_date" value="{{ user['suspend_start_date'] }}">
-        {% else %}
-        <input name="suspend_start_date" id="suspend_start_date">
-        {% endif %}
-        <br>
-        to
-        <br>
-        <label for="suspend_end_date">End</label>
-        {% if user['suspend_end_date'] %}
-        <input name="suspend_end_date" id="suspend_end_date" value="{{ user['suspend_end_date'] }}">
-        {% else %}
-        <input name="suspend_end_date" id="suspend_end_date">
-        {% endif %}
-        <br>
-        Password last refreshed on {{ user['password_refresh_date'] }}
-        <br>
-        <input type="submit" value="Save changes">
-        <button type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'">Back</button>
-        <button type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
+        <div class = "form-second">
+            <div class = "details personal">
+                <div class = "category">
+                    <div class = "information">
+                        <label for="email_address">Email Address</label>
+                        <input name="email_address" type = "email" id="email_address" required value="{{ user['email_address'] }}">
+                    </div>
+                    <div class = "information">
+                        <label for="first_name">First Name</label>
+                        <input name="first_name" id="first_name" required value="{{ user['first_name'] }}">
+                    </div>
+                    <div class = "information">
+                        <label for="last_name">Last Name</label>
+                        <input name="last_name" id="last_name" required value="{{ user['last_name'] }}">
+                    </div>
+                    <div class = "information">
+                        {% if user['active'] == 1 %}
+                            <label for="active">Active?</label>
+                            <input type="checkbox" id="active" name= "active" value="active" checked style="height: 30px; margin-left: -250px">
+                        {% else %}
+                            <label for="active">Active?</label>
+                            <input type="checkbox" id="active" name="active" value="active" style="height: 30px; margin-left: -250px">
+                        {% endif %}
+                    </div>
+                    <div class = "information">
+                        <label for="role">Role</label>
+                        <select name="role" id="role" style="border-radius: 5px;
+                            border: 1px solid #F89E19;
+                            padding:  0 15px;
+                            height: 45px;
+                            margin: 8px 0;outline: none;
+                            font-size: 14px;
+                            font-weight: 400;">
+                        <option value="0" {% if user['role'] == 0 %} selected {% endif %}>User</option>
+                        <option value="1" {% if user['role'] == 1 %} selected {% endif %}>Manager</option>
+                        <option value="2" {% if user['role'] == 2 %} selected {% endif %}>Administrator</option>
+                    </select>
+                    </div>
+                    <div class = "information">
+                        <label for="address">Address</label>
+                        <input name="address" id="address" required value="{{ user['address'] }}">
+                    </div>
+                    <div class = "information">
+                        <label for="DOB">Date of birth (YYYY-MM-DD)</label>
+                        <input name="DOB" id="DOB" required value="{{ user['DOB'] }}">
+                    </div>
+                 <div class = "information">
+                            <label for="first_pet">Name of your first pet</label>
+                            <input name="first_pet" id="first_pet" required value="{{ user['first_pet'] }}">
+                    </div>
+                                <div class = "information">
+                        <label for="city_born">City you were born in</label>
+                        <input name="city_born" id="city_born" required value="{{ user['city_born'] }}">
+                    </div>
+                    <div class = "information">
+                        <label for="year_graduated_hs">Year you graduated highschool</label>
+                        <input name="year_graduated_hs" id="year_graduated_hs" required value="{{ user['year_graduated_hs'] }}">
+                    </div>
+                    <div class = "buttons" style="margin-top: 30px; align-content: center; margin-left: 150px; margin-bottom: 50px">
+                            <input type="submit" class = "submit" value="Save changes">
+                            <button type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'">Back</button>
+                            <button type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
+    </div>
 {% endblock %}
