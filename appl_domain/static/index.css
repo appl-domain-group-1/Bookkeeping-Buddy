@@ -12,8 +12,8 @@ font-family: Smooch;
 color: blue;
 font-size: 38px;
 text-align: center;
-top: 50%
-left: 50%
+top: 50%;
+left: 50%;
 transform: translateX(-50%)translateY(-50%);
 }
 .Welcome-text{
@@ -42,13 +42,13 @@ color: blue;
 text-decoration:none;
 padding: 5px 20px;
 }
-.nav-area li a: hover{
+.nav-area li a:hover{
 background: blue;
 color: grey;
 }
 .logo img{
 width: 60px;
 float:left;
-padding-left: 5%
+padding-left: 5%;
 padding-top:2%
 }
