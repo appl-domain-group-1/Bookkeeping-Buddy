@@ -3,16 +3,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}{% endblock %} - Bookkeeping Buddy</title>
-<!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
 <nav>
     <div id="navbar">
 
         {%  if g.user %}
             <div id="logged_in_header" style="display: inline-block; width:100%">
+                <a href = {{ url_for('mainpage') }}> <img src="{{ url_for('static', filename='logo_cropped.png') }}" style="height: 150px" alt="BookkeepingBuddy logo"></a>
                 <div id="user_pic" style="text-align: right; display: inline-block">
             {% if g.user['picture'] %}
-                <span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" alt="User's profile picture"/></span>
+                <span><img src="data:image/jpeg;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" style="width:100px;height:100px;" alt="User's profile picture"/></span>
             {% else %}
                 <span><img src="{{ url_for('static', filename='no_photo.png') }}" style="width:100px;height:100px;"  alt="Placeholder profile picture"/></span>
             {% endif %}
@@ -27,6 +28,7 @@
                 {% else %}
                 <div id="account_type" style="text-align: right">Account type: User</div>
                 {% endif %}
+                <div id="my_account" style="text-align: right"><a href="{{ url_for('auth.my_account') }}">My Account</a></div>
                 <div id="logout" style="text-align: right"><a href="{{ url_for('auth.logout') }}">Log Out</a></div>
             </div>
         {% else %}

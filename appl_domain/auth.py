@@ -1,9 +1,13 @@
+import base64
 import functools
 from appl_domain.autoemail import email_registration
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from appl_domain.db import get_db
-from datetime import datetime
+from datetime import datetime, timedelta
+import json
+from PIL import Image
+from io import BytesIO
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -83,8 +87,8 @@ def register():
                     - password [str]: Hashed representation of user input. Never stored in plain text.
                     - address [str]: Input by user
                     - DOB [str]: Input by user. Should be in YYYY-MM-DD format
-                    - old_passwords [bytes]: List of old passwords used by this user. SQLite cannot handle a Python list
-                        datatype, so this must be converted to bytes.
+                    - old_passwords [str]: List of old passwords used by this user. SQLite cannot handle a Python list
+                        datatype, so this must be converted to JSON
                     - password_refresh_date [str]: Date when password was last updated (YYYY-MM-DD). Set to the date 
                         account was created, then is updated each time a user updates their password
                     - creation_date [str]: Date when account was created (YYYY-MM-DD)
@@ -92,12 +96,14 @@ def register():
                     - city_born [str]: City where user was born. Security question #2
                     - year_graduated_hs [str]: Year user graduated highschool. Security question #3
                 """
+                # Hash the new password
+                password = generate_password_hash(password)
                 db.execute(
                     "INSERT INTO users (username, email_address, first_name, last_name, active, role, password, "
                     "address, DOB, old_passwords, password_refresh_date, creation_date, first_pet, city_born, "
-                    "year_graduated_hs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    (username, email_address, first_name, last_name, 0, 0, generate_password_hash(password), address,
-                     DOB, bytes([]), today, today, first_pet, city_born, year_graduated_hs)
+                    "year_graduated_hs, incorrect_login_attempts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (username, email_address, first_name, last_name, 0, 0, password, address,
+                     DOB, json.dumps([password]), today, today, first_pet, city_born, year_graduated_hs, 0)
                 )
                 # Write the change to the database
                 db.commit()
@@ -105,7 +111,8 @@ def register():
                 email_registration(username, first_name, last_name)
 
             # Catch cases where a username already exists
-            except (db.InternalError, db.IntegrityError):  # TODO: Probably won't need this error since usernames are not user-supplied.
+            except (db.InternalError,
+                    db.IntegrityError):  # TODO: Probably won't need this error since usernames are not user-supplied.
                 error = f"User with username {username} already exists."
             else:
                 # TODO: Should show the new user a page saying their account is awaiting approval from an admin
@@ -140,9 +147,25 @@ def login():
         # If we are given a blank username, throw an error
         if user is None:
             error = "Incorrect username"
+        # Ensure that user account isn't locked
+        elif user['incorrect_login_attempts'] >= 3:
+            error = "Account suspended due to too many incorrect login attempts. Contact an administrator."
+            db.execute("UPDATE users SET active = ? WHERE username = ?", (0, username))
+            db.commit()
         # If the password hash in the form doesn't match what's in the database, throw an error
         elif not check_password_hash(user['password'], password):
-            error = "Incorrect password"
+            if user['incorrect_login_attempts'] < 2:
+                error = f"Incorrect password. {2 - user['incorrect_login_attempts']} attempts remaining."
+                db.execute(
+                    "UPDATE users SET incorrect_login_attempts = ? WHERE username = ?",
+                    (user['incorrect_login_attempts'] + 1, username))
+                db.commit()
+            else:
+                error = "Account suspended due to too many incorrect login attempts. Contact an administrator."
+                db.execute(
+                    "UPDATE users SET incorrect_login_attempts = ?, active = ? WHERE username = ?",
+                    (user['incorrect_login_attempts'] + 1, 0, username))
+                db.commit()
         # If the account is inactive, throw an error
         elif not user['active']:
             error = "Account not activated. Contact your administrator."
@@ -155,6 +178,10 @@ def login():
             session['username'] = user['username']
             # Add the logged-in user's role to the cookie
             session['role'] = user['role']
+            # Reset the user's incorrect login attempts
+            db.execute(
+                "UPDATE users SET incorrect_login_attempts = ? WHERE username = ?", (0, username))
+            db.commit()
             # Send the logged-in user back to the main screen of the application
             return redirect(url_for('mainpage'))
 
@@ -162,6 +189,138 @@ def login():
         flash(error)
 
     return render_template('auth/login.html')
+
+
+@bp.route('forgot_password', methods=('GET', 'POST'))
+def forgot_password():
+    """
+    View to allow a user to begin the password reset process. Asks them to provide username, email address, and answer
+    three security questions
+    """
+    if request.method == 'POST':
+        # Get username from the form
+        username = request.form['username']
+        # Get email from the form
+        email_address = request.form['email_address']
+        # Get security questions from the form
+        first_pet = request.form['first_pet']
+        city_born = request.form['city_born']
+        year_graduated_hs = request.form['year_graduated_hs']
+
+        # Get a handle on the database
+        db = get_db()
+        # Get the row for this user
+        user = db.execute(
+            "SELECT * FROM users WHERE username = ?", (username,)
+        ).fetchone()
+
+        # Ensure that a user with that username was found in the database
+        if user:
+            # Check the provided email address against what's in the database
+            if email_address != user['email_address']:
+                flash("Email address incorrect")
+                return render_template('auth/forgot_password.html')
+            # Check security question answers against the database
+            if (first_pet != user['first_pet']) or \
+                    (city_born != user['city_born']) or \
+                    (year_graduated_hs != str(user['year_graduated_hs'])):
+                flash("Security questions incorrect")
+                return render_template('auth/forgot_password.html')
+            # If the checks pass begin to reset the password
+            # First, clear the cookie
+            session.clear()
+            # Add the logged-in user's ID to the cookie
+            session['username'] = user['username']
+            # Set the user in the current session
+            g.user = user
+            # Send the user to a new page to reset their password
+            return redirect(url_for('auth.reset_password'))
+        # If there was no matching record in the database for that user, boot them back to the previous screen
+        else:
+            flash("Could not find user with that login.")
+    return render_template('auth/forgot_password.html')
+
+
+@bp.route('reset_password', methods=('GET', 'POST'))
+@login_required
+def reset_password():
+    """
+    View to allow logged-in users to reset their password
+    """
+    # Placeholder in case an error occurs during the process
+    error = None
+    if request.method == 'POST':
+        # Get the entries from the page
+        password1 = request.form['password1']
+        password2 = request.form['password2']
+        # Ensure that they match
+        if password1 != password2:
+            error = "Passwords must match!"
+        # Ensure new passwords are not blank
+        if not password1 or not password2:
+            error = "You must enter a new password"
+        # Ensure that passwords meet requirements
+        for password in (password1, password2):
+            if (len(password) < 8) or \
+                    not (password[0].isalpha()) or \
+                    not (any(character.isdigit() for character in password)) or \
+                    not (any(character not in "!@#$%^&*") for character in password):
+                error = 'Password must contain at least 8 characters, start with a letter, contain a number, and ' \
+                        'contain a special character from this list: !@#$%^&*'
+        # If we didn't get an error, reset the password
+        if error is None:
+            # Get a handle on the DB
+            db = get_db()
+            try:
+                # Fetch the row for this user
+                user = db.execute(
+                    "SELECT * FROM users WHERE username = ?", (g.user['username'],)
+                ).fetchone()
+                # Get list of old passwords and decode it from JSON
+                old_passwords = json.loads(user['old_passwords'])
+                # Ensure the new password isn't in the list of old passwords
+                found = False
+                for password in old_passwords:
+                    if check_password_hash(password, password1):
+                        found = True
+                        break
+                # If the password is in the list of old passwords, throw an error
+                if found:
+                    flash("Old passwords may not be reused!")
+                    return render_template('auth/reset_password.html')
+                # If the new password was not in the old_passwords list, add it and set it as the new current password
+                else:
+                    # Hash the new password
+                    new_password = generate_password_hash(password1)
+                    # Add it to the list
+                    old_passwords.append(new_password)
+                    # Convert the list to JSON
+                    old_passwords = json.dumps(old_passwords)
+                    # Get today's date so we can update password refresh date to today
+                    today = datetime.now()
+                    # Format today's date for the database (YYYY-MM-DD)
+                    today = f"{today.year}-{today.month:02d}-{today.day:02d}"
+                    # Update the database
+                    try:
+                        db.execute(
+                            "UPDATE users SET password = ?, old_passwords = ?, password_refresh_date = ? WHERE username = ?",
+                            (new_password, old_passwords, today, user['username'])
+                        )
+                        # Write changes
+                        db.commit()
+                    except (db.InternalError, db.IntegrityError):
+                        error = "Database error. Contact an administrator for assistance."
+                # Clear the user's cookie to log them out
+                session.clear()
+                # Tell user to log in with new password
+                flash("Password changed! Please log in with your new password")
+                # Send them to the login page
+                return redirect(url_for('auth.login'))
+            except (db.InternalError, db.IntegrityError):
+                error = "Database error. Contact an administrator for assistance."
+    if error:
+        flash(error)
+    return render_template('auth/reset_password.html')
 
 
 @bp.route('/manage_users', methods=('GET', 'POST'))
@@ -211,6 +370,34 @@ def delete_user(username):
                 flash(f"User {username} deleted!")
             return redirect(url_for('auth.manage_users'))
 
+
+@bp.route('/reset_user/<username>', methods=('GET', 'POST'))
+@login_required
+def reset_user(username):
+    """
+    Allows administrators to reset status of suspended users
+    """
+    error = None
+    if request.method == 'GET':
+        # Only allow admins to do this
+        if g.user['role'] != 2:
+            flash("Operation not permitted")
+            return redirect(url_for('mainpage'))
+        else:
+            # Get a handle on the database
+            db = get_db()
+            # Update the row
+            try:
+                db.execute(
+                    "UPDATE users SET active = ?, incorrect_login_attempts = ? WHERE username = ?", (1, 0, username)
+                )
+                # Commit the change
+                db.commit()
+            except (db.InternalError, db.IntegrityError):
+                error = f"User with username {username} not found!"
+            if error is None:
+                flash(f"User {username} reactivated!")
+            return redirect(url_for('auth.manage_users'))
 
 
 @bp.route('/edit_user/<username>', methods=('GET', 'POST'))
@@ -265,6 +452,76 @@ def edit_user(username):
             "SELECT * FROM users WHERE username = ?", (username,)
         ).fetchone()
         return render_template('auth/edit_user.html', user=user)
+
+
+@bp.route('/my_account', methods=('GET', 'POST'))
+@login_required
+def my_account():
+    """
+     View to allow a user to edit information about their account (change password, upload photo, etc.)
+     """
+
+    if request.method == 'GET':
+        # Get the date the user's password will expire. This is a string.
+        password_refresh_date = g.user['password_refresh_date']
+        # Convert each piece of the date to integers
+        year = int(password_refresh_date[:4])
+        month = int(password_refresh_date[5:7])
+        day = int(password_refresh_date[8:])
+        # Convert the string to a datetime object
+        password_refresh_date = datetime(year, month, day)
+        # Calculate the date when it will expire
+        password_expires = password_refresh_date + timedelta(days=180)
+        # Convert this date to a string for use on the page
+        password_expires = password_expires.date().__str__()
+        # render the template
+        return render_template('auth/my_account.html', password_expires=password_expires)
+
+    if request.method == 'POST':
+        # Get handle on DB
+        db = get_db()
+        # Get the info from the form fields
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email_address']
+        address = request.form['address']
+        uploaded_pic = request.files['uploaded_pic']
+        # Make sure a picture was supplied
+        if uploaded_pic.filename:
+            # Ensure that the pic uploaded is of the correct type
+            if uploaded_pic.mimetype not in ['image/jpeg', 'image/png']:
+                flash("Improper profile picture format. Profile pictures must be JPEG or PNG")
+                return redirect(url_for('auth.my_account'))
+            # Ensure we know what type of image it is
+            image_type = None
+            if uploaded_pic.mimetype == 'image/jpeg':
+                image_type = "JPEG"
+            if uploaded_pic.mimetype == 'image/png':
+                image_type = "PNG"
+            # Open image using Pillow library for manipulation
+            uploaded_pic = Image.open(uploaded_pic)
+            # Resize the picture to save DB size
+            uploaded_pic.thumbnail((200, 200))
+            # Create a temporary byte buffer for the image
+            temp_buffer = BytesIO()
+            # Write the uploaded image to the temporary byte buffer
+            uploaded_pic.save(temp_buffer, format=image_type)
+            # Save the new image in the database
+            uploaded_pic = temp_buffer.getvalue()
+            db.execute(
+                "UPDATE users SET picture = ?, email_address = ?, first_name = ?, last_name = ?, address = ? WHERE username = ?",
+                (uploaded_pic, email, first_name, last_name, address, g.user['username'])
+            )
+            db.commit()
+        else:
+            db.execute(
+                "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, address = ? WHERE username = ?",
+                (email, first_name, last_name, address, g.user['username'])
+            )
+            db.commit()
+        # Tell the user it worked
+        flash("Profile updated!")
+        return redirect(url_for('auth.my_account'))
 
 
 # This decorator registers a function that runs before the view function regardless of what URL is requested

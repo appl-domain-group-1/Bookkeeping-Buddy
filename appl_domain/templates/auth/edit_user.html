@@ -21,6 +21,12 @@
             <label for="active">Active?</label>
             <input type="checkbox" id="active" name="active" value="active">
         {% endif %}
+        {% if user['incorrect_login_attempts'] >= 3 %}
+            User account suspended for too many incorrect logins.
+            <br>
+            Reset login attempts and activate account?
+            <button type="button" onclick="if (confirm('Are you sure you want to reactivate user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.reset_user', username=user['username'])}}'}">Reset</button>
+        {% endif %}
         <br>
         <label for="role">Role</label>
         <select name="role" id="role">
