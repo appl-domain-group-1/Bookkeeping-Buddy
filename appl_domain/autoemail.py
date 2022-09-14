@@ -38,22 +38,3 @@ def email_registration(username, first_name, last_name):
 
     # https://towardsdatascience.com/how-to-easily-automate-emails-with-python-8b476045c151#bc59
     # User: noreply.bookkeepingbuddy@gmail.com   Pass: xEcN5GxFjCBqq29
-
-    # @bp.route('/email/<username>')
-    # def email(username):
-    #    db = get_db()
-    #    # Get matching user from the DB
-    #    user = db.execute(
-    #        "SELECT * FROM users WHERE username = ?", (username,)
-    #    ).fetchone()
-
-    #    admins = db.execute(
-    #        "SELECT * FROM users WHERE role = ?", (2,)
-    #    ).fetchall()
-
-    #    for admin in admins:
-    #        email_registration(user, admin["email_address"])
-        # Generate email body
-        # email_body = flask.render_template('email.html', user=user)
-        # Send email
-    #    return flask.render_template('auth/email.html', user=user)
