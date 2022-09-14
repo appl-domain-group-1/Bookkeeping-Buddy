@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Account settings for {{ g.user['username'] }}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        <label for="first_name">First Name</label>
+        <input name="first_name" id="first_name" required value="{{ g.user['first_name'] }}">
+        <label for="last_name">Last Name</label>
+        <input name="last_name" id="last_name" required value="{{ g.user['last_name'] }}">
+        <br>
+        <label for="email_address">Email Address</label>
+        <input name="email_address" id="email_address" required value="{{ g.user['email_address'] }}">
+        <br>
+        <label for="address">Address</label>
+        <input name="address" id="address" required value="{{ g.user['address'] }}">
+        <br>
+        <label for="profile_pic">Profile picture</label>
+        <br>
+        {% if g.user['picture'] %}
+            <span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" style="width:100px;height:100px;" alt="User's profile picture"/></span>
+        {% else %}
+            <span><img src="{{ url_for('static', filename='no_photo.png') }}" style="width:100px;height:100px;"  alt="Placeholder profile picture"/></span>
+        {% endif %}
+        <br>
+        <label for="uploaded_pic">Upload new photo</label>
+        <input type="file" name="uploaded_pic" id="uploaded_pic">
+        <br>
+        <input type="submit" value="Save changes">
+    </form>
+        <br>
+        Password last reset on {{ g.user['password_refresh_date'] }}<br>
+        Your password will expire on {{ password_expires }}<br>
+        {% if g.user['suspend_start_date'] %}
+            Your account is set to be suspended starting on {{ g.user['suspend_start_date'] }}.
+            It will be reactivated on {{ g.user['suspend_end_date'] }}
+        {% endif %}
+        <button type="button" onclick="window.location.href='{{ url_for('auth.reset_password')}}'">Change Password</button>
+{% endblock %}
