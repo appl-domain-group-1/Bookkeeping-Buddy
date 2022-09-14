@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
-
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 <head>
     <meta charset="UTF-8">
-    <h1>{% block title %}Home{% endblock %}</h1>
+    {% block title %}Home{% endblock %}
 </head>
+
 {% block content %}
 <body>
 <div class = "wrapper">
     <div class = "logo">
-        <img src = "logobk.png" alt = "logo">
+        <img src = "{{ url_for('static', filename='logobk.png') }}" alt ="logo">
     </div>
     <ul class = "nav-area">
         <li><a href = "index.html">Home</a></li>
