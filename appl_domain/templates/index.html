@@ -4,25 +4,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bookkeeping Buddy</title>
-    <link rel="stylesheet" href="index.css">
-
+    <h1>{% block title %}Home{% endblock %}</h1>
 </head>
 <body>
-
-<div class = "wrapper">
-    <div class = "logo">
-        <img src = "logobk.png" alt = "logo">
-    </div>
-    <ul class = "nav-area">
-        <li><a href = "index.html">Home</a></li>
-        <li><a href = "#">Log in</a></li>
-        <li><a href = "#">Sign up</a></li>
-    </ul>
-</div>
-<div class = "Welcome-text">
-<h1> BOOKKEEPING BUDDY</h1>
-    <p><mark>Easily track income, expenses, and more with accounting software designed for all kinds of businesses.</mark></p>
-    </div>
+{% block content %}
+    <h1>This is the main page</h1>
+{%  endblock %}
 </body>
 </html>
