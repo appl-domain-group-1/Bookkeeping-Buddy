@@ -1,14 +1,13 @@
 {% extends 'base.html' %}
 
-{% block header %}
+
     {% block title %}
-    <!--{% if (g.user) and (g.user['role'] == 2) %}
-        <h1>Create a new account</h1>
+    {% if (g.user) and (g.user['role'] == 2) %}
+        Create a new account
     {% else %}
-        <h1>Register for a new account</h1>
-    {% endif %}-->
+        Register for a new account
+    {% endif %}
     {% endblock %}
-{% endblock %}
 {% block content %}
 <style>
     body{
