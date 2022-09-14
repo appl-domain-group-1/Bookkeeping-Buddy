@@ -4,12 +4,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bookkeeping Buddy</title>
-    <link rel="stylesheet" href="index.css">
-
+    <h1>{% block title %}Home{% endblock %}</h1>
 </head>
+{% block content %}
 <body>
-
 <div class = "wrapper">
     <div class = "logo">
         <img src = "logobk.png" alt = "logo">
@@ -25,4 +23,5 @@
     <p><mark>Easily track income, expenses, and more with accounting software designed for all kinds of businesses.</mark></p>
     </div>
 </body>
+{% endblock %}
 </html>
