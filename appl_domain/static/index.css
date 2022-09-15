@@ -1,54 +1,18 @@
 body {
-font-family: sans-serif;
- background-image: url('backgroundbb.jpg');
+  background-image: url("backgroundbb.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
   background-position: center center;
   position: relative;
 }
-.Welcome-text h1{
-font-family: Smooch;
-color: blue;
-font-size: 38px;
-text-align: center;
-top: 50%
-left: 50%
-transform: translateX(-50%)translateY(-50%);
-}
-.Welcome-text{
-color:grey;
+
+.Welcome-text {
+font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 font-size:22px;
-position: absolute;
-margin: 20% 30%;
+  margin: 20% 30%;
 text-align:center;
 }
 
-.wrapper{
-width: 1170px;
-margin: auto;
-}
-.nav-area{
-float:right;
-list-style:none;
-margin-top:20px;
-margin-right:10px;
-}
-.nav-area li{
-display:inline-block;
-}
-.nav-area li a{
-color: blue;
-text-decoration:none;
-padding: 5px 20px;
-}
-.nav-area li a: hover{
-background: blue;
-color: grey;
-}
-.logo img{
-width: 60px;
-float:left;
-padding-left: 5%
-padding-top:2%
-}
+
+
