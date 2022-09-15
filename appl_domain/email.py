@@ -8,6 +8,8 @@ from email.mime.text import MIMEText
 EMAIL_PASSWORD = 'gfiwyydznrfioixh'
 SENDER = 'noreply.bookkeepingbuddy@gmail.com'
 SITE_URL = 'http://localhost:5000'  # TODO: Change this when we go live
+
+
 def email_registration(username, first_name, last_name):
     # Get a handle on the database
     db = get_db()
