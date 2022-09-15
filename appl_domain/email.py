@@ -31,10 +31,10 @@ def email_registration(username, first_name, last_name):
     for admin in admins:
         # Content to be sent in the email
         msg = MIMEText(
-            f"Hello {admin['first_name']} {admin['last_name']},<br>{first_name} {last_name} has requested for their "
-            f"account to be approved.<br><a href='{SITE_URL}{endpoint}'>Click here to activate the account</a>.<br>If "
-            f"you wish to reject this request, simply ignore this email.<br>Regards,<br>Your Bookkeeping Buddy",
-            'html')
+            f"Hello {admin['first_name']} {admin['last_name']},<br><br>{first_name} {last_name} has requested for "
+            f"their account to be approved.<br><br><a href='{SITE_URL}{endpoint}'>Click here to activate the "
+            f"account</a>.<br><br>If you wish to reject this request, simply ignore this email.<br><br>Regards,<br><br>"
+            f"Your Bookkeeping Buddy", 'html')
         # Set the content of the email
         email.set_content(msg)
         # Set the email destination
@@ -65,9 +65,9 @@ def send_approval(username):
     context = ssl.create_default_context()
     # Content to be sent in the email
     msg = MIMEText(
-        f"Hello {user['first_name']} {user['last_name']},<br>Your new account on Bookkeeping Buddy has been activated! "
-        f"<br><a href='{SITE_URL}'>Click here to log in.</a><br>Regards,<br>Your Bookkeeping Buddy",
-        'html')
+        f"Hello {user['first_name']} {user['last_name']},<br><br>Your new account on Bookkeeping Buddy has been "
+        f"activated!<br><br><a href='{SITE_URL}'>Click here to log in.</a><br><br>Regards,<br><br>Your Bookkeeping "
+        f"Buddy", 'html')
     email.set_content(msg)
     email['To'] = user["email_address"]
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
