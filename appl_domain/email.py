@@ -46,3 +46,30 @@ def email_registration(username, first_name, last_name):
 
     # https://towardsdatascience.com/how-to-easily-automate-emails-with-python-8b476045c151#bc59
     # User: noreply.bookkeepingbuddy@gmail.com   Pass: xEcN5GxFjCBqq29
+
+
+def send_approval(username):
+    # Get a handle on the DB
+    db = get_db()
+    # Get user info
+    user = db.execute(
+        "SELECT * FROM users WHERE username = ?", (username,)
+    ).fetchone()
+
+    # Create empty email object
+    email = EmailMessage()
+    # Set email info
+    email['From'] = SENDER
+    email['Subject'] = 'Account approved'
+    # Create SSL context
+    context = ssl.create_default_context()
+    # Content to be sent in the email
+    msg = MIMEText(
+        f"Hello {user['first_name']} {user['last_name']},<br>Your new account on Bookkeeping Buddy has been activated! "
+        f"<br><a href='{SITE_URL}'>Click here to log in.</a><br>Regards,<br>Your Bookkeeping Buddy",
+        'html')
+    email.set_content(msg)
+    email['To'] = user["email_address"]
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(SENDER, EMAIL_PASSWORD)
+        smtp.sendmail(SENDER, email["To"], email.as_string())
