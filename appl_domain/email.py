@@ -56,6 +56,9 @@ def send_approval(username):
         "SELECT * FROM users WHERE username = ?", (username,)
     ).fetchone()
 
+    # Craft endpoint
+    endpoint = url_for('auth.login')
+
     # Create empty email object
     email = EmailMessage()
     # Set email info
@@ -66,8 +69,8 @@ def send_approval(username):
     # Content to be sent in the email
     msg = MIMEText(
         f"Hello {user['first_name']} {user['last_name']},<br><br>Your new account on Bookkeeping Buddy has been "
-        f"activated!<br><br><a href='{SITE_URL}'>Click here to log in.</a><br><br>Regards,<br><br>Your Bookkeeping "
-        f"Buddy", 'html')
+        f"activated!<br><br><a href='{SITE_URL}{endpoint}'>Click here to log in.</a><br><br>Regards,<br><br>Your "
+        f"Bookkeeping Buddy", 'html')
     email.set_content(msg)
     email['To'] = user["email_address"]
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
