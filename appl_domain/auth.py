@@ -1,7 +1,6 @@
-import base64
 import functools
-from appl_domain.autoemail import email_registration
-from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
+from appl_domain.email import email_registration, send_approval
+from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 from werkzeug.security import check_password_hash, generate_password_hash
 from appl_domain.db import get_db
 from datetime import datetime, timedelta
@@ -108,6 +107,7 @@ def register():
                 # Write the change to the database
                 db.commit()
 
+                # Email admins to let them know that a new account is waiting to be approved
                 email_registration(username, first_name, last_name)
 
             # Catch cases where a username already exists
@@ -553,3 +553,33 @@ def logout():
     session.clear()
     # Send them back to the main page (but now logged out)
     return redirect(url_for('mainpage'))
+
+
+@bp.route('/approve_user/<username>')
+@login_required
+def approve_user(username):
+    if g.user and g.user['role'] == 2:
+        # Get a handle on the DB
+        db = get_db()
+        user = db.execute(
+            "SELECT * FROM users WHERE username =?", (username,)
+        ).fetchone()
+        if not user:
+            flash("User not found in database!")
+            return redirect(url_for('mainpage'))
+        elif user and user['active'] == 0:
+            # Update the user's row
+            db.execute(
+                "UPDATE users SET active = ? WHERE username =?", (1, username)
+            )
+            db.commit()
+            # Tell admin it's approved
+            flash("Account approved!")
+            # Email the user to let them know
+            send_approval(username)
+            return redirect(url_for('mainpage'))
+        else:
+            flash("User already activated!")
+            return redirect(url_for('mainpage'))
+    else:
+        return abort(403)
