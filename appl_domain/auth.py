@@ -67,7 +67,14 @@ def register():
 
         # Other field validation
         if not (
-                email_address or first_name or last_name or address or DOB or first_pet or city_born or year_graduated_hs):
+                email_address or
+                first_name or
+                last_name or
+                address or
+                DOB or
+                first_pet or
+                city_born or
+                year_graduated_hs):
             error = 'Please fill out all information'  # TODO: Perform other field validation
 
         # If we got no error, we're good to proceed
@@ -100,7 +107,8 @@ def register():
                 db.execute(
                     "INSERT INTO users (username, email_address, first_name, last_name, active, role, password, "
                     "address, DOB, old_passwords, password_refresh_date, creation_date, first_pet, city_born, "
-                    "year_graduated_hs, incorrect_login_attempts) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "year_graduated_hs, incorrect_login_attempts) VALUES "
+                    "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (username, email_address, first_name, last_name, 0, 0, password, address,
                      DOB, json.dumps([password]), today, today, first_pet, city_born, year_graduated_hs, 0)
                 )
@@ -303,8 +311,8 @@ def reset_password():
                     # Update the database
                     try:
                         db.execute(
-                            "UPDATE users SET password = ?, old_passwords = ?, password_refresh_date = ? WHERE username = ?",
-                            (new_password, old_passwords, today, user['username'])
+                            "UPDATE users SET password = ?, old_passwords = ?, password_refresh_date = ? WHERE "
+                            "username = ?", (new_password, old_passwords, today, user['username'])
                         )
                         # Write changes
                         db.commit()
@@ -436,11 +444,9 @@ def edit_user(username):
         try:
             # Update columns
             db.execute(
-                "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, active = ?, role = ?, address = ?, DOB = ?, "
-                "first_pet = ?, city_born = ?, year_graduated_hs = ? WHERE username = ?", (email, first_name, last_name,
-                                                                                           active, role, address, DOB,
-                                                                                           first_pet, city_born,
-                                                                                           yr_graduated, username)
+                "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, active = ?, role = ?, address = ?, "
+                "DOB = ?, first_pet = ?, city_born = ?, year_graduated_hs = ? WHERE username = ?",
+                (email, first_name, last_name, active, role, address, DOB, first_pet, city_born, yr_graduated, username)
             )
             # Write changes
             db.commit()
@@ -509,8 +515,8 @@ def my_account():
             # Save the new image in the database
             uploaded_pic = temp_buffer.getvalue()
             db.execute(
-                "UPDATE users SET picture = ?, email_address = ?, first_name = ?, last_name = ?, address = ? WHERE username = ?",
-                (uploaded_pic, email, first_name, last_name, address, g.user['username'])
+                "UPDATE users SET picture = ?, email_address = ?, first_name = ?, last_name = ?, address = ? WHERE "
+                "username = ?", (uploaded_pic, email, first_name, last_name, address, g.user['username'])
             )
             db.commit()
         else:
