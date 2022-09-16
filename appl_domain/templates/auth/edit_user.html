@@ -135,7 +135,7 @@ form .category .information{
                             <label for="active">Active?</label>
                             <input type="checkbox" id="active" name="active" value="active" style="height: 30px; margin-left: -250px">
                         {% endif %}
-                        {% if user['incorrect_login_attempts'] >= 3 %}
+                        {% if user['incorrect_login_attempts'] and user['incorrect_login_attempts'] >= 3 %}
                             User account suspended for too many incorrect logins.
                             <br>
                             Reset login attempts and activate account?
