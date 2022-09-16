@@ -1,41 +1,158 @@
 {% extends 'base.html' %}
 
-{% block header %}
-    <h1>{% block title %}Account settings for {{ g.user['username'] }}{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
+<style>
+ body{
+    align-items:center;
+    justify-content: center;
+}
+.container{
+    position: relative;
+    max-width: 900px;
+    width: 100%;
+    border-radius: 6px;
+    padding: 30px;
+    margin-left: 275px;
+    margin-right: 15px;
+    margin-bottom: 50px;
+    margin-top: 40px;
+    background-color: black;
+}
+.container h1{
+    font-size : x-large;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+.container form{
+    position: relative;
+    margin-top:16px;
+    min-height: 400px;
+    background: black;
+}
+.container form .personal{
+    margin-top: 30px;
+}
+.container form .fields{
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+form .fields .input-field{
+    display: flex;
+    width: calc(100%/3 - 15px);
+    flex-direction: column;
+    margin: 4px 0;
+}
+.input-field label{
+    font-size: 14px;
+    font-weight: bold;
+    color: #185DFF;
+
+}
+.input-field .file{
+    border: none;
+    outline: none;
+    height: 42px;
+    color: #185DFF;
+    margin-left: -14px;
+}
+.input-field input{
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    border-radius: 5px;
+    border: 1px solid #F89E19;
+    padding:  0 15px;
+    height: 42px;
+    margin: 8px 0;
+}
+.container form .submit{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 280px;
+    border: none;
+    outline: none;
+    color: white;
+    margin-top: 50px;
+    border-radius: 6px;
+    margin: 25px 0;
+    background-color: #185DFF;
+    margin-left: 0px;
+}
+.container button{
+   display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 300px;
+    border: none;
+    outline: none;
+    color: white;
+    border-radius: 6px;
+    margin: 25px 0;
+    background-color: #185DFF;
+    margin-left: 300px;
+}
+</style>
+<div class="container">
+     <h1>{% block title %}Account settings for {{ g.user['username'] }}{% endblock %}</h1>
     <form method="post" enctype="multipart/form-data">
-        <label for="first_name">First Name</label>
-        <input name="first_name" id="first_name" required value="{{ g.user['first_name'] }}">
-        <label for="last_name">Last Name</label>
-        <input name="last_name" id="last_name" required value="{{ g.user['last_name'] }}">
-        <br>
-        <label for="email_address">Email Address</label>
-        <input name="email_address" id="email_address" required value="{{ g.user['email_address'] }}">
-        <br>
-        <label for="address">Address</label>
-        <input name="address" id="address" required value="{{ g.user['address'] }}">
-        <br>
-        <label for="profile_pic">Profile picture</label>
-        <br>
-        {% if g.user['picture'] %}
-            <span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" style="width:100px;height:100px;" alt="User's profile picture"/></span>
-        {% else %}
-            <span><img src="{{ url_for('static', filename='no_photo.png') }}" style="width:100px;height:100px;"  alt="Placeholder profile picture"/></span>
-        {% endif %}
-        <br>
-        <label for="uploaded_pic">Upload new photo</label>
-        <input type="file" name="uploaded_pic" id="uploaded_pic">
-        <br>
-        <input type="submit" value="Save changes">
-    </form>
-        <br>
-        Password last reset on {{ g.user['password_refresh_date'] }}<br>
-        Your password will expire on {{ password_expires }}<br>
-        {% if g.user['suspend_start_date'] %}
-            Your account is set to be suspended starting on {{ g.user['suspend_start_date'] }}.
-            It will be reactivated on {{ g.user['suspend_end_date'] }}
-        {% endif %}
-        <button type="button" onclick="window.location.href='{{ url_for('auth.reset_password')}}'">Change Password</button>
+        <div class = "form-first">
+            <div class = "personal details">
+                <div class = "fields">
+                    <div class = "input-field">
+                    <label for="first_name">First Name</label>
+                    <input name="first_name" id="first_name" required value="{{ g.user['first_name'] }}">
+                    </div>
+                    <div class = "input-field">
+                        <label for="last_name">Last Name</label>
+                    <input name="last_name" id="last_name" required value="{{ g.user['last_name'] }}">
+                    </div>
+                    <div class = "input-field">
+                    <label for="email_address">Email Address</label>
+                    <input name="email_address" id="email_address" required value="{{ g.user['email_address'] }}">
+                    </div>
+                        <div class = "input-field">
+                    <label for="address">Address</label>
+                    <input name="address" id="address" required value="{{ g.user['address'] }}">
+                        </div>
+                    <div class = "input-field">
+                        <label for="DOB">Date of birth (YYYY-MM-DD)</label>
+                        <input name="DOB" id="DOB" required value="{{ g.user['DOB'] }}">
+                        </div>
+                    <div class = "input-field">
+                    <label for="profile_pic">Profile picture</label>
+                    {% if g.user['picture'] %}
+                        <span><img src="data:image/png;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" style="width:100px;height:100px;" alt="User's profile picture"/></span>
+                    {% else %}
+                        <span><img src="{{ url_for('static', filename='no_photo.png') }}" style="width:100px;height:100px;margin-top: 10px"  alt="Placeholder profile picture"/></span>
+                    {% endif %}
+                    <label for="uploaded_pic">Upload new photo</label>
+                    <input class ="file" type="file" name="uploaded_pic" id="uploaded_pic">
+                    </div>
+
+                    <div class="instructions" style="color: white; margin-top: 12px">
+                        <p style="margin-left: 0px">
+                    Password last reset on {{ g.user['password_refresh_date'] }}<br>
+                    Your password will expire on {{ password_expires }}<br>
+                    {% if g.user['suspend_start_date'] %}
+                        Your account is set to be suspended starting on {{ g.user['suspend_start_date'] }}.
+                        It will be reactivated on {{ g.user['suspend_end_date'] }}
+                    {% endif %}
+                        </p>
+                    <button type="button" onclick="window.location.href='{{ url_for('auth.reset_password')}}'" style="margin-left: 300px; margin-top: -55px">Change Password</button>
+                    </div>
+                    <div>
+                     <input class="submit" type="submit" value="Save changes">
+                    </div>
+    </div>
+</div>
+</div>
+        </form>
+</div>
 {% endblock %}

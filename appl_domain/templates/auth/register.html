@@ -1,13 +1,7 @@
 {% extends 'base.html' %}
 
 
-    {% block title %}
-    {% if (g.user) and (g.user['role'] == 2) %}
-        Create a new account
-    {% else %}
-        Register for a new account
-    {% endif %}
-    {% endblock %}
+
 {% block content %}
 <style>
     body{
@@ -121,12 +115,15 @@ form .fields .input-field{
   content: "✖";
 }
 </style>
+
 <div class = container>
+    {% block title %}
     {% if (g.user) and (g.user['role'] == 2) %}
         <header>Create a new account</header>
     {% else %}
         <header >Register for a new account</header>
     {% endif %}
+    {% endblock %}
     <form method="post">
         <div class = "form-first">
             <div class = "personal details">
@@ -137,8 +134,7 @@ form .fields .input-field{
                     </div>
                     <div class = "input-field">
                         <label for="password" >Password</label>
-                        <input type="password" name="password" placeholder="Enter password" id="password" pattern="^[A-Za-z](?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                        title="Must contain at least one number, one special character, start with a letter, and at least 8 or more characters" required>
+                        <input type="password" name="password" placeholder="Enter password" id="password"  required>
                     </div>
                     <div class = "input-field">
                         <label for="first_name" >First Name</label>
@@ -187,7 +183,8 @@ form .fields .input-field{
        </div>
     </form>
     </div>
-    <script>
+    <!--<script>
+
             var myInput = document.getElementById("password");
             var letter = document.getElementById("letter");
             var alphabet = document.getElementById("alphabet");
@@ -208,7 +205,7 @@ form .fields .input-field{
         // When the user starts to type something inside the password field
         myInput.onkeyup = function() {
           // Validate starts with a letter
-          var lowerCaseLetters = /[a-z]/g;
+          var lowerCaseLetters = /[a-zA-Z]/g;
           if(myInput.value.match(lowerCaseLetters)) {
             letter.classList.remove("invalid");
             letter.classList.add("valid");
@@ -268,5 +265,5 @@ form .fields .input-field{
           }
           document.getElementById("error").innerHTML = text;
         
-    </script>
+    </script> -->
 {% endblock %}

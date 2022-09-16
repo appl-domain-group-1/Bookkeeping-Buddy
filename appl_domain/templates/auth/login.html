@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 <link rel="stylesheet" href="{{ url_for('static', filename='form.css') }}">
-{% block header %}
-  <h1>{% block title %}Log In{% endblock %}</h1>
-{% endblock %}
+
+
+
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 
@@ -10,13 +10,13 @@
 <style>
   .loginbox{
     width: 380px;
-    height: 450px;
+    height: 500px;
     background: black;
     color: #185DFF;
     position: absolute;
     left: 50%;
     top : 50%;
-    margin-top: 20px;
+    margin-top: 50px;
     border-radius: 10px;
     box-sizing: border-box;
     transform: translate(-50%, -50%);
@@ -33,11 +33,11 @@
   form input{
     width: 100%;
     outline: none;
+    color: #333;
     font-size: 14px;
     border: 1px solid #F89E19;
-    background:transparent;
     border-radius: 5px;
-    color: white;
+    color: black;
     height: 42px;
     margin: 8px 0;
   }
@@ -69,9 +69,20 @@
         <input name="username" id="username" placeholder="Enter username" required>
     <label for="password" >Password</label>
     <input type="password" name="password" placeholder="Enter password" id="password" required >
-    <input class = "submit" type="submit" value="Log In" style="">
+    <input style = "height: 20px; margin-left: -150px; margin-right: -140px; margin-top: 4px" type="checkbox" onclick="myFunction()"><p style="margin-left: 38px; margin-top: -27px; color: white">Show Password</p>
+    <input class = "submit" type="submit" value="Log In">
     <a href="{{ url_for('auth.forgot_password') }}" >Forgot password?</a><br>
     <a href="{{ url_for('auth.register') }}" >Create a new user account</a><br>
   </form>
 </div>
+<script>
+  function myFunction() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+</script>
 {% endblock %}

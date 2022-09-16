@@ -1,8 +1,5 @@
 {% extends 'base.html' %}
 
-{% block header %}
-    <h1>{% block title %}Edit account for user {{ user['username'] }}{% endblock %}</h1>
-{% endblock %}
 
 {% block content %}
 <style>
@@ -18,11 +15,11 @@
     padding: 30px;
     margin-left: 275px;
     margin-right: 15px;
-    margin-bottom: 0px;
+    margin-bottom: 40px;
     margin-top: 40px;
     background-color: black;
 }
-.box header{
+.box h1{
     font-size : x-large;
     font-weight: bold;
     color: white;
@@ -36,6 +33,9 @@
 }
 .box form .details{
     margin-top: 30px;
+}
+.box form p{
+    color: #185DFF;
 }
 .box form .category{
     display: flex;
@@ -79,6 +79,22 @@ form .category .information{
     width: 200px;
     background-color: #185DFF;
 }
+.accountInfo input{
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    border-radius: 5px;
+    border: 1px solid #F89E19;
+    padding:  0 15px;
+    height: 42px;
+    margin: 8px 0;
+}
+.box form .accountInfo{
+    color: white;
+    font-weight: bold;
+    font-size: x-large;
+}
 .box form .submit{
     outline: none;
     font-size: 14px;
@@ -94,7 +110,7 @@ form .category .information{
 }
 </style>
 <div class="box">
-    <header>Edit account for user {{ user['username'] }}</header>
+    <h1>{% block title %}Edit account for user {{ user['username'] }}{% endblock %}</h1>
     <form method="post">
         <div class = "form-second">
             <div class = "details personal">
@@ -119,6 +135,12 @@ form .category .information{
                             <label for="active">Active?</label>
                             <input type="checkbox" id="active" name="active" value="active" style="height: 30px; margin-left: -250px">
                         {% endif %}
+                        {% if user['incorrect_login_attempts'] >= 3 %}
+                            User account suspended for too many incorrect logins.
+                            <br>
+                            Reset login attempts and activate account?
+                        <button type="button" onclick="if (confirm('Are you sure you want to reactivate user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.reset_user', username=user['username'])}}'}">Reset</button>
+                        {% endif %}
                     </div>
                     <div class = "information">
                         <label for="role">Role</label>
@@ -142,26 +164,40 @@ form .category .information{
                         <label for="DOB">Date of birth (YYYY-MM-DD)</label>
                         <input name="DOB" id="DOB" required value="{{ user['DOB'] }}">
                     </div>
-                 <div class = "information">
-                            <label for="first_pet">Name of your first pet</label>
-                            <input name="first_pet" id="first_pet" required value="{{ user['first_pet'] }}">
-                    </div>
-                                <div class = "information">
-                        <label for="city_born">City you were born in</label>
-                        <input name="city_born" id="city_born" required value="{{ user['city_born'] }}">
-                    </div>
-                    <div class = "information">
-                        <label for="year_graduated_hs">Year you graduated highschool</label>
-                        <input name="year_graduated_hs" id="year_graduated_hs" required value="{{ user['year_graduated_hs'] }}">
-                    </div>
-                    <div class = "buttons" style="margin-top: 30px; align-content: center; margin-left: 150px; margin-bottom: 50px">
-                            <input type="submit" class = "submit" value="Save changes">
-                            <button type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'">Back</button>
-                            <button type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
-                    </div>
-                </div>
             </div>
         </div>
+              <div class = "account details">
+                  <div class = "account category">
+                    <span class = "accountInfo">Suspension details</span>
+                    <p style="margin-left: -240px; margin-top: 90px">Suspend user account from:</p>
+                        <div class = "information" style="padding-top: 50px">
+                            <label for="suspend_start_date">Start</label>
+                            {% if user['suspend_start_date'] %}
+                            <input type="date" name="suspend_start_date" id="suspend_start_date" value="{{ user['suspend_start_date'] }}" style="width: 250px">
+                            {% else %}
+                            <input type="date" name="suspend_start_date" id="suspend_start_date" style="width: 250px">
+                            {% endif %}
+                        </div>
+
+                        <div class = "information" style="padding-top: 50px">
+                            <label for="suspend_end_date">End</label>
+                            {% if user['suspend_end_date'] %}
+                            <input type="date" name="suspend_end_date" id="suspend_end_date" value="{{ user['suspend_end_date'] }}" style="width: 250px">
+                            {% else %}
+                            <input type="date" name="suspend_end_date" id="suspend_end_date" style="width: 250px">
+                            {% endif %}
+                        </div>
+                    <br>
+                    <p style="margin-left: -3px">Password last refreshed on {{ user['password_refresh_date'] }}</p>
+                      </div>
+                    </div>
+                      <div class = "buttons" style="margin-top: 30px; align-content: center; margin-left: 150px; margin-bottom: 50px; ">
+                            <button type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'" style="margin-right: 30px;margin-left: -30px">Back</button>
+                        <button style="margin-right: 30px;" type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
+                         <input type="submit" class = "submit" value="Save changes">
+                    </div>
+                </div>
+
     </form>
     </div>
 {% endblock %}
