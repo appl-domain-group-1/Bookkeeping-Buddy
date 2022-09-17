@@ -45,4 +45,7 @@ def create_app(test_config=None):
     import appl_domain.auth as auth
     app.register_blueprint(auth.bp)
 
+    import appl_domain.API as api
+    app.register_blueprint(api.bp)
+
     return app
