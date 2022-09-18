@@ -1,5 +1,7 @@
 """
 This file contains the different scheduled tasks that need to be run independent of the Flask server
+
+For PythonAnywhere, this file will need to be added to the nightly cron jobs
 """
 import json
 import requests
