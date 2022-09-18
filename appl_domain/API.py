@@ -1,9 +1,10 @@
 from flask import (
-    Blueprint, request, jsonify
+    Blueprint, request, jsonify, g
 )
 from werkzeug.exceptions import abort
 from appl_domain.db import get_db
 from datetime import date, datetime, timedelta
+from appl_domain.auth import login_required
 
 # Get today's date
 today = datetime.today().date()
@@ -13,9 +14,10 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 
 
 @bp.route('/expiring_users', methods=['GET'])
+@login_required
 def expiring_users():
-    # Restrict to local traffic only
-    if (request.remote_addr == '127.0.0.1') and (request.method == 'GET'):
+    # Restrict only to accounts with role 3 (API access)
+    if request.method == 'GET' and g.user['role'] == 3:
         # Create empty list to hold users
         user_list = []
         # Get a handle on the database
@@ -48,9 +50,10 @@ def expiring_users():
 
 
 @bp.route('/expired_passwords', methods=['GET'])
+@login_required
 def expired_passwords():
-    # Restrict to local traffic only
-    if (request.remote_addr == '127.0.0.1') and (request.method == 'GET'):
+    # Restrict only to accounts with role 3 (API access)
+    if request.method == 'GET' and g.user['role'] == 3:
         # Create empty list to hold users
         user_list = []
         # Get a handle on the database
@@ -83,8 +86,8 @@ def expired_passwords():
 
 @bp.route('/admin_list', methods=['GET'])
 def admin_list():
-    # Restrict to local traffic only
-    if (request.remote_addr == '127.0.0.1') and (request.method == 'GET'):
+    # Restrict only to accounts with role 3 (API access)
+    if request.method == 'GET' and g.user['role'] == 3:
         # Create empty list to hold admins
         list_of_admins = []
         # Get a handle on the database
