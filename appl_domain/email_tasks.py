@@ -10,14 +10,14 @@ SENDER = 'noreply.bookkeepingbuddy@gmail.com'
 SITE_URL = 'http://localhost:5000'  # TODO: Change this when we go live
 
 
-def __send_email(to, subject, message):
+def send_email(to, subject, message):
     # Create empty email object
     email = EmailMessage()
     # Set email info
     email['From'] = SENDER
     email['Subject'] = subject
     # Set the content of the email
-    email.set_content(message)
+    email.set_content(MIMEText(message, 'html'))
     # Set the email destination
     email['To'] = to
 
@@ -49,13 +49,12 @@ def email_registration(username, first_name, last_name):
     # Loop through each admin and send the email
     for admin in admins:
         # Content to be sent in the email
-        message = MIMEText(
-            f"Hello {admin['first_name']} {admin['last_name']},<br><br>{first_name} {last_name} has requested for "
-            f"their account to be approved.<br><br><a href='{SITE_URL}{endpoint}'>Click here to activate the "
-            f"account</a>.<br><br>If you wish to reject this request, simply ignore this email.<br><br>Regards,<br><br>"
-            f"Your Bookkeeping Buddy", 'html')
+        message = f"Hello {admin['first_name']} {admin['last_name']},<br><br>{first_name} {last_name} has requested " \
+                  f"for their account to be approved.<br><br><a href='{SITE_URL}{endpoint}'>Click here to activate " \
+                  f"the account</a>.<br><br>If you wish to reject this request, simply ignore this email.<br><br>" \
+                  f"Regards,<br><br>Your Bookkeeping Buddy"
 
-        __send_email(admin["email_address"], subject, message)
+        send_email(admin["email_address"], subject, message)
 
 
 def send_approval(username):
@@ -72,9 +71,8 @@ def send_approval(username):
     # Craft endpoint to be linked in the email
     endpoint = url_for('auth.login')
     # Content to be sent in the email
-    message = MIMEText(
-        f"Hello {user['first_name']} {user['last_name']},<br><br>Your new account on Bookkeeping Buddy has been "
-        f"activated!<br><br><a href='{SITE_URL}{endpoint}'>Click here to log in.</a><br><br>Regards,<br><br>Your "
-        f"Bookkeeping Buddy", 'html')
+    message = f"Hello {user['first_name']} {user['last_name']},<br><br>Your new account on Bookkeeping Buddy has " \
+              f"been activated!<br><br><a href='{SITE_URL}{endpoint}'>Click here to log in.</a><br><br>Regards," \
+              f"<br><br>Your Bookkeeping Buddy"
 
-    __send_email(user["email_address"], subject, message)
+    send_email(user["email_address"], subject, message)
