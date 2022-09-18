@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 
 EMAIL_PASSWORD = 'gfiwyydznrfioixh'
 SENDER = 'noreply.bookkeepingbuddy@gmail.com'
-SITE_URL = 'http://localhost:5000'  # TODO: Change this when we go live
+SITE_URL = 'http://eexley1.pythonanywhere.com'
 
 
 def send_email(to, subject, message):
