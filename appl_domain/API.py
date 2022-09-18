@@ -12,8 +12,8 @@ today = datetime.today().date()
 bp = Blueprint('api', __name__, url_prefix='/api')
 
 
-@bp.route('/get_expired_users', methods=['GET'])
-def get_expired_users():
+@bp.route('/expiring_users', methods=['GET'])
+def expiring_users():
     # Restrict to local traffic only
     if (request.remote_addr == '127.0.0.1') and (request.method == 'GET'):
         # Create empty list to hold users

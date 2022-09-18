@@ -8,13 +8,13 @@ import requests
 from appl_domain.email_tasks import send_email, SITE_URL
 
 
-def send_expired_emails():
+def send_expiration_emails():
     """
     Sends emails to all users with expired passwords
     """
     try:
         # Query the API on the flask server
-        users = requests.get("http://127.0.0.1:5000/api/get_expired_users").content
+        users = requests.get("http://127.0.0.1:5000/api/expiring_users").content
         users = json.loads(users)
     except Exception as err:
         print(err)
@@ -31,4 +31,4 @@ def send_expired_emails():
 
 
 if __name__ == '__main__':
-    send_expired_emails()
+    send_expiration_emails()
