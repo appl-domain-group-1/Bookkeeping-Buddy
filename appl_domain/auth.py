@@ -1,6 +1,6 @@
 import base64
 import functools
-from appl_domain.email import email_registration, send_approval
+from appl_domain.email_tasks import email_registration, send_approval
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 from werkzeug.security import check_password_hash, generate_password_hash
 from appl_domain.db import get_db
