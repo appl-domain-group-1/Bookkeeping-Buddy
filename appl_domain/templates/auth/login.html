@@ -9,14 +9,16 @@
 {% block content %}
 <style>
   .loginbox{
-    width: 380px;
-    height: 500px;
+    max-width: 380px;
+    width: 80%;
+    max-height: 500px;
+    height: 70%;
     background: black;
     color: #185DFF;
     position: absolute;
     left: 50%;
     top : 50%;
-    margin-top: 50px;
+    margin-top: 30px;
     border-radius: 10px;
     box-sizing: border-box;
     transform: translate(-50%, -50%);
@@ -61,6 +63,18 @@
     color: white;
     display: block;
   }
+  form .checkbox{
+    width:auto;
+    float:left;
+
+  }
+  form .show{
+      margin-left: 2em;
+      color: white;
+      padding-left: -50px;
+      margin-bottom: 20px;
+
+  }
 </style>
 <div class = loginbox>
   <h1>{% block title %}Log In{% endblock %}</h1>
@@ -69,7 +83,10 @@
         <input name="username" id="username" placeholder="Enter username" required>
     <label for="password" >Password</label>
     <input type="password" name="password" placeholder="Enter password" id="password" required >
-    <input style = "height: 20px; margin-left: -150px; margin-right: -140px; margin-top: 4px" type="checkbox" onclick="myFunction()"><p style="margin-left: 38px; margin-top: -27px; color: white">Show Password</p>
+    <input class = "checkbox"  type="checkbox" onclick="myFunction()"><div class = "show"></div>
+    <div style="overflow: hidden; padding: 0px 0px 0px 5px; color: white">
+             Show Password
+    </div>
     <input class = "submit" type="submit" value="Log In">
     <a href="{{ url_for('auth.forgot_password') }}" >Forgot password?</a><br>
     <a href="{{ url_for('auth.register') }}" >Create a new user account</a><br>

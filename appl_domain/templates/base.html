@@ -7,7 +7,17 @@
     <title>{% block title %}{% endblock %} - Bookkeeping Buddy</title>
 </head>
 <style>
+@media screen and (max-width: 600px) {
+    #username, #admin_functions, #account_type, #my_account, #logout{
 
+    }
+    #app_name{
+        font-size: 10px;
+    }
+    #admin_functions{
+        margin-top: -45px;
+    }
+}
 </style>
     <div id="navbar" style="height:110px; width:100%; border-bottom: 1px solid #F89E19; background-color: white" >
         {%  if g.user %}

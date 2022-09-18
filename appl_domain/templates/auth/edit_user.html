@@ -8,15 +8,14 @@
     justify-content: center;
 }
 .box{
-    position: relative;
+     position: relative;
     max-width: 900px;
     width: 100%;
     border-radius: 6px;
     padding: 30px;
-    margin-left: 275px;
-    margin-right: 15px;
-    margin-bottom: 40px;
-    margin-top: 40px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
     background-color: black;
 }
 .box h1{
@@ -108,6 +107,131 @@ form .category .information{
     margin: 8px 0;
     background-color: #185DFF;
 }
+@media screen and (max-width: 830px) {
+  .box {
+    max-width: 500px;
+    width: 80%;
+    height: auto;
+    background: black;
+    color: #185DFF;
+    position: absolute;
+    left: 50%;
+    top : 50%;
+    margin-top: 240px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transform: translate(-50%, -50%);
+    padding: 40px 30px;
+  }
+    .information label{
+        font-size: 14px;
+        font-weight: bold;
+        color: #185DFF;
+    }
+    .information input{
+        width: 85%;
+        outline: none;
+        color: #333;
+        font-size: 14px;
+        border: 1px solid #F89E19;
+        border-radius: 5px;
+        height: 42px;
+        margin: 8px 0;
+    }
+    form .category .information{
+        display: block;
+        width: 100%;
+    }
+
+    .box form .category{
+        display: block;
+        width: 100%
+    }
+    .box form .submit{
+        margin-left: 0px;
+        width: 70%;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }}
+@media screen and (max-width: 600px) {
+  .box {
+    max-width: 380px;
+    width: 80%;
+    height: auto;
+    background: black;
+    color: #185DFF;
+    position: absolute;
+    left: 50%;
+    top : 50%;
+    margin-top: 400px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transform: translate(-50%, -50%);
+    padding: 40px 30px;
+  }
+    .information label{
+        font-size: 14px;
+        font-weight: bold;
+        color: #185DFF;
+    }
+    .information input{
+        width: 90%;
+        outline: none;
+        color: #333;
+        font-size: 14px;
+        border: 1px solid #F89E19;
+        border-radius: 5px;
+        height: 42px;
+        margin: 8px 0;
+    }
+
+      form .category .information{
+        display: block;
+        width: 100%;
+    }
+
+    .box form .category{
+        display: block;
+        width: 100%
+    }
+     .box form .accountInfo{
+        display: block;
+        width: 100%
+    }
+     .accountInfo p{
+         margin-left: -100px;
+
+     }
+
+     .box form .submit{
+        margin-left: 0px;
+        width: 100%;
+         text-align: center;
+        margin-bottom: 10px;
+        margin-top: 0px;
+    }
+    .account_category p{
+        margin-left: -100px;
+    }
+    .box form button{
+        margin-left: 0px;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+        margin-top: 0px;
+    }
+    .buttons{
+        margin-left: 100px;
+    }
+}
+    @media screen and (max-width: 395px) {
+  .box {
+      margin-top: 400px;
+  }
+    input[type=date]{
+        width: 80%
+    }
+    }
 </style>
 <div class="box">
     <h1>{% block title %}Edit account for user {{ user['username'] }}{% endblock %}</h1>
@@ -129,25 +253,26 @@ form .category .information{
                     </div>
                     <div class = "information">
                         {% if user['active'] == 1 %}
-                            <label for="active">Active?</label>
-                            <input type="checkbox" id="active" name= "active" value="active" checked style="height: 30px; margin-left: -250px">
+                            <label class = "show" for="active">Active?</label>
+                            <input type="checkbox" id="active" name= "active" value="active" checked style="height: 30px; ">
                         {% else %}
-                            <label for="active">Active?</label>
-                            <input type="checkbox" id="active" name="active" value="active" style="height: 30px; margin-left: -250px">
+                            <label  class = "show" for="active">Active?</label>
+                            <input type="checkbox" id="active" name="active" value="active" style="height: 30px; ">
                         {% endif %}
                         {% if user['incorrect_login_attempts'] >= 3 %}
-                            User account suspended for too many incorrect logins.
+                        <p style="color: white">User account suspended for too many incorrect logins.</p>
                             <br>
-                            Reset login attempts and activate account?
+                        <p style="color: white">Reset login attempts and activate account?</p>
                         <button type="button" onclick="if (confirm('Are you sure you want to reactivate user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.reset_user', username=user['username'])}}'}">Reset</button>
                         {% endif %}
                     </div>
                     <div class = "information">
-                        <label for="role">Role</label>
+                        <label for="role">Role</label><br>
                         <select name="role" id="role" style="border-radius: 5px;
                             border: 1px solid #F89E19;
                             padding:  0 15px;
                             height: 45px;
+                            margin-top: -20px;
                             margin: 8px 0;outline: none;
                             font-size: 14px;
                             font-weight: 400;">
@@ -166,11 +291,11 @@ form .category .information{
                     </div>
             </div>
         </div>
-              <div class = "account details">
-                  <div class = "account category">
-                    <span class = "accountInfo">Suspension details</span>
-                    <p style="margin-left: -240px; margin-top: 90px">Suspend user account from:</p>
-                        <div class = "information" style="padding-top: 50px">
+              <div class = "account_details">
+                  <div class = "account_category">
+                    <span class = "accountInfo">Suspension details
+                    <br><label for = "heading"style = "font-size: 14px; font-weight: lighter; color: #185DFF">Suspend user account from:</label></span>
+                        <div class = "information" style="padding-top: 10px">
                             <label for="suspend_start_date">Start</label>
                             {% if user['suspend_start_date'] %}
                             <input type="date" name="suspend_start_date" id="suspend_start_date" value="{{ user['suspend_start_date'] }}" style="width: 250px">
@@ -179,7 +304,7 @@ form .category .information{
                             {% endif %}
                         </div>
 
-                        <div class = "information" style="padding-top: 50px">
+                        <div class = "information" style="padding-top: 10px">
                             <label for="suspend_end_date">End</label>
                             {% if user['suspend_end_date'] %}
                             <input type="date" name="suspend_end_date" id="suspend_end_date" value="{{ user['suspend_end_date'] }}" style="width: 250px">
@@ -192,8 +317,8 @@ form .category .information{
                       </div>
                     </div>
                       <div class = "buttons" style="margin-top: 30px; align-content: center; margin-left: 150px; margin-bottom: 50px; ">
-                            <button type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'" style="margin-right: 30px;margin-left: -30px">Back</button>
-                        <button style="margin-right: 30px;" type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
+                            <button id = "back" type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'" style="margin-right: 30px;">Back</button>
+                        <button style="margin-right: 30px; color: white" type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
                          <input type="submit" class = "submit" value="Save changes">
                     </div>
                 </div>

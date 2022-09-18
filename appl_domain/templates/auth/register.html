@@ -4,6 +4,9 @@
 
 {% block content %}
 <style>
+    *{
+        box-sizing: border-box;
+    }
     body{
     align-items:center;
     justify-content: center;
@@ -14,10 +17,9 @@
     width: 100%;
     border-radius: 6px;
     padding: 30px;
-    margin-left: 275px;
-    margin-right: 15px;
-    margin-bottom: 50px;
-    margin-top: 40px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
     background-color: black;
 }
 .container header{
@@ -48,7 +50,7 @@ form .fields .input-field{
     margin: 4px 0;
 }
 .input-field label{
-    font-size: 14px;
+   font-size: 14px;
     font-weight: bold;
     color: #185DFF;
 
@@ -75,10 +77,60 @@ form .fields .input-field{
     outline: none;
     color: white;
     border-radius: 6px;
-    margin: 25px 0;
     background-color: #185DFF;
     margin-left: 300px;
+    margin: auto;
 }
+@media screen and (max-width: 600px) {
+  .container {
+    max-width: 380px;
+    width: 80%;
+    height: auto;
+    background: black;
+    color: #185DFF;
+    position: absolute;
+    left: 50%;
+    top : 50%;
+    margin-top: 230px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transform: translate(-50%, -50%);
+    padding: 40px 30px;
+  }
+    .input-field label{
+        font-size: 14px;
+        font-weight: bold;
+        color: #185DFF;
+    }
+    .input-field input{
+        width: 100%;
+        outline: none;
+        color: #333;
+        font-size: 14px;
+        border: 1px solid #F89E19;
+        border-radius: 5px;
+        height: 42px;
+        margin: 8px 0;
+    }
+    form .fields .input-field{
+        display: block;
+        width: 100%;
+    }
+
+    .container form .fields{
+        display: block;
+        width: 100%
+    }
+    .container form .submit{
+        margin-left: 0px;
+        width: 100%;
+
+    }
+}
+@media screen and (max-width: 390px) {
+  .container {
+      margin-top: 280px;
+  }}
 #message {
   display:none;
   background: #f1f1f1;
@@ -114,6 +166,7 @@ form .fields .input-field{
   left: -35px;
   content: "✖";
 }
+
 </style>
 
 <div class = container>
@@ -125,7 +178,6 @@ form .fields .input-field{
     {% endif %}
     {% endblock %}
     <form method="post">
-        <div class = "form-first">
             <div class = "personal details">
                 <div class = "fields">
                     <div class = "input-field">
@@ -172,7 +224,7 @@ form .fields .input-field{
                         {% endif %}
                 </div>
             </div>
-    </div>
+
        <div id="message" style="color:#185DFF">
           <h3>Password must contain the following:</h3>
           <p id="length" class="invalid">A <b>minimum of 8 characters</b></p>
@@ -183,6 +235,8 @@ form .fields .input-field{
        </div>
     </form>
     </div>
+
+
     <!--<script>
 
             var myInput = document.getElementById("password");
