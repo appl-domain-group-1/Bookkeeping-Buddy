@@ -45,3 +45,63 @@ def expiring_users():
     else:
         # Send 403 - Forbidden response
         abort(403)
+
+
+@bp.route('/expired_passwords', methods=['GET'])
+def expired_passwords():
+    # Restrict to local traffic only
+    if (request.remote_addr == '127.0.0.1') and (request.method == 'GET'):
+        # Create empty list to hold users
+        user_list = []
+        # Get a handle on the database
+        db = get_db()
+        # Get the users from the database
+        users = db.execute(
+            "SELECT * FROM users"
+        ).fetchall()  # TODO: write a better select statement
+
+        # Loop over the users and find users with passwords about to expire
+        for user in users:
+            # Get the date the password was last refreshed
+            password_refresh_date = date.fromisoformat(user['password_refresh_date'])
+            # Calculate the date when it will expire
+            password_expires = password_refresh_date + timedelta(days=180)
+            # If the user is in the time window, add them to the list of users to be emailed
+            if password_expires <= today:
+                user_list.append({
+                    'first_name': user['first_name'],
+                    'last_name': user['last_name'],
+                    'username': user['username'],
+                    'email_address': user['email_address'],
+                    'expired_on': password_expires.strftime("%b %d, %Y")
+                })
+        return jsonify(user_list)
+    else:
+        # Send 403 - Forbidden response
+        abort(403)
+
+
+@bp.route('/admin_list', methods=['GET'])
+def admin_list():
+    # Restrict to local traffic only
+    if (request.remote_addr == '127.0.0.1') and (request.method == 'GET'):
+        # Create empty list to hold admins
+        list_of_admins = []
+        # Get a handle on the database
+        db = get_db()
+        # Get list of admins from the database
+        admins = db.execute(
+            "SELECT * FROM users WHERE role = 2"
+        ).fetchall()
+
+        # Loop over each row and get the necessary info
+        for admin in admins:
+            list_of_admins.append({
+                'first_name': admin['first_name'],
+                'last_name': admin['last_name'],
+                'email_address': admin['email_address']
+            })
+        return jsonify(list_of_admins)
+    else:
+        # Send 403 - Forbidden
+        abort(403)
