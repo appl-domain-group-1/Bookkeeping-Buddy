@@ -4,18 +4,19 @@ from flask import (
 from werkzeug.exceptions import abort
 from appl_domain.db import get_db
 from datetime import date, datetime, timedelta
+import json
 
 today = datetime.today().date()
 
-bp = Blueprint('api', __name__)
+bp = Blueprint('api', __name__, url_prefix='/api')
 
 
-@bp.route('/get_expired_users', methods='GET')
+@bp.route('/get_expired_users', methods=['GET'])
 def get_expired_users():
     if request.method == 'GET':
         # Create empty list to hold users
         user_list = []
-        # Get a handle on the datbase
+        # Get a handle on the database
         db = get_db()
         # Get the users from the database
         users = db.execute(
@@ -38,3 +39,4 @@ def get_expired_users():
                     user['email_address'],
                     days_before_expiration
                 ])
+        return json.dumps(user_list)
