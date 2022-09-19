@@ -1,85 +1,64 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
 <style>
-    body{
+ body{
     align-items:center;
     justify-content: center;
 }
-.box{
-     position: relative;
+.container{
+    position: relative;
     max-width: 900px;
     width: 100%;
     border-radius: 6px;
     padding: 30px;
-    margin-top: 50px;
+    margin-top: 10vh;
     margin-left: auto;
     margin-right: auto;
     background-color: black;
 }
-.box h1{
+.container h1{
     font-size : x-large;
     font-weight: bold;
     color: white;
     text-align: center;
 }
-.box form{
+.container form{
     position: relative;
     margin-top:16px;
     min-height: 400px;
     background: black;
 }
-.box form .details{
+.container form .personal{
     margin-top: 30px;
 }
-.box form p{
-    color: #185DFF;
-}
-.box form .category{
+.container form .fields{
     display: flex;
     align-content: center;
     justify-content: space-between;
     flex-wrap: wrap;
 }
-form .category .information{
+form .fields .input-field{
     display: flex;
     width: calc(100%/3 - 15px);
     flex-direction: column;
     margin: 4px 0;
 }
-.information label{
+.input-field label{
     font-size: 14px;
     font-weight: bold;
     color: #185DFF;
-}
-.information input{
-    outline: none;
-    font-size: 14px;
-    font-weight: 400;
-    color: #333;
-    border-radius: 5px;
-    border: 1px solid #F89E19;
-    padding:  0 15px;
-    height: 42px;
-    margin: 8px 0;
-}
-.box form button{
 
-    outline: none;
-    font-size: 14px;
-    font-weight: 400;
-    color: white;
-    border-radius: 5px;
-    border: 1px solid #F89E19;
-    padding:  0 15px;
-    height: 42px;
-    margin: 8px 0;
-    width: 200px;
-    background-color: #185DFF;
 }
-.accountInfo input{
+.input-field .file{
+    border: none;
     outline: none;
+    height: 42px;
+    color: #185DFF;
+    margin-left: -14px;
+}
+.input-field input{
+     outline: none;
     font-size: 14px;
     font-weight: 400;
     color: #333;
@@ -89,46 +68,65 @@ form .category .information{
     height: 42px;
     margin: 8px 0;
 }
-.box form .accountInfo{
-    color: white;
-    font-weight: bold;
-    font-size: x-large;
-}
-.box form .submit{
-    outline: none;
-    font-size: 14px;
-    font-weight: 400;
+.container form .submit{
+   display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 15px;
     width: 200px;
+    border: none;
+    outline: none;
     color: white;
-    border-radius: 5px;
-    border: 1px solid #F89E19;
-    padding:  0 15px;
-    height: 42px;
-    margin: 8px 0;
+    border-radius: 6px;
     background-color: #185DFF;
+    margin: auto;
+    margin-left: 0px;
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 100px;
 }
-@media screen and (max-width: 830px) {
-  .box {
-    max-width: 500px;
+.container button{
+   display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 300px;
+    border: none;
+    outline: none;
+    color: white;
+    border-radius: 6px;
+    margin: auto;
+    background-color: #185DFF;
+    margin-left: 300px;
+}
+.container form p{
+    margin-top: -45px;
+}
+ @media screen and (max-width: 830px) {
+  .container {
+    position: relative;
+    max-width: 380px;
     width: 80%;
-    height: auto;
-    background: black;
-    color: #185DFF;
-    position: absolute;
-    left: 50%;
-    top : 50%;
-    margin-top: 240px;
-    border-radius: 10px;
-    box-sizing: border-box;
-    transform: translate(-50%, -50%);
-    padding: 40px 30px;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top: 10vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;
   }
-    .information label{
+     .container form{
+    position: relative;
+    margin-top:16px;
+    min-height: 400px;
+    background: black;
+}
+    .input-field label{
         font-size: 14px;
         font-weight: bold;
         color: #185DFF;
     }
-    .information input{
+    .input-field input{
         width: 85%;
         outline: none;
         color: #333;
@@ -138,44 +136,50 @@ form .category .information{
         height: 42px;
         margin: 8px 0;
     }
-    form .category .information{
+    form .fields .input-field{
         display: block;
         width: 100%;
     }
 
-    .box form .category{
+    .container form .fields{
         display: block;
         width: 100%
     }
-    .box form .submit{
+    .container form .submit{
         margin-left: 0px;
-        width: 70%;
+        width: 100%;
         margin-bottom: 10px;
-        margin-top: 10px;
-    }}
+        margin-top: 0px;
+    }
+    .container form p{
+        margin-top: 30px;
+    }
+    .container form button{
+        margin-left: 0px;
+        width: 100%;
+    }
+
+}
+
 @media screen and (max-width: 600px) {
-  .box {
+  .container {
+    position: relative;
     max-width: 380px;
     width: 80%;
-    height: auto;
-    background: black;
-    color: #185DFF;
-    position: absolute;
-    left: 50%;
-    top : 50%;
-    margin-top: 400px;
-    border-radius: 10px;
-    box-sizing: border-box;
-    transform: translate(-50%, -50%);
-    padding: 40px 30px;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top:10vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;
   }
-    .information label{
+    .input-field label{
         font-size: 14px;
         font-weight: bold;
         color: #185DFF;
     }
-    .information input{
-        width: 90%;
+    .input-field input{
+        width: 85%;
         outline: none;
         color: #333;
         font-size: 14px;
@@ -184,89 +188,78 @@ form .category .information{
         height: 42px;
         margin: 8px 0;
     }
-
-      form .category .information{
+    form .fields .input-field{
         display: block;
         width: 100%;
     }
 
-    .box form .category{
-        display: block;
-        width: 100%
-    }
-     .box form .accountInfo{
+    .container form .fields{
         display: block;
         width: 100%
     }
-     .accountInfo p{
-         margin-left: -100px;
-
-     }
-
-     .box form .submit{
+    .container form .submit{
         margin-left: 0px;
         width: 100%;
-         text-align: center;
         margin-bottom: 10px;
         margin-top: 0px;
     }
-    .account_category p{
-        margin-left: -100px;
+    .input-field .picture{
+        width:70px;
+        height:70px;
+        margin-top: 10px;
+        margin-left: -84px;
     }
-    .box form button{
+    .container form p{
+        margin-top: 30px;
+    }
+    .container form button{
         margin-left: 0px;
         width: 100%;
-        text-align: center;
-        margin-bottom: 10px;
-        margin-top: 0px;
     }
-    .buttons{
-        margin-left: 100px;
+    .submit #back{
+        margin-top: 0px;
     }
 }
-    @media screen and (max-width: 395px) {
-  .box {
-      margin-top: 400px;
-  }
-    input[type=date]{
-        width: 80%
-    }
-    }
+@media screen and (max-width: 390px) {
+  .container {
+      margin-top: 10vh;
+  }}
+
 </style>
-<div class="box">
-    <h1>{% block title %}Edit account for user {{ user['username'] }}{% endblock %}</h1>
-    <form method="post">
-        <div class = "form-second">
-            <div class = "details personal">
-                <div class = "category">
-                    <div class = "information">
-                        <label for="email_address">Email Address</label>
+<div class="container">
+     <h1>{% block title %}Account settings for {{ g.user['username'] }}{% endblock %}</h1>
+    <form method="post" enctype="multipart/form-data">
+        <div class = "form-first">
+            <div class = "personal details">
+                <div class = "fields">
+                    <div class = "input-field">
+                    <label for="email_address">Email Address</label>
                         <input name="email_address" type = "email" id="email_address" required value="{{ user['email_address'] }}">
                     </div>
-                    <div class = "information">
-                        <label for="first_name">First Name</label>
+                    <div class = "input-field">
+                         <label for="first_name">First Name</label>
                         <input name="first_name" id="first_name" required value="{{ user['first_name'] }}">
                     </div>
-                    <div class = "information">
-                        <label for="last_name">Last Name</label>
+                    <div class = "input-field">
+                     <label for="last_name">Last Name</label>
                         <input name="last_name" id="last_name" required value="{{ user['last_name'] }}">
                     </div>
-                    <div class = "information">
-                        {% if user['active'] == 1 %}
+                        <div class = "input-field">
+                    {% if user['active'] == 1 %}
                             <label class = "show" for="active">Active?</label>
                             <input type="checkbox" id="active" name= "active" value="active" checked style="height: 30px; ">
                         {% else %}
                             <label  class = "show" for="active">Active?</label>
                             <input type="checkbox" id="active" name="active" value="active" style="height: 30px; ">
                         {% endif %}
-                        {% if user['incorrect_login_attempts'] >= 3 %}
-                        <p style="color: white">User account suspended for too many incorrect logins.</p>
+                        {% if user['incorrect_login_attempts'] and user['incorrect_login_attempts'] >= 3 %}
+                        <p style="color: #185DFF; font-weight: bold; font-size: 16px">User account suspended for too many incorrect logins.</p>
                             <br>
-                        <p style="color: white">Reset login attempts and activate account?</p>
+                        <p style="color: #185DFF; font-weight: bold; font-size: 16px">Reset login attempts and activate account?</p>
                         <button type="button" onclick="if (confirm('Are you sure you want to reactivate user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.reset_user', username=user['username'])}}'}">Reset</button>
                         {% endif %}
-                    </div>
-                    <div class = "information">
+                        </div>
+                    <div class = "input-field">
                         <label for="role">Role</label><br>
                         <select name="role" id="role" style="border-radius: 5px;
                             border: 1px solid #F89E19;
@@ -280,49 +273,55 @@ form .category .information{
                         <option value="1" {% if user['role'] == 1 %} selected {% endif %}>Manager</option>
                         <option value="2" {% if user['role'] == 2 %} selected {% endif %}>Administrator</option>
                     </select>
-                    </div>
-                    <div class = "information">
-                        <label for="address">Address</label>
+                        </div>
+                    <div class = "input-field">
+                            <label for="address">Address</label>
                         <input name="address" id="address" required value="{{ user['address'] }}">
                     </div>
-                    <div class = "information">
+
+                    <div class = "input-field">
                         <label for="DOB">Date of birth (YYYY-MM-DD)</label>
                         <input name="DOB" id="DOB" required value="{{ user['DOB'] }}">
                     </div>
-            </div>
-        </div>
-              <div class = "account_details">
-                  <div class = "account_category">
                     <span class = "accountInfo">Suspension details
-                    <br><label for = "heading"style = "font-size: 14px; font-weight: lighter; color: #185DFF">Suspend user account from:</label></span>
-                        <div class = "information" style="padding-top: 10px">
-                            <label for="suspend_start_date">Start</label>
+                    <br><label for = "heading"style = "font-size: 16px; font-weight: bold; color: #185DFF">Suspend user account from:</label></span>
+                    <div class = "input-field">
+                       <label for="suspend_start_date">Start</label>
                             {% if user['suspend_start_date'] %}
                             <input type="date" name="suspend_start_date" id="suspend_start_date" value="{{ user['suspend_start_date'] }}" style="width: 250px">
                             {% else %}
                             <input type="date" name="suspend_start_date" id="suspend_start_date" style="width: 250px">
                             {% endif %}
-                        </div>
-
-                        <div class = "information" style="padding-top: 10px">
-                            <label for="suspend_end_date">End</label>
+                    </div>
+                    <div class = "input-field">
+                         <label for="suspend_end_date">End</label>
                             {% if user['suspend_end_date'] %}
                             <input type="date" name="suspend_end_date" id="suspend_end_date" value="{{ user['suspend_end_date'] }}" style="width: 250px">
                             {% else %}
                             <input type="date" name="suspend_end_date" id="suspend_end_date" style="width: 250px">
                             {% endif %}
-                        </div>
-                    <br>
-                    <p style="margin-left: -3px">Password last refreshed on {{ user['password_refresh_date'] }}</p>
-                      </div>
                     </div>
-                      <div class = "buttons" style="margin-top: 30px; align-content: center; margin-left: 150px; margin-bottom: 50px; ">
-                            <button id = "back" type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'" style="margin-right: 30px;">Back</button>
-                        <button style="margin-right: 30px; color: white" type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
-                         <input type="submit" class = "submit" value="Save changes">
+                    <div>
+                     <input type="submit" class = "submit" value="Save changes">
                     </div>
-                </div>
+                    <div>
+                     <button class = "submit" style="margin-right: 30px; color: white" type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
+                    </div>
+                    <div>
+                     <button class = "submit" id = "back" type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'" style="margin-right: 30px; ">Back</button>
+                    </div>
+                     <!--<button class = "change" type="button" onclick="window.location.href='{{ url_for('auth.reset_password')}}'" style="margin-left: 300px; margin-top: -55px">Change Password</button>-->
+                    <div class="instructions" style="color: white; margin-top: 12px;margin-left: -20px;text-align: center">
+                        <p style="color: white; margin-top: 12px;margin-left: -20px;text-align: center">
+                            Password last refreshed on {{ user['password_refresh_date'] }}
+                        </p>
+                        <br>
+                    </div>
 
-    </form>
+
     </div>
+</div>
+</div>
+        </form>
+</div>
 {% endblock %}

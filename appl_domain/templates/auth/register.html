@@ -81,22 +81,59 @@ form .fields .input-field{
     margin-left: 300px;
     margin: auto;
 }
+#message {
+  display:none;
+  background: #000000;
+  color: #000;
+  position: relative;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+#message p {
+  padding: 5px 35px;
+  font-size: 18px;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+  color: green;
+}
+
+.valid:before {
+  position: relative;
+  left: -35px;
+  content: "✔";
+}
+
+/* Add a red text color and an "x" when the requirements are wrong */
+.invalid {
+  color: red;
+}
+
+.invalid:before {
+  position: relative;
+  left: -35px;
+  content: "✖";
+}
 @media screen and (max-width: 600px) {
   .container {
+    position: relative;
     max-width: 380px;
-    width: 80%;
-    height: auto;
-    background: black;
-    color: #185DFF;
-    position: absolute;
-    left: 50%;
-    top : 50%;
-    margin-top: 230px;
-    border-radius: 10px;
-    box-sizing: border-box;
-    transform: translate(-50%, -50%);
-    padding: 40px 30px;
+    width: 90%;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top: 10vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;
   }
+    .container form{
+    position: relative;
+    margin-top:16px;
+    min-height: 400px;
+    background: black;
+}
     .input-field label{
         font-size: 14px;
         font-weight: bold;
@@ -131,41 +168,7 @@ form .fields .input-field{
   .container {
       margin-top: 280px;
   }}
-#message {
-  display:none;
-  background: #f1f1f1;
-  color: #000;
-  position: relative;
-  padding: 20px;
-  margin-top: 10px;
-}
 
-#message p {
-  padding: 10px 35px;
-  font-size: 18px;
-}
-
-/* Add a green text color and a checkmark when the requirements are right */
-.valid {
-  color: green;
-}
-
-.valid:before {
-  position: relative;
-  left: -35px;
-  content: "✔";
-}
-
-/* Add a red text color and an "x" when the requirements are wrong */
-.invalid {
-  color: red;
-}
-
-.invalid:before {
-  position: relative;
-  left: -35px;
-  content: "✖";
-}
 
 </style>
 
@@ -186,7 +189,8 @@ form .fields .input-field{
                     </div>
                     <div class = "input-field">
                         <label for="password" >Password</label>
-                        <input type="password" name="password" placeholder="Enter password" id="password"  required>
+                        <input type="password" name="password" placeholder="Enter password" id="password" pattern="^([A-Za-z])(?=.*\d)(?=.*[A-Za-z])(?=.*[!@#$%^&*]).{8,}"
+                               title="Must start with a letter, contain at least one number and one special character and have at least 8 or more characters" required>
                     </div>
                     <div class = "input-field">
                         <label for="first_name" >First Name</label>
@@ -215,7 +219,6 @@ form .fields .input-field{
                     <div class = "input-field">
                         <label for="year_graduated_hs" >Year you graduated highschool</label>
                         <input name="year_graduated_hs" placeholder="Enter graduation year" id="year_graduated_hs" required >
-                        <p id = "error"></p>
                     </div>
                         {% if (g.user) and (g.user['role'] == 2) %}
                             <input class = "submit" type="submit" value="Create" >
@@ -237,7 +240,7 @@ form .fields .input-field{
     </div>
 
 
-    <!--<script>
+    <script>
 
             var myInput = document.getElementById("password");
             var letter = document.getElementById("letter");
@@ -269,7 +272,7 @@ form .fields .input-field{
           }
 
           // Validate contains a letter other than the first letter
-          var upperCaseLetters = /[A-Z]/g;
+          var upperCaseLetters = /[a-zA-Z]/g;
           if(myInput.value.match(upperCaseLetters)) {
             alphabet.classList.remove("invalid");
             alphabet.classList.add("valid");
@@ -297,7 +300,7 @@ form .fields .input-field{
             length.classList.add("invalid");
           }
           // Validate Special characters
-            var specialChars = /[^a-zA-Z\d]/g;
+            var specialChars = /[!@#$%^&*]/g;
             if(myInput.value.match(specialChars)){
                 specialChar.classList.remove("invalid");
                 specialChar.classList.add("valid");
@@ -309,7 +312,7 @@ form .fields .input-field{
 
 
           // Get the value of the input field with id="numb"
-          let x = document.getElementById("year_graduated_hs").value;
+          /*let x = document.getElementById("year_graduated_hs").value;
           // If x is Not a Number or less than one or greater than 10
           let text;
           if (isNaN(x) || x < 1930 || x > 2011) {
@@ -317,7 +320,7 @@ form .fields .input-field{
           } else {
             text = "Input OK";
           }
-          document.getElementById("error").innerHTML = text;
+          document.getElementById("error").innerHTML = text;*/
         
-    </script> -->
+    </script>
 {% endblock %}
