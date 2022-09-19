@@ -66,7 +66,7 @@
     }
 }
 </style>
-    <div id="navbar" style="height:15vh; width:100%; border-bottom: 1px solid #F89E19; background-color: white; " >
+    <div id="navbar" style="height:15vh; width:100%; border-bottom: 1px solid #F89E19; background-color: white; position: static " >
         {%  if g.user %}
         <div style = "flex:50%">
                 <a href = {{ url_for('mainpage') }} > <img src="{{ url_for('static', filename='logo_cropped.png') }}" style = "width: 70px;height: 75px;"  alt="BookkeepingBuddy logo"></a>
