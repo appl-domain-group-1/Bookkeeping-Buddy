@@ -1,28 +1,16 @@
 {% extends 'base.html' %}
-<!DOCTYPE html>
+
 <html lang="en">
-<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 <head>
     <meta charset="UTF-8">
-    {% block title %}Home{% endblock %}
+   {% block title %}BookkeepingBuddy{% endblock %}
 </head>
-
-{% block content %}
 <body>
-<div class = "wrapper">
-    <div class = "logo">
-        <img src = "{{ url_for('static', filename='logobk.png') }}" alt ="logo">
-    </div>
-    <ul class = "nav-area">
-        <li><a href = "index.html">Home</a></li>
-        <li><a href = "#">Log in</a></li>
-        <li><a href = "#">Sign up</a></li>
-    </ul>
-</div>
+{% block content %}
 <div class = "Welcome-text">
-<h1> BOOKKEEPING BUDDY</h1>
-    <p><mark>Easily track income, expenses, and more with accounting software designed for all kinds of businesses.</mark></p>
+    <p>Easily track income, expenses, and more with accounting software designed for all kinds of businesses.</p>
     </div>
+{%  endblock %}
 </body>
-{% endblock %}
+
 </html>
