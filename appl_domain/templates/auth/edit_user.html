@@ -321,7 +321,6 @@ form .fields .input-field{
                     <div>
                      <button class = "submit" id = "back" type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'" style="margin-right: 30px; ">Back</button>
                     </div>
-                     <!--<button class = "change" type="button" onclick="window.location.href='{{ url_for('auth.reset_password')}}'" style="margin-left: 300px; margin-top: -55px">Change Password</button>-->
                     <div class="instructions" style="color: white; margin-top: 12px;margin-left: 15px;text-align: center">
                         <p style="color: white; margin-top: 12px;margin-left: -20px;text-align: center">
                             Password last refreshed on {{ user['password_refresh_date'] }}<br>
