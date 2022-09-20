@@ -189,7 +189,8 @@ form .fields .input-field{
                     </div>
                     <div class = "input-field">
                         <label for="password" >Password</label>
-                        <input type="password" name="password" placeholder="Enter password" id="password" required>
+                        <input type="password" name="password" placeholder="Enter password" id="password"
+                               title="Must start with a letter, contain at least one number and one special character and have at least 8 or more characters" required>
                     </div>
                     <div class = "input-field">
                         <label for="first_name" >First Name</label>
@@ -261,7 +262,7 @@ form .fields .input-field{
         // When the user starts to type something inside the password field
         myInput.onkeyup = function() {
           // Validate starts with a letter
-          var lowerCaseLetters = /[a-zA-Z]/g;
+          var lowerCaseLetters = /^[a-zA-Z]/g;
           if(myInput.value.match(lowerCaseLetters)) {
             letter.classList.remove("invalid");
             letter.classList.add("valid");

@@ -7,9 +7,9 @@
     justify-content: center;
 }
 .container{
-    position: relative;
-    max-width: 900px;
-    width: 100%;
+   position: relative;
+    max-width: 450px;
+    width: 80%;
     border-radius: 6px;
     padding: 30px;
     margin-top: 10vh;
@@ -39,10 +39,8 @@
     flex-wrap: wrap;
 }
 form .fields .input-field{
-    display: flex;
-    width: calc(100%/3 - 15px);
-    flex-direction: column;
-    margin: 4px 0;
+    display: block;
+        width: 100%;
 }
 .input-field label{
     font-size: 14px;
@@ -50,55 +48,42 @@ form .fields .input-field{
     color: #185DFF;
 
 }
-.input-field .file{
-    border: none;
-    outline: none;
-    height: 42px;
-    color: #185DFF;
-    margin-left: -14px;
-}
 .input-field input{
-     outline: none;
-    font-size: 14px;
-    font-weight: 400;
+     width: 100%;
+    outline: none;
     color: #333;
-    border-radius: 5px;
+    font-size: 14px;
     border: 1px solid #F89E19;
-    padding:  0 15px;
+    border-radius: 5px;
+    color: black;
     height: 42px;
     margin: 8px 0;
 }
 .container form .submit{
-   display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 40px;
-    padding: 15px;
-    width: 200px;
-    border: none;
-    outline: none;
-    color: white;
-    border-radius: 6px;
     background-color: #185DFF;
-    margin: auto;
-    margin-left: 0px;
-    width: 100%;
-    margin-bottom: 10px;
-    margin-top: 100px;
+        color: white;
+        padding: 10px 20px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+        font-size: 14px;
 }
 .container button{
-   display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 40px;
-    width: 300px;
-    border: none;
-    outline: none;
-    color: white;
-    border-radius: 6px;
-    margin: auto;
     background-color: #185DFF;
-    margin-left: 300px;
+        color: white;
+        padding: 10px 20px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+        font-size: 14px;
 }
 .container form p{
     margin-top: -45px;
@@ -179,7 +164,7 @@ form .fields .input-field{
         color: #185DFF;
     }
     .input-field input{
-        width: 85%;
+        width: 100%;
         outline: none;
         color: #333;
         font-size: 14px;
@@ -188,6 +173,7 @@ form .fields .input-field{
         height: 42px;
         margin: 8px 0;
     }
+
     form .fields .input-field{
         display: block;
         width: 100%;
@@ -203,12 +189,6 @@ form .fields .input-field{
         margin-bottom: 10px;
         margin-top: 0px;
     }
-    .input-field .picture{
-        width:70px;
-        height:70px;
-        margin-top: 10px;
-        margin-left: -84px;
-    }
     .container form p{
         margin-top: 30px;
     }
@@ -216,9 +196,7 @@ form .fields .input-field{
         margin-left: 0px;
         width: 100%;
     }
-    .submit #back{
-        margin-top: 0px;
-    }
+
 }
 @media screen and (max-width: 390px) {
   .container {
@@ -261,14 +239,15 @@ form .fields .input-field{
                         </div>
                     <div class = "input-field">
                         <label for="role">Role</label><br>
-                        <select name="role" id="role" style="border-radius: 5px;
-                            border: 1px solid #F89E19;
-                            padding:  0 15px;
-                            height: 45px;
-                            margin-top: -20px;
-                            margin: 8px 0;outline: none;
-                            font-size: 14px;
-                            font-weight: 400;">
+                        <select name="role" id="role" style="width: 100%;
+                        outline: none;
+                        color: #333;
+                        font-size: 14px;
+                        border: 1px solid #F89E19;
+                        border-radius: 5px;
+                        color: black;
+                        height: 42px;
+                        margin: 8px 0;">
                         <option value="0" {% if user['role'] == 0 %} selected {% endif %}>User</option>
                         <option value="1" {% if user['role'] == 1 %} selected {% endif %}>Manager</option>
                         <option value="2" {% if user['role'] == 2 %} selected {% endif %}>Administrator</option>
@@ -277,28 +256,60 @@ form .fields .input-field{
                     <div class = "input-field">
                             <label for="address">Address</label>
                         <input name="address" id="address" required value="{{ user['address'] }}">
-                    </div>
+                    </div><br>
 
-                    <div class = "input-field">
+                   <div class = "input-field">
                         <label for="DOB">Date of birth (YYYY-MM-DD)</label>
                         <input name="DOB" id="DOB" required value="{{ user['DOB'] }}">
                     </div>
-                    <span class = "accountInfo">Suspension details
-                    <br><label for = "heading"style = "font-size: 16px; font-weight: bold; color: #185DFF">Suspend user account from:</label></span>
+
+                     <label for = "heading"style = "font-size: 16px; font-weight: bold; color: #185DFF; margin-left: 0px">Suspend user account from:</label>
                     <div class = "input-field">
                        <label for="suspend_start_date">Start</label>
                             {% if user['suspend_start_date'] %}
-                            <input type="date" name="suspend_start_date" id="suspend_start_date" value="{{ user['suspend_start_date'] }}" style="width: 250px">
+                            <input type="date" name="suspend_start_date" id="suspend_start_date" value="{{ user['suspend_start_date'] }}" style="width: 100%;
+                                outline: none;
+                                color: #333;
+                                font-size: 14px;
+                                border: 1px solid #F89E19;
+                                border-radius: 5px;
+                                color: black;
+                                height: 42px;
+                                margin: 8px 0;">
                             {% else %}
-                            <input type="date" name="suspend_start_date" id="suspend_start_date" style="width: 250px">
+                            <input type="date" name="suspend_start_date" id="suspend_start_date" style="width: 100%;
+                                outline: none;
+                                color: #333;
+                                font-size: 14px;
+                                border: 1px solid #F89E19;
+                                border-radius: 5px;
+                                color: black;
+                                height: 42px;
+                                margin: 8px 0;">
                             {% endif %}
                     </div>
                     <div class = "input-field">
                          <label for="suspend_end_date">End</label>
                             {% if user['suspend_end_date'] %}
-                            <input type="date" name="suspend_end_date" id="suspend_end_date" value="{{ user['suspend_end_date'] }}" style="width: 250px">
+                            <input type="date" name="suspend_end_date" id="suspend_end_date" value="{{ user['suspend_end_date'] }}" style="width: 100%;
+                                outline: none;
+                                color: #333;
+                                font-size: 14px;
+                                border: 1px solid #F89E19;
+                                border-radius: 5px;
+                                color: black;
+                                height: 42px;
+                                margin: 8px 0;">
                             {% else %}
-                            <input type="date" name="suspend_end_date" id="suspend_end_date" style="width: 250px">
+                            <input type="date" name="suspend_end_date" id="suspend_end_date" style="width: 100%;
+                                outline: none;
+                                color: #333;
+                                font-size: 14px;
+                                border: 1px solid #F89E19;
+                                border-radius: 5px;
+                                color: black;
+                                height: 42px;
+                                margin: 8px 0;">
                             {% endif %}
                     </div>
                     <div>
@@ -311,7 +322,7 @@ form .fields .input-field{
                      <button class = "submit" id = "back" type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'" style="margin-right: 30px; ">Back</button>
                     </div>
                      <!--<button class = "change" type="button" onclick="window.location.href='{{ url_for('auth.reset_password')}}'" style="margin-left: 300px; margin-top: -55px">Change Password</button>-->
-                    <div class="instructions" style="color: white; margin-top: 12px;margin-left: -20px;text-align: center">
+                    <div class="instructions" style="color: white; margin-top: 12px;margin-left: 15px;text-align: center">
                         <p style="color: white; margin-top: 12px;margin-left: -20px;text-align: center">
                             Password last refreshed on {{ user['password_refresh_date'] }}<br>
                             Password will expire on {{ password_expires }}
@@ -320,9 +331,9 @@ form .fields .input-field{
                     </div>
 
 
-    </div>
-</div>
-</div>
+                </div>
+            </div>
+            </div>
         </form>
 </div>
 {% endblock %}
