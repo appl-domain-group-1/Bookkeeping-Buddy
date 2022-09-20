@@ -9,10 +9,7 @@ body{
   position: relative;
 }
 
-h1, h3{
-  background-color: #CFCFCF;
-  color:#185DFF;
-}
+
 .Welcome-text {
 font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 font-size:20px;
