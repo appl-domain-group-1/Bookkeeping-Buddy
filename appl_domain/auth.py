@@ -54,28 +54,33 @@ def register():
 
         db = get_db()
         error = None
-        year = int(datetime.today().year)
 
+        # Validate format of high school graduation year
         if not year_graduated_hs:
             error = 'Please enter the year you graduated high school'
-        if int(year_graduated_hs) >= (year - 18) or int(year_graduated_hs) <= (year - 118):
+        elif not (any(character.isdigit() for character in year_graduated_hs)):
+            error = 'High school graduation year must be a number'
+        elif (today.year - 18) <= int(year_graduated_hs) <= (today.year - 118):
             error = 'Invalid year of graduation'
 
+        # Validate format of city user was born in
         if not city_born:
             error = 'Please enter the city you were born in'
-        if (len(city_born) > 32) or \
+        elif (len(city_born) > 32) or \
                 not city_born.isalpha():
             error = 'Please enter a valid city name'
 
+        # Validate format of name of user's first pet
         if not first_pet:
             error = 'Please enter the name of your first pet'
-        if (len(first_pet) > 16) or \
+        elif (len(first_pet) > 16) or \
                 not first_pet.isalpha():
             error = 'Please do not enter special characters in the pet name field'
 
+        # Validate format of user's date of birth
         if not DOB:
             error = 'Date of birth is required'
-        else:
+        elif DOB:
             try:
                 correct_date = bool(datetime.strptime(DOB, "%Y-%m-%d"))
             except ValueError:
@@ -83,36 +88,41 @@ def register():
             if not correct_date:
                 error = 'Date of birth must be formatted as YYYY-MM-DD'
 
+        # Validate format of user's address
         if not address:
             error = 'Please enter your address'
-        if (len(address) > 32) or \
+        elif (len(address) > 32) or \
                 not (any(character.isalpha() for character in address)) or \
                 not (any(character.isdigit() for character in address)) or \
                 (any(character in "!@#$%^&*()-+?_=,<>/" for character in address)):
             error = 'Please enter a valid street address'
 
+        # Validate format of user's last name
         if not last_name:
             error = 'Please enter your last name'
         if (len(last_name) > 32) or \
                 not last_name.isalpha():
             error = 'Please do not enter special characters in the last name field'
 
+        # Validate format of user's first name
         if not first_name:
             error = 'Please enter your first name'
-        if (len(first_name) > 16) or \
+        elif (len(first_name) > 16) or \
                 not first_name.isalpha():
             error = 'Please do not enter special characters in the first name field'
 
-        regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        # Regex used for email format validation
+        email_regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        # Validate format of user's email address
         if not email_address:
             error = 'Please enter your email address'
-        if not (re.fullmatch(regex, email_address)):
+        elif not (re.fullmatch(email_regex, email_address)):
             error = "Invalid email address"
 
         # If password is blank or does not meet requirements, return an error
         if not password:
             error = 'Password is required'
-        if (len(password) < 8) or \
+        elif (len(password) < 8) or \
                 not (password[0].isalpha()) or \
                 not (any(character.isdigit() for character in password)) or \
                 not (any(character not in "!@#$%^&*") for character in password):
