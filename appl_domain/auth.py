@@ -36,7 +36,7 @@ def register():
     """
     if request.method == 'POST':
         # Get today's date
-        today = datetime.now()
+        today = datetime.today().date()
 
         # Get elements from form
         password = request.form['password']
@@ -50,10 +50,7 @@ def register():
         year_graduated_hs = request.form['year_graduated_hs']
 
         # Generate username: First initial, last name, account created MM, account created YY
-        username = f"{first_name[0]}{last_name}{today.month:02d}{str(today.year)[2:]}"
-
-        # Format today's date for the database (YYYY-MM-DD)
-        today = f"{today.year}-{today.month:02d}-{today.day:02d}"
+        username = f"{first_name[0]}{last_name}{today:%m}{today:%y}"
 
         db = get_db()
         error = None
@@ -151,6 +148,8 @@ def register():
                     - incorrect_login_attempts [int]: Number of times login has been attempted to this account with
                         incorrect password. Default: 0. When == 3, account is suspended
                 """
+                # Format today's date as a string for the database (YYYY-MM-DD)
+                today = f"{today.year}-{today.month:02d}-{today.day:02d}"
                 # Hash the new password
                 password = generate_password_hash(password)
                 db.execute(
