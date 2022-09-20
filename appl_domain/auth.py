@@ -438,6 +438,14 @@ def edit_user(username):
     user = db.execute(
         "SELECT * FROM users WHERE username = ?", (username,)
     ).fetchone()
+    # Get the date the user's password will expire. This is a string.
+    password_refresh_date = g.user['password_refresh_date']
+    # Convert the string to a datetime object
+    password_refresh_date = datetime.fromisoformat(password_refresh_date)
+    # Calculate the date when it will expire
+    password_expires = password_refresh_date + timedelta(days=180)
+    # Convert this date to a string for use on the page
+    password_expires = password_expires.date().__str__()
 
     if request.method == 'GET':
         # Display user info on the page
@@ -504,12 +512,8 @@ def my_account():
     if request.method == 'GET':
         # Get the date the user's password will expire. This is a string.
         password_refresh_date = g.user['password_refresh_date']
-        # Convert each piece of the date to integers
-        year = int(password_refresh_date[:4])
-        month = int(password_refresh_date[5:7])
-        day = int(password_refresh_date[8:])
         # Convert the string to a datetime object
-        password_refresh_date = datetime(year, month, day)
+        password_refresh_date = datetime.fromisoformat(password_refresh_date)
         # Calculate the date when it will expire
         password_expires = password_refresh_date + timedelta(days=180)
         # Convert this date to a string for use on the page
