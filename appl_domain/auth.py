@@ -441,7 +441,7 @@ def edit_user(username):
 
     if request.method == 'GET':
         # Display user info on the page
-        return render_template('auth/edit_user.html', user=user)
+        return render_template('auth/edit_user.html', user=user, password_expires=password_expires)
 
     if request.method == 'POST':
         # Get the info from the form fields
@@ -486,11 +486,12 @@ def edit_user(username):
                 print(f"Error: {Exception.__traceback__.tb_next}")
         else:
             flash(error)
+
         # Get fresh info from the DB
         user = db.execute(
             "SELECT * FROM users WHERE username = ?", (username,)
         ).fetchone()
-        return render_template('auth/edit_user.html', user=user)
+        return render_template('auth/edit_user.html', user=user, password_expires=password_expires)
 
 
 @bp.route('/my_account', methods=('GET', 'POST'))
