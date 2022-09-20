@@ -1,12 +1,14 @@
 import base64
 import functools
+import re
+
 from appl_domain.email_tasks import email_registration, send_approval
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 from werkzeug.security import check_password_hash, generate_password_hash
 from appl_domain.db import get_db
 from datetime import date, datetime, timedelta
 import json
-from PIL import Image
+# from PIL import Image
 from io import BytesIO
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -56,6 +58,22 @@ def register():
         db = get_db()
         error = None
 
+        regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        if not email_address:
+            error = 'Email Address is required'
+        if not (re.fullmatch(regex, email_address)):
+            error = "Invalid email address"
+
+        if not DOB:
+            error = 'Date of birth is required'
+        else:
+            try:
+                correct_date = bool(datetime.strptime(DOB, "%Y-%m-%d"))
+            except ValueError:
+                correct_date = False
+            if not correct_date:
+                error = 'Date of birth must be formatted as YYYY-MM-DD'
+
         # If password is blank or does not meet requirements, return an error
         if not password:
             error = 'Password is required'
@@ -68,11 +86,9 @@ def register():
 
         # Other field validation
         if not (
-                email_address or
                 first_name or
                 last_name or
                 address or
-                DOB or
                 first_pet or
                 city_born or
                 year_graduated_hs):
