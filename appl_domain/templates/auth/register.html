@@ -173,13 +173,15 @@ form .fields .input-field{
 </style>
 
 <div class = container>
+    <header>
     {% block title %}
     {% if (g.user) and (g.user['role'] == 2) %}
-        <header>Create a new account</header>
+        Create a new account
     {% else %}
-        <header >Register for a new account</header>
+        Register for a new account
     {% endif %}
     {% endblock %}
+    </header>
     <form method="post">
             <div class = "personal details">
                 <div class = "fields">
