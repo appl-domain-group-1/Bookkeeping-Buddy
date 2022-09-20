@@ -438,8 +438,9 @@ def edit_user(username):
     user = db.execute(
         "SELECT * FROM users WHERE username = ?", (username,)
     ).fetchone()
+
     # Get the date the user's password will expire. This is a string.
-    password_refresh_date = g.user['password_refresh_date']
+    password_refresh_date = user['password_refresh_date']
     # Convert the string to a datetime object
     password_refresh_date = datetime.fromisoformat(password_refresh_date)
     # Calculate the date when it will expire
