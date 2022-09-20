@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <h1>{% block title %}Home{% endblock %}</h1>
+   {% block title %}BookkeepingBuddy{% endblock %}
 </head>
 <body>
 {% block content %}
-    <h1>This is the main page</h1>
+<div class = "Welcome-text">
+    <p style="font-weight: bolder; color: white">Easily track income, expenses, and more with accounting software designed for all kinds of businesses.</p>
+    </div>
 {%  endblock %}
 </body>
+
 </html>
