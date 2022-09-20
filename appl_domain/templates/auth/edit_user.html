@@ -1,68 +1,327 @@
 {% extends 'base.html' %}
 
-{% block header %}
-    <h1>{% block title %}Edit account for user {{ user['username'] }}{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
-    <form method="post">
-        <label for="first_name">First Name</label>
-        <input name="first_name" id="first_name" required value="{{ user['first_name'] }}">
-        <label for="last_name">Last Name</label>
-        <input name="last_name" id="last_name" required value="{{ user['last_name'] }}">
-        <br>
-        <label for="email_address">Email Address</label>
-        <input name="email_address" id="email_address" required value="{{ user['email_address'] }}">
-        <br>
-        {% if user['active'] == 1 %}
-            <label for="active">Active?</label>
-            <input type="checkbox" id="active" name= "active" value="active" checked>
-        {% else %}
-            <label for="active">Active?</label>
-            <input type="checkbox" id="active" name="active" value="active">
-        {% endif %}
-        {% if user['incorrect_login_attempts'] >= 3 %}
-            User account suspended for too many incorrect logins.
-            <br>
-            Reset login attempts and activate account?
-            <button type="button" onclick="if (confirm('Are you sure you want to reactivate user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.reset_user', username=user['username'])}}'}">Reset</button>
-        {% endif %}
-        <br>
-        <label for="role">Role</label>
-        <select name="role" id="role">
-            <option value="0" {% if user['role'] == 0 %} selected {% endif %}>User</option>
-            <option value="1" {% if user['role'] == 1 %} selected {% endif %}>Manager</option>
-            <option value="2" {% if user['role'] == 2 %} selected {% endif %}>Administrator</option>
-        </select>
-        <br>
-        <label for="address">Address</label>
-        <input name="address" id="address" required value="{{ user['address'] }}">
-        <br>
-        <label for="DOB">Date of birth (YYYY-MM-DD)</label>
-        <input name="DOB" id="DOB" required value="{{ user['DOB'] }}">
-        <br>
-        Suspend user account from:
-        <br>
-        <label for="suspend_start_date">Start</label>
-        {% if user['suspend_start_date'] %}
-        <input name="suspend_start_date" id="suspend_start_date" value="{{ user['suspend_start_date'] }}">
-        {% else %}
-        <input name="suspend_start_date" id="suspend_start_date">
-        {% endif %}
-        <br>
-        to
-        <br>
-        <label for="suspend_end_date">End</label>
-        {% if user['suspend_end_date'] %}
-        <input name="suspend_end_date" id="suspend_end_date" value="{{ user['suspend_end_date'] }}">
-        {% else %}
-        <input name="suspend_end_date" id="suspend_end_date">
-        {% endif %}
-        <br>
-        Password last refreshed on {{ user['password_refresh_date'] }}
-        <br>
-        <input type="submit" value="Save changes">
-        <button type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'">Back</button>
-        <button type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
-    </form>
+<style>
+ body{
+    align-items:center;
+    justify-content: center;
+}
+.container{
+    position: relative;
+    max-width: 900px;
+    width: 100%;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top: 10vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;
+}
+.container h1{
+    font-size : x-large;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+.container form{
+    position: relative;
+    margin-top:16px;
+    min-height: 400px;
+    background: black;
+}
+.container form .personal{
+    margin-top: 30px;
+}
+.container form .fields{
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+form .fields .input-field{
+    display: flex;
+    width: calc(100%/3 - 15px);
+    flex-direction: column;
+    margin: 4px 0;
+}
+.input-field label{
+    font-size: 14px;
+    font-weight: bold;
+    color: #185DFF;
+
+}
+.input-field .file{
+    border: none;
+    outline: none;
+    height: 42px;
+    color: #185DFF;
+    margin-left: -14px;
+}
+.input-field input{
+     outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    border-radius: 5px;
+    border: 1px solid #F89E19;
+    padding:  0 15px;
+    height: 42px;
+    margin: 8px 0;
+}
+.container form .submit{
+   display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 15px;
+    width: 200px;
+    border: none;
+    outline: none;
+    color: white;
+    border-radius: 6px;
+    background-color: #185DFF;
+    margin: auto;
+    margin-left: 0px;
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 100px;
+}
+.container button{
+   display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 300px;
+    border: none;
+    outline: none;
+    color: white;
+    border-radius: 6px;
+    margin: auto;
+    background-color: #185DFF;
+    margin-left: 300px;
+}
+.container form p{
+    margin-top: -45px;
+}
+ @media screen and (max-width: 830px) {
+  .container {
+    position: relative;
+    max-width: 380px;
+    width: 80%;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top: 10vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;
+  }
+     .container form{
+    position: relative;
+    margin-top:16px;
+    min-height: 400px;
+    background: black;
+}
+    .input-field label{
+        font-size: 14px;
+        font-weight: bold;
+        color: #185DFF;
+    }
+    .input-field input{
+        width: 85%;
+        outline: none;
+        color: #333;
+        font-size: 14px;
+        border: 1px solid #F89E19;
+        border-radius: 5px;
+        height: 42px;
+        margin: 8px 0;
+    }
+    form .fields .input-field{
+        display: block;
+        width: 100%;
+    }
+
+    .container form .fields{
+        display: block;
+        width: 100%
+    }
+    .container form .submit{
+        margin-left: 0px;
+        width: 100%;
+        margin-bottom: 10px;
+        margin-top: 0px;
+    }
+    .container form p{
+        margin-top: 30px;
+    }
+    .container form button{
+        margin-left: 0px;
+        width: 100%;
+    }
+
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    position: relative;
+    max-width: 380px;
+    width: 80%;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top:10vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;
+  }
+    .input-field label{
+        font-size: 14px;
+        font-weight: bold;
+        color: #185DFF;
+    }
+    .input-field input{
+        width: 85%;
+        outline: none;
+        color: #333;
+        font-size: 14px;
+        border: 1px solid #F89E19;
+        border-radius: 5px;
+        height: 42px;
+        margin: 8px 0;
+    }
+    form .fields .input-field{
+        display: block;
+        width: 100%;
+    }
+
+    .container form .fields{
+        display: block;
+        width: 100%
+    }
+    .container form .submit{
+        margin-left: 0px;
+        width: 100%;
+        margin-bottom: 10px;
+        margin-top: 0px;
+    }
+    .input-field .picture{
+        width:70px;
+        height:70px;
+        margin-top: 10px;
+        margin-left: -84px;
+    }
+    .container form p{
+        margin-top: 30px;
+    }
+    .container form button{
+        margin-left: 0px;
+        width: 100%;
+    }
+    .submit #back{
+        margin-top: 0px;
+    }
+}
+@media screen and (max-width: 390px) {
+  .container {
+      margin-top: 10vh;
+  }}
+
+</style>
+<div class="container">
+     <h1>{% block title %}Account settings for {{ g.user['username'] }}{% endblock %}</h1>
+    <form method="post" enctype="multipart/form-data">
+        <div class = "form-first">
+            <div class = "personal details">
+                <div class = "fields">
+                    <div class = "input-field">
+                    <label for="email_address">Email Address</label>
+                        <input name="email_address" type = "email" id="email_address" required value="{{ user['email_address'] }}">
+                    </div>
+                    <div class = "input-field">
+                         <label for="first_name">First Name</label>
+                        <input name="first_name" id="first_name" required value="{{ user['first_name'] }}">
+                    </div>
+                    <div class = "input-field">
+                     <label for="last_name">Last Name</label>
+                        <input name="last_name" id="last_name" required value="{{ user['last_name'] }}">
+                    </div>
+                        <div class = "input-field">
+                    {% if user['active'] == 1 %}
+                            <label class = "show" for="active">Active?</label>
+                            <input type="checkbox" id="active" name= "active" value="active" checked style="height: 30px; ">
+                        {% else %}
+                            <label  class = "show" for="active">Active?</label>
+                            <input type="checkbox" id="active" name="active" value="active" style="height: 30px; ">
+                        {% endif %}
+                        {% if user['incorrect_login_attempts'] and user['incorrect_login_attempts'] >= 3 %}
+                        <p style="color: #185DFF; font-weight: bold; font-size: 16px">User account suspended for too many incorrect logins.</p>
+                            <br>
+                        <p style="color: #185DFF; font-weight: bold; font-size: 16px">Reset login attempts and activate account?</p>
+                        <button type="button" onclick="if (confirm('Are you sure you want to reactivate user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.reset_user', username=user['username'])}}'}">Reset</button>
+                        {% endif %}
+                        </div>
+                    <div class = "input-field">
+                        <label for="role">Role</label><br>
+                        <select name="role" id="role" style="border-radius: 5px;
+                            border: 1px solid #F89E19;
+                            padding:  0 15px;
+                            height: 45px;
+                            margin-top: -20px;
+                            margin: 8px 0;outline: none;
+                            font-size: 14px;
+                            font-weight: 400;">
+                        <option value="0" {% if user['role'] == 0 %} selected {% endif %}>User</option>
+                        <option value="1" {% if user['role'] == 1 %} selected {% endif %}>Manager</option>
+                        <option value="2" {% if user['role'] == 2 %} selected {% endif %}>Administrator</option>
+                    </select>
+                        </div>
+                    <div class = "input-field">
+                            <label for="address">Address</label>
+                        <input name="address" id="address" required value="{{ user['address'] }}">
+                    </div>
+
+                    <div class = "input-field">
+                        <label for="DOB">Date of birth (YYYY-MM-DD)</label>
+                        <input name="DOB" id="DOB" required value="{{ user['DOB'] }}">
+                    </div>
+                    <span class = "accountInfo">Suspension details
+                    <br><label for = "heading"style = "font-size: 16px; font-weight: bold; color: #185DFF">Suspend user account from:</label></span>
+                    <div class = "input-field">
+                       <label for="suspend_start_date">Start</label>
+                            {% if user['suspend_start_date'] %}
+                            <input type="date" name="suspend_start_date" id="suspend_start_date" value="{{ user['suspend_start_date'] }}" style="width: 250px">
+                            {% else %}
+                            <input type="date" name="suspend_start_date" id="suspend_start_date" style="width: 250px">
+                            {% endif %}
+                    </div>
+                    <div class = "input-field">
+                         <label for="suspend_end_date">End</label>
+                            {% if user['suspend_end_date'] %}
+                            <input type="date" name="suspend_end_date" id="suspend_end_date" value="{{ user['suspend_end_date'] }}" style="width: 250px">
+                            {% else %}
+                            <input type="date" name="suspend_end_date" id="suspend_end_date" style="width: 250px">
+                            {% endif %}
+                    </div>
+                    <div>
+                     <input type="submit" class = "submit" value="Save changes">
+                    </div>
+                    <div>
+                     <button class = "submit" style="margin-right: 30px; color: white" type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
+                    </div>
+                    <div>
+                     <button class = "submit" id = "back" type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'" style="margin-right: 30px; ">Back</button>
+                    </div>
+                     <!--<button class = "change" type="button" onclick="window.location.href='{{ url_for('auth.reset_password')}}'" style="margin-left: 300px; margin-top: -55px">Change Password</button>-->
+                    <div class="instructions" style="color: white; margin-top: 12px;margin-left: -20px;text-align: center">
+                        <p style="color: white; margin-top: 12px;margin-left: -20px;text-align: center">
+                            Password last refreshed on {{ user['password_refresh_date'] }}
+                        </p>
+                        <br>
+                    </div>
+
+
+    </div>
+</div>
+</div>
+        </form>
+</div>
 {% endblock %}

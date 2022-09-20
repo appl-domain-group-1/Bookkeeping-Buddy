@@ -1,0 +1,40 @@
+body{
+  background-image: url("backgroundbb.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-color: #CFCFCF;
+  height: 500px;
+  background-position: center center;
+  position: relative;
+}
+
+h1, h3{
+  background-color: #CFCFCF;
+  color:#185DFF;
+}
+.Welcome-text {
+font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+font-size:20px;
+  background-color: black;
+  padding: 20px;
+  color: black;
+text-align:center;
+margin: 20% 30%;
+}
+.Welcome-text p {
+background-color: #185DFF;
+}
+.table-header{
+  color: #185DFF;
+
+}
+.table{
+  background-color: white;
+
+}
+
+
+
+
+
