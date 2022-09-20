@@ -10,14 +10,13 @@
 {% block content %}
     <h1>User management</h1>
     <h3>Current users:</h3>
-    <table style="border:1px solid black;width: 100%">
-        <tr>
+    <table class = "table" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+        <tr class = "table-header">
             <th style="border:1px solid black">Full Name</th>
             <th style="border:1px solid black">Username</th>
             <th style="border:1px solid black">Email</th>
             <th style="border:1px solid black">Active?</th>
             <th style="border:1px solid black">Role</th>
-
 
         </tr>
     {% if users %}
@@ -25,7 +24,7 @@
         {% for user in users %}
             {% set row.counter = row.counter + 1 %}
             {% if user['incorrect_login_attempts'] >= 3 %}
-                <tr style="background-color:goldenrod">
+                <tr style="background-color: goldenrod">
             {% elif row.counter % 2 == 1 %}
                 <tr style="background-color:#CFCFCF">
             {% else %}
