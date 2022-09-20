@@ -9,7 +9,9 @@ body {
 
 .Welcome-text {
 font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-font-size:22px;
+font-size:20px;
+  background-color: black;
+  padding: 20px;
   margin: 20% 30%;
 text-align:center;
 }
