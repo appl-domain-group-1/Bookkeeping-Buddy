@@ -104,10 +104,10 @@
 
         {% else %}
                <div style = "flex:50%">
-                <a href = {{ url_for('mainpage') }} > <img src="{{ url_for('static', filename='logo_cropped.png') }}" style = "width: 70px;height: 75px;"  alt="BookkeepingBuddy logo"></a>
+                <a href = {{ url_for('mainpage') }} > <img src="{{ url_for('static', filename='logo_cropped.png') }}" style = "width: 60px;height: 65px;"  alt="BookkeepingBuddy logo"></a>
                    <p class = "title" style ="text-align: center; color: #185DFF; font-size: 20px; margin-top: -40px"><b>Bookkeeping Buddy</b></p><br>
-                   <a href="{{ url_for('auth.register') }}" style="right:0; top:0; ">Register</a>
-                <a href="{{ url_for('auth.login') }}" style="right:0; top:0;">Log In</a>
+                   <a href ="{{ url_for('auth.register') }}" style="right:0; top:0; "><b>Register</b></a>
+                <a href="{{ url_for('auth.login') }}" style="right:0; top:0;"><b>Log In</b></a>
                </div>
         {% endif %}
     </div>
