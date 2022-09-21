@@ -16,6 +16,7 @@
 {% block content %}
     <h1 class = "h1-h3">User management</h1>
     <h3 class = "h1-h3">Current users:</h3>
+<div style="overflow-x:auto;">
     <table class = "table" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
         <tr class = "table-header">
             <th style="border:1px solid black">Full Name</th>
@@ -70,9 +71,12 @@
             <td>No users found!</td>
         </tr>
     {% endif %}
-    </table>
-    <button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('auth.register')}}'">Create user</button>
 
+    </table>
+    </div>
+ <button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('auth.register')}}'">Create user</button>
 {% endblock %}
+
+
 </body>
 </html>
