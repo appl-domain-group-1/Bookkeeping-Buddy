@@ -1,5 +1,7 @@
 import base64
 import functools
+import re
+
 from appl_domain.email_tasks import email_registration, send_approval
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -34,7 +36,7 @@ def register():
     """
     if request.method == 'POST':
         # Get today's date
-        today = datetime.now()
+        today = datetime.today().date()
 
         # Get elements from form
         password = request.form['password']
@@ -48,35 +50,84 @@ def register():
         year_graduated_hs = request.form['year_graduated_hs']
 
         # Generate username: First initial, last name, account created MM, account created YY
-        username = f"{first_name[0]}{last_name}{today.month:02d}{str(today.year)[2:]}"
-
-        # Format today's date for the database (YYYY-MM-DD)
-        today = f"{today.year}-{today.month:02d}-{today.day:02d}"
+        username = f"{first_name[0]}{last_name}{today:%m}{today:%y}"
 
         db = get_db()
         error = None
 
+        # Validate format of high school graduation year
+        if not year_graduated_hs:
+            error = 'Please enter the year you graduated high school'
+        elif not (any(character.isdigit() for character in year_graduated_hs)):
+            error = 'High school graduation year must be a number'
+        elif (today.year - 18) <= int(year_graduated_hs) <= (today.year - 118):
+            error = 'Invalid year of graduation'
+
+        # Validate format of city user was born in
+        if not city_born:
+            error = 'Please enter the city you were born in'
+        elif (len(city_born) > 32) or \
+                not city_born.isalpha():
+            error = 'Please enter a valid city name'
+
+        # Validate format of name of user's first pet
+        if not first_pet:
+            error = 'Please enter the name of your first pet'
+        elif (len(first_pet) > 16) or \
+                not first_pet.isalpha():
+            error = 'Please do not enter special characters in the pet name field'
+
+        # Validate format of user's date of birth
+        if not DOB:
+            error = 'Date of birth is required'
+        elif DOB:
+            try:
+                correct_date = bool(datetime.strptime(DOB, "%Y-%m-%d"))
+            except ValueError:
+                correct_date = False
+            if not correct_date:
+                error = 'Date of birth must be formatted as YYYY-MM-DD'
+
+        # Validate format of user's address
+        if not address:
+            error = 'Please enter your address'
+        elif (len(address) > 32) or \
+                not (any(character.isalpha() for character in address)) or \
+                not (any(character.isdigit() for character in address)) or \
+                (any(character in "!@#$%^&*()-+?_=,<>/" for character in address)):
+            error = 'Please enter a valid street address'
+
+        # Validate format of user's last name
+        if not last_name:
+            error = 'Please enter your last name'
+        if (len(last_name) > 32) or \
+                not last_name.isalpha():
+            error = 'Please do not enter special characters in the last name field'
+
+        # Validate format of user's first name
+        if not first_name:
+            error = 'Please enter your first name'
+        elif (len(first_name) > 16) or \
+                not first_name.isalpha():
+            error = 'Please do not enter special characters in the first name field'
+
+        # Regex used for email format validation
+        email_regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        # Validate format of user's email address
+        if not email_address:
+            error = 'Please enter your email address'
+        elif not (re.fullmatch(email_regex, email_address)):
+            error = "Invalid email address"
+
         # If password is blank or does not meet requirements, return an error
         if not password:
             error = 'Password is required'
-        if (len(password) < 8) or \
+        elif (len(password) < 8) or \
                 not (password[0].isalpha()) or \
                 not (any(character.isdigit() for character in password)) or \
                 not (any(character not in "!@#$%^&*") for character in password):
             error = 'Password must contain at least 8 characters, start with a letter, contain a number, and contain ' \
                     'a special character from this list: !@#$%^&*'
-
-        # Other field validation
-        if not (
-                email_address or
-                first_name or
-                last_name or
-                address or
-                DOB or
-                first_pet or
-                city_born or
-                year_graduated_hs):
-            error = 'Please fill out all information'  # TODO: Perform other field validation
 
         # If we got no error, we're good to proceed
         if error is None:
@@ -107,6 +158,8 @@ def register():
                     - incorrect_login_attempts [int]: Number of times login has been attempted to this account with
                         incorrect password. Default: 0. When == 3, account is suspended
                 """
+                # Format today's date as a string for the database (YYYY-MM-DD)
+                today = f"{today.year}-{today.month:02d}-{today.day:02d}"
                 # Hash the new password
                 password = generate_password_hash(password)
                 db.execute(

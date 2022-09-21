@@ -90,16 +90,11 @@
                 <div id="username" style="text-align: right; padding-right: 10px;margin-top: -75px">{{ g.user['username'] }}</div>
                 {% if g.user['role'] == 2 %}
                 <div id="account_type" style="text-align: right; padding-right: 10px;" >Administrator</div>
-                <!--<div id="admin_functions" style="text-align: right; margin-top: -38px">
-                    <a href="{{ url_for('auth.manage_users')}}" >Manage Users</a>
-                </div>-->
                 {% elif g.user['role'] == 1 %}
                 <div id="account_type" style="text-align: right; padding-right: 10px;">Manager</div>
                 {% else %}
                 <div id="account_type" style="text-align: right; padding-right: 10px;">User</div>
                 {% endif %}
-                <!--<div id="my_account" style="text-align: right; "><a href="{{ url_for('auth.my_account') }}">My Account</a></div>
-                <div id="logout" style="text-align: right; "><a href="{{ url_for('auth.logout') }}">Log Out</a></div>-->
             </div>
 
         {% else %}
