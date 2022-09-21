@@ -39,8 +39,10 @@
     flex-wrap: wrap;
 }
 form .fields .input-field{
-    display: block;
-        width: 100%;
+    display: flex;
+    width: calc(100%/3 - 15px);
+    flex-direction: column;
+    margin: 4px 0;
 }
 .input-field label{
     font-size: 14px;
