@@ -21,9 +21,11 @@ def update_sample_expired_users(cookie):
     try:
         # Query the API on the server
         update = requests.get(f"{HOST}/api/update_expired", cookies=cookie)
+        if update.status_code != 200:
+            print(f"Error in {__name__}: Response code was {update.status_code}")
     except Exception as err:
         print(f"Error in {__name__}: {err}")
-        return
+    return
 
 
 def get_credentials():
