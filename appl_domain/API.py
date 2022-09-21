@@ -117,7 +117,7 @@ def update_expired():
     """
     def __get_date(delta):
         # Calculate (180 + delta) days back from today
-        expire_on = today - timedelta(days=(180 + delta))
+        expire_on = today - timedelta(days=(180 - delta))
         # Format the date for the DB
         return f"{expire_on.year}-{expire_on.month:02d}-{expire_on.day:02d}"
     # Get a handle on the DB
@@ -127,8 +127,9 @@ def update_expired():
         # Update the rows
         db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(0), "Expired01"))
         db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(1), "Expired02"))
-        db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(3), "Expired03"))
-        db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(4), "Expired04"))
+        db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(2), "Expired03"))
+        db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(3), "Expired04"))
+        db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(4), "Expired05"))
         # Write the changes out
         db.commit()
     except Exception as err:
