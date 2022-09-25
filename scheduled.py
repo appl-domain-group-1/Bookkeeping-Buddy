@@ -80,9 +80,19 @@ def send_expiration_emails(cookie):
     # If any users were returned from the API send them an email
     if len(users):
         for user in users:
-            message = f"Hello {user['first_name']} {user['last_name']},<br><br>Your password on Bookkeeping Buddy is " \
-                      f"set to expire in {user['days_before_expiration']} days. Please <a href='{SITE_URL}'>log into \
-                      your account</a> and reset your password.<br><br>Regards,<br><br>Your Bookkeeping Buddy"
+            if user['days_before_expiration'] == 1:
+                message = f"Hello {user['first_name']} {user['last_name']},<br><br>Your password on Bookkeeping " \
+                          f"Buddy is set to expire tomorrow. Please <a href='{SITE_URL}'>log into your account</a> " \
+                          f"and reset your password.<br><br>Regards,<br><br>Your Bookkeeping Buddy"
+            elif user['days_before_expiration'] == 0:
+                message = f"Hello {user['first_name']} {user['last_name']},<br><br>Your password on Bookkeeping " \
+                          f"Buddy is set to expire today. Please <a href='{SITE_URL}'>log into your account</a> and " \
+                          f"reset your password.<br><br>Regards,<br><br>Your Bookkeeping Buddy"
+            else:
+                message = f"Hello {user['first_name']} {user['last_name']},<br><br>Your password on Bookkeeping " \
+                          f"Buddy is set to expire in {user['days_before_expiration']} days. Please " \
+                          f"<a href='{SITE_URL}'>log into your account</a> and reset your password.<br><br>Regards," \
+                          f"<br><br>Your Bookkeeping Buddy"
             send_email(user['email_address'], subject, message)
     # If no users were returned from the API call, just end
     else:

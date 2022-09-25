@@ -70,7 +70,7 @@ def expired_passwords():
             # Calculate the date when it will expire
             password_expires = password_refresh_date + timedelta(days=180)
             # If the user is in the time window, add them to the list of users to be emailed
-            if password_expires <= today:
+            if password_expires < today:
                 user_list.append({
                     'first_name': user['first_name'],
                     'last_name': user['last_name'],
@@ -116,8 +116,8 @@ def update_expired():
     Updates the rows for the example users with expiring passwords
     """
     def __get_date(delta):
-        # Calculate (180 + delta) days back from today
-        expire_on = today - timedelta(days=(180 - delta))
+        # Calculate (180 - delta) days back from today
+        expire_on = today - timedelta(days=(176 + delta))
         # Format the date for the DB
         return f"{expire_on.year}-{expire_on.month:02d}-{expire_on.day:02d}"
     # Get a handle on the DB
@@ -125,11 +125,9 @@ def update_expired():
 
     try:
         # Update the rows
-        db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(0), "Expired01"))
-        db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(1), "Expired02"))
-        db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(2), "Expired03"))
-        db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(3), "Expired04"))
-        db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(4), "Expired05"))
+        for num in range(0, 11):
+            db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(num),
+                                                                                         f"Expired{num+1:02d}"))
         # Write the changes out
         db.commit()
     except Exception as err:
