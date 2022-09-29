@@ -48,4 +48,7 @@ def create_app(test_config=None):
     import appl_domain.API as api
     app.register_blueprint(api.bp)
 
+    import appl_domain.fin_accts as fin_accts
+    app.register_blueprint(fin_accts.bp)
+
     return app
