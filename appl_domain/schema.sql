@@ -43,7 +43,7 @@ CREATE TABLE statements (
 /* Contains financial accounts */
 CREATE TABLE accounts (
     acct_name TEXT NOT NULL,
-    acct_num INTEGER PRIMARY KEY UNIQUE,
+    acct_num INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
     acct_desc TEXT,
     /* category to which this account belongs. Must be in
        the acct_categories table */
