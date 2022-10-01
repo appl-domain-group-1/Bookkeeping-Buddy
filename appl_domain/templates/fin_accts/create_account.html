@@ -3,10 +3,21 @@
 {% block content %}
     <header>
     {% block title %}
-        Create a new account
+        Create a new financial account
     {% endblock %}
     </header>
 
     <form method="post">
-        
+        <label for="acct_name">Account Name</label>
+        <input name="acct_name" placeholder="Enter a name for the new account" id="acct_name" required>
+
+        <label for="acct_desc">Account Description</label>
+        <input name="acct_desc" placeholder="Enter a description of the new account" id="acct_desc" required>
+
+        <label for="acct_category">Account Category</label>
+        <select name="acct_category" id="acct_category">
+            {% for category in acct_categories %}
+            <option value="{{ category }}">{{ category }}</option>
+            {% endfor %}
     </form>
+{% endblock %}
