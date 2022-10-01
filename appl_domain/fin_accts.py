@@ -15,17 +15,23 @@ def create_acct():
     # If the user isn't an admin, boot them
     if g.user['role'] != 2:
         abort(403)
-        return
+
+    # Get a handle on the database
+    db = get_db()
+    # Get all account categories
+    categories = db.execute(
+        "SELECT * FROM acct_categories"
+    ).fetchall()
+
+    statements = db.execute(
+        "SELECT * FROM statements"
+    ).fetchall()
+
     if request.method == 'POST':
         error = None
 
         # Get a handle on the DB
         db = get_db()
-
-        # Get a list of all the account categories
-        acct_categories = db.execute(
-            "SELECT * FROM acct_categories"
-        )
 
         # Get today's date
         today = datetime.today().date()
@@ -64,4 +70,5 @@ def create_acct():
             else:
                 return redirect(url_for('fin_accts.view_accts'))
         flash(error)
-    return render_template('fin_accts/create_account.html')
+
+    return render_template('fin_accts/create_account.html', categories=categories, statements=statements)
