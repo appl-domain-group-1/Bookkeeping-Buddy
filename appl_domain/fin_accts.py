@@ -72,3 +72,19 @@ def create_acct():
         flash(error)
 
     return render_template('fin_accts/create_account.html', categories=categories, statements=statements)
+
+@bp.route('/view_accounts', methods=('GET',))
+@login_required
+def view_accounts():
+    # Get a handle on the DB
+    db = get_db()
+    # Get all the different account categories
+    acct_categories = db.execute(
+        "SELECT * FROM acct_categories"
+    ).fetchall()
+    # Get all the different accounts
+    accounts = db.execute(
+        "SELECT * FROM accounts"
+    ).fetchall()
+
+    return render_template('fin_accts/view_accounts.html', acct_categories=acct_categories, accounts=accounts)
