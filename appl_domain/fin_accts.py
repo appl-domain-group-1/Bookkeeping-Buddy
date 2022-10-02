@@ -55,25 +55,38 @@ def create_acct():
 
         if error is None:
             try:
+                # Generate new account number
+                highest_acct_number = db.execute(
+                    "SELECT acct_num FROM accounts WHERE acct_num = (SELECT MAX(acct_num) FROM accounts WHERE "
+                    "acct_category = ?)", (acct_category,)
+                ).fetchone()
+                if highest_acct_number:
+                    highest_acct_number = highest_acct_number['acct_num']
+                    this_account_num = highest_acct_number + 1
+                else:
+                    this_account_num = (int(acct_category) * 1000) + 1
+
                 # Add the new row
-                db.execute(
+                this_account = db.execute(
                     "INSERT INTO accounts (acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal, "
-                    "balance, date_created, created_by, statement, comment) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    (acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal, initial_bal, today,
-                     g.user['username'], statement, comment)
-                )
+                    "balance, date_created, created_by, statement, comment, acct_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+                    "RETURNING *", (acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal, initial_bal, today,
+                     g.user['username'], statement, comment, this_account_num)
+                ).fetchone()
                 # Commit the change
                 db.commit()
+
             except (db.InternalError,
                     db.IntegrityError):
                 error = f"Database error. Contact your administrator."
             else:
-                return redirect(url_for('fin_accts.view_accts'))
+                return redirect(url_for('fin_accts.view_accounts'))
         flash(error)
 
     return render_template('fin_accts/create_account.html', categories=categories, statements=statements)
 
-@bp.route('/view_accounts', methods=('GET',))
+
+@bp.route('/', methods=('GET',))
 @login_required
 def view_accounts():
     # Get a handle on the DB
@@ -84,7 +97,7 @@ def view_accounts():
     ).fetchall()
     # Get all the different accounts
     accounts = db.execute(
-        "SELECT * FROM accounts"
+        "SELECT * FROM accounts ORDER BY acct_num"
     ).fetchall()
 
     return render_template('fin_accts/view_accounts.html', acct_categories=acct_categories, accounts=accounts)
