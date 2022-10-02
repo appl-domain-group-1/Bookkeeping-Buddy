@@ -23,6 +23,7 @@ def create_acct():
         "SELECT * FROM acct_categories"
     ).fetchall()
 
+    # Get all statement types
     statements = db.execute(
         "SELECT * FROM statements"
     ).fetchall()
