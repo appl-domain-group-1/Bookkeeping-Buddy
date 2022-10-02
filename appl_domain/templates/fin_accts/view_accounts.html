@@ -7,6 +7,12 @@
         {% endblock %}
     </header>
 
+    <br>
+    <br>
+    <button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('fin_accts.create_acct')}}'">Create New Account</button>
+    <br>
+    <br>
+
     {% for category in acct_categories %}
         <h2>{{ category['name'] }}</h2>
         <table>
