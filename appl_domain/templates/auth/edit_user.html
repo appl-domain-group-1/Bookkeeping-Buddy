@@ -8,7 +8,7 @@
 }
 .container{
    position: relative;
-    max-width: 450px;
+    max-width: 500px;
     width: 80%;
     border-radius: 6px;
     padding: 30px;
@@ -263,7 +263,7 @@ form .fields .input-field{
                         <input name="DOB" id="DOB" required value="{{ user['DOB'] }}">
                     </div>
 
-                     <label for = "heading"style = "font-size: 16px; font-weight: bold; color: #185DFF; margin-left: 0px">Suspend user account from:</label>
+                     <label for = "heading" style = "font-size: 16px; font-weight: bold; color: #185DFF; margin-left: 0px">Suspend user account from:</label>
                     <div class = "input-field">
                        <label for="suspend_start_date">Start</label>
                             {% if user['suspend_start_date'] %}
@@ -322,7 +322,7 @@ form .fields .input-field{
                      <button class = "submit" id = "back" type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'" style="margin-right: 30px; ">Back</button>
                     </div>
                     <div class="instructions" style="color: white; margin-top: 12px;margin-left: 15px;text-align: center">
-                        <p style="color: white; margin-top: 12px;margin-left: -20px;text-align: center">
+                        <p style="color: white; margin-top: 12px;margin-left: -20px;text-align: left">
                             Password last refreshed on {{ user['password_refresh_date'] }}<br>
                             Password will expire on {{ password_expires }}
                         </p>
