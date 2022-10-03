@@ -68,11 +68,11 @@ def create_acct():
                     this_account_num = (int(acct_category) * 1000) + 1
 
                 # Add the new row
-                this_account = db.execute(
+                db.execute(
                     "INSERT INTO accounts (acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal, "
-                    "balance, date_created, created_by, statement, comment, acct_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
-                    "RETURNING *", (acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal, initial_bal, today,
-                     g.user['username'], statement, comment, this_account_num)
+                    "balance, date_created, created_by, statement, comment, acct_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?, "
+                    "?, ?, ?, ?)", (acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal,
+                                    initial_bal, today, g.user['username'], statement, comment, this_account_num)
                 ).fetchone()
                 # Commit the change
                 db.commit()
