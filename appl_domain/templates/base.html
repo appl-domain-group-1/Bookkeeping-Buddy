@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
   <head>
     <!-- Required meta tags -->
@@ -83,9 +82,52 @@
      {% endif %}
  </nav>
 {%  if g.user %}
-    <nav class="navbar navbar-light bg-primary">
-         <div id="fullname" style="text-align: left;">{{ g.user['first_name'] }} {{ g.user['last_name'] }}</div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+  <div id="fullname" style="text-align: left;">{{ g.user['first_name'] }} {{ g.user['last_name'] }}</div>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
+  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Calendar</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+       <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: white; color: #185DFF">Statements
+              <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li><a href="#">Income Statement</a></li>
+                <li><a href="#">Retained Earnings statement</a></li>
+                <li><a href="#">Balance sheet</a></li>
+              </ul>
+            </div>
+        <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: white; color: #185DFF">Accounts
+              <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li><a href='{{ url_for('fin_accts.create_acct')}}'>Create new account</a></li>
+                <li><a href='{{ url_for('fin_accts.view_accounts')}}'>View accounts</a></li>
+              </ul>
+            </div>
+            <!--<button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF"  data-toggle="tooltip" data-placement="top" title="Create a new account" onclick="window.location.href='{{ url_for('fin_accts.create_acct')}}'">New Account</button>-->
+          <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="Create a new transaction" style = "background-color: white; color: #185DFF">Transactions</button>
+        <button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF" data-toggle="tooltip" data-placement="top" title="Create a journal transaction">Journaling</button>
+        <button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF" data-toggle="tooltip" data-placement="top" title="Create a trial balance">Trial balance</button>
+    </form>
+  </div>
+</nav>
+   <!-- <nav class="navbar navbar-light bg-primary">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <div id="fullname" style="text-align: left;">{{ g.user['first_name'] }} {{ g.user['last_name'] }}</div>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Calendar</a>
+      </li>
+     </ul>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
   </button>
@@ -97,7 +139,7 @@
               <span class="caret"></span></button>
               <ul class="dropdown-menu">
                 <li><a href="#">Income Statement</a></li>
-                <li><a href="#">Cash Flow</a></li>
+                <li><a href="#">Retained Earnings statement</a></li>
                 <li><a href="#">Balance sheet</a></li>
               </ul>
             </div>
@@ -108,7 +150,7 @@
 
       </form>
 </div>
-</nav>
+</nav>-->
 {% else %}
 {% endif %}
 </body>
