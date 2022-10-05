@@ -102,3 +102,66 @@ def view_accounts():
     ).fetchall()
 
     return render_template('fin_accts/view_accounts.html', acct_categories=acct_categories, accounts=accounts)
+
+
+@bp.route('/edit_acct/<account_num>', methods=('GET', 'POST'))
+@login_required
+def edit_account(account_num):
+    # Get a handle on the DB
+    db = get_db()
+
+    # Look up the account
+    account = db.execute(
+        "SELECT * from accounts WHERE acct_num = ?", (account_num,)
+    ).fetchone()
+
+    # Get all account categories
+    categories = db.execute(
+        "SELECT * FROM acct_categories"
+    ).fetchall()
+
+    # Get all statements
+    statements = db.execute(
+        "SELECT * FROM statements"
+    ).fetchall()
+
+    if request.method == 'POST':
+        try:
+            # Get info from form
+            acct_name = request.form['acct_name']
+            acct_desc = request.form['acct_desc']
+            acct_category = request.form['acct_category']
+            acct_subcategory = request.form['acct_subcategory']
+            debit = request.form['debit']
+            statement = request.form['statement']
+            comment = request.form['comment']
+
+            # Update the row
+            db.execute(
+                "UPDATE accounts SET acct_name = ?, acct_desc = ?, acct_category = ?, acct_subcategory = ?, debit = ?, "
+                "statement = ?, comment = ? WHERE acct_num = ?", (acct_name, acct_desc, acct_category, acct_subcategory,
+                                                                  debit, statement, comment, account_num)
+            )
+            # Write changes
+            db.commit()
+            flash("Account updated!")
+
+            # Get a fresh copy of the DB info
+            account = db.execute(
+                "SELECT * from accounts WHERE acct_num = ?", (account_num,)
+            ).fetchone()
+
+        except db.IntegrityError:
+            flash("Duplicate account names not allowed")
+
+    # Return the template
+    return render_template('fin_accts/create_account.html',
+                           account=account,
+                           statements=statements,
+                           categories=categories)
+
+
+@bp.route('/deactivate_acct/<account_num>', methods=('GET', 'POST'))
+@login_required
+def deactivate_account(account_num):
+    return "Ok"
