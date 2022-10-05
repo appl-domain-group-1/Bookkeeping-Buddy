@@ -102,3 +102,15 @@ def view_accounts():
     ).fetchall()
 
     return render_template('fin_accts/view_accounts.html', acct_categories=acct_categories, accounts=accounts)
+
+
+@bp.route('/edit_acct/<account_num>', methods=('GET', 'POST'))
+@login_required
+def edit_account(account_num):
+    return "Ok"
+
+
+@bp.route('/deactivate_acct/<account_num>', methods=('GET', 'POST'))
+@login_required
+def deactivate_account(account_num):
+    return "Ok"
