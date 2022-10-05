@@ -24,6 +24,9 @@
                 <th>Balance</th>
                 <th>Statement</th>
                 <th>Comment</th>
+                {% if g.user['role'] == 2 %}
+                    <th>Account Actions</th>
+                {% endif %}
             </tr>
             {% for account in accounts %}
                 {% if account['acct_category'] == category['number'] %}
@@ -39,6 +42,12 @@
                         <td>{{ account['balance'] }}</td>
                         <td>{{ account['statement'] }}</td>
                         <td>{{ account['comment'] }}</td>
+                        {% if g.user['role'] == 2 %}
+                            <td>
+                                <button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for("fin_accts.edit_account", account_num="{{ account['acct_num'] }}" )}}'">Edit</button>
+                                <button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('fin_accts.deactivate_account', account_num="{{ account['acct_num'] }}")}}'">Deactivate</button>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endif %}
             {% endfor %}
