@@ -1,13 +1,70 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <header>
+ <style>
+    .loginbox{
+   position: relative;
+    max-width: 500px;
+    width: 80%;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top: 10vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;}
+  .loginbox h1{
+    padding:0; text-align:center; color: white; font-size: x-large;
+  }
+  .loginbox form{
+    position: relative;
+    margin-top:16px;
+    min-height: 400px;
+    background: black;
+}
+  form label{
+    font-size: 14px;
+    font-weight: bold;
+    color: #185DFF;
+  }
+  form input{
+    width: 100%;
+    outline: none;
+    color: #333;
+    font-size: 14px;
+    border: 1px solid #F89E19;
+    border-radius: 5px;
+    color: black;
+    height: 42px;
+    margin: 8px 0;
+  }
+  form .submit{
+        background-color: #185DFF;
+        color: white;
+        padding: 10px 20px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+        font-size: 14px;
+  }
+  @media screen and (max-width: 600px) {
+  }
+    @media screen and (max-width: 390px) {
+  .loginbox {
+      margin-top: 10vh;
+  }}
+
+</style>
+<div class = "loginbox">
+    <form method="post">
+        <h1>
     {% block title %}
         Create a new financial account
     {% endblock %}
-    </header>
-
-    <form method="post">
+    </h1>
         <label for="acct_name">Account Name</label>
         <input name="acct_name" placeholder="Enter a name for the new account" id="acct_name" required>
         <br>
@@ -15,7 +72,7 @@
         <input name="acct_desc" placeholder="Enter a description of the new account" id="acct_desc" required>
         <br>
         <label for="acct_category">Account Category</label>
-        <select name="acct_category" id="acct_category">
+        <select name="acct_category" id="acct_category" class="form-control">
             {% for category in categories %}
             <option value="{{ category['number'] }}">{{ category['name'] }}</option>
             {% endfor %}
@@ -25,7 +82,7 @@
         <input name="acct_subcategory" placeholder="Enter the numerical subcategory for the new account" id="acct_subcategory" required>
         <br>
         <label for="debit">Account Type</label>
-        <select name="debit" id="debit">
+        <select name="debit" id="debit" class="form-control">
             <option value="1">Debit</option>
             <option value="0">Credit</option>
         </select>
@@ -34,15 +91,16 @@
         <input name="initial_bal" placeholder="Enter the initial balance for the new account" id="initial_bal" required>
         <br>
         <label for="statement">Statement</label>
-        <select name="statement" id="statement">
+        <select name="statement" id="statement" class="form-control">
             {% for statement in statements %}
                 <option value="{{ statement['number'] }}">{{ statement['name'] }}</option>
             {% endfor %}
         </select>
         <br>
         <label for="comment">Account Comments</label>
-        <textarea name="comment" id="comment" placeholder="Enter comments about this account"></textarea>
+         <textarea class="form-control" name="comment" id="comment" placeholder="Enter comments about this account" rows="3"></textarea>
         <br>
-        <input type="submit" value="Create Account">
+        <input class = "submit" type="submit" value="Create Account">
     </form>
+    </div>
 {% endblock %}

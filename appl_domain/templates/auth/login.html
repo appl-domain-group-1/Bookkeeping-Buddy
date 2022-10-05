@@ -6,7 +6,7 @@
 <style>
   .loginbox{
    position: relative;
-    max-width: 380px;
+    max-width: 450px;
     width: 80%;
     border-radius: 6px;
     padding: 30px;
@@ -22,7 +22,7 @@
     background: black;
 }
   .loginbox h1{
-    padding:0; text-align:center; color: white;
+    padding:0; text-align:center; color: white; font-size: x-large;
   }
   form label{
     font-size: 14px;
@@ -85,6 +85,7 @@
     <div style="overflow: hidden; padding: 0px 0px 0px 5px; color: white">
              Show Password
     </div>
+
     <input class = "submit" type="submit" value="Log In">
     <a href="{{ url_for('auth.forgot_password') }}" >Forgot password?</a><br>
     <a href="{{ url_for('auth.register') }}" >Create a new user account</a><br>

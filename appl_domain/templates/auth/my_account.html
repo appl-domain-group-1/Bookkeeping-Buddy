@@ -8,7 +8,7 @@
 }
 .container{
     position: relative;
-    max-width: 450px;
+    max-width: 500px;
     width: 80%;
     border-radius: 6px;
     padding: 30px;
@@ -239,7 +239,7 @@ form .fields .input-field{
                     <div class = "input-field" style="float: left">
                     <label for="profile_pic" style="float: left">Profile picture</label>
                     {% if g.user['picture'] %}
-                        <span ><img class = "picture" src="data:image/png;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" style="width:100px;height:100px;margin-top: 20px; float:left;" alt="User's profile picture"/></span>
+                        <span ><img class = "picture" src="data:image/png;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" style="width:100px;height:100px;margin-top: 20px;" alt="User's profile picture"/></span>
                     {% else %}
                         <span ><img class = "picture" src="{{ url_for('static', filename='no_photo.png') }}" style="width:100px;height:100px;margin-top: 20px;"  alt="Placeholder profile picture"/></span>
                     {% endif %}
@@ -248,11 +248,9 @@ form .fields .input-field{
                         <label for="uploaded_pic">Upload new photo</label>
                          <input class ="file" type="file" name="uploaded_pic" id="uploaded_pic">
                     </div>
-                    <div>
-                     <input class="submit" type="submit" value="Save changes">
-                    </div>
-                    <div>
-                     <input class="submit" type="button" onclick="window.location.href='{{ url_for('auth.reset_password')}}'" value="Change password">
+                    <div class="btn-group-vertical-justified" style="margin-bottom: 10px">
+                      <button type="submit" class="btn btn-secondary" style = "color: white; background-color: #185DFF">Save changes</button>
+                      <button type="button" class="btn btn-secondary" style = "color: white; background-color: #185DFF" onclick="window.location.href='{{ url_for('auth.reset_password')}}'" >Change password</button>
                     </div>
                     <div class="instructions" style="color: white; margin-top: 12px">
                         <p style="margin-left: 0px">
