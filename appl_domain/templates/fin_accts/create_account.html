@@ -62,45 +62,51 @@
     <form method="post">
         <h1>
     {% block title %}
-        Create a new financial account
+        {% if account %}
+            Edit Account #{{ account['acct_num'] }}
+        {% else %}
+            Create a new financial account
+        {% endif %}
     {% endblock %}
     </h1>
         <label for="acct_name">Account Name</label>
-        <input name="acct_name" placeholder="Enter a name for the new account" id="acct_name" required>
+        <input name="acct_name" placeholder="Enter a name for the new account" id="acct_name" {% if account %} value="{{ account['acct_name'] }}" {% endif %}required>
         <br>
         <label for="acct_desc">Account Description</label>
-        <input name="acct_desc" placeholder="Enter a description of the new account" id="acct_desc" required>
+        <input name="acct_desc" placeholder="Enter a description of the new account" id="acct_desc" {% if account %} value="{{ account['acct_desc'] }}" {% endif %}required>
         <br>
         <label for="acct_category">Account Category</label>
         <select name="acct_category" id="acct_category" class="form-control">
             {% for category in categories %}
-            <option value="{{ category['number'] }}">{{ category['name'] }}</option>
+            <option value="{{ category['number'] }}" {% if account and account['acct_category'] == category['number'] %} selected {% endif %}>{{ category['name'] }}</option>
             {% endfor %}
         </select>
         <br>
         <label for="acct_subcategory">Account Subcategory</label>
-        <input name="acct_subcategory" placeholder="Enter the numerical subcategory for the new account" id="acct_subcategory" required>
+        <input name="acct_subcategory" placeholder="Enter the numerical subcategory for the new account" id="acct_subcategory" {% if account %} value="{{ account['acct_subcategory'] }}" {% endif %} required>
         <br>
         <label for="debit">Account Type</label>
         <select name="debit" id="debit" class="form-control">
-            <option value="1">Debit</option>
-            <option value="0">Credit</option>
+            <option value="1" {% if account and account['debit'] == 1 %} selected {% endif %}>Debit</option>
+            <option value="0" {% if account and account['debit'] == 0 %} selected {% endif %}>Credit</option>
         </select>
-        <br>
-        <label for="initial_bal">Initial Account Balance</label>
-        <input name="initial_bal" placeholder="Enter the initial balance for the new account" id="initial_bal" required>
+        {% if not account %}
+            <br>
+            <label for="initial_bal">Initial Account Balance</label>
+            <input name="initial_bal" placeholder="Enter the initial balance for the new account" id="initial_bal" required>
+        {% endif %}
         <br>
         <label for="statement">Statement</label>
         <select name="statement" id="statement" class="form-control">
             {% for statement in statements %}
-                <option value="{{ statement['number'] }}">{{ statement['name'] }}</option>
+                <option value="{{ statement['number'] }}" {% if account and account['statement'] == statement['number'] %} selected {% endif %}>{{ statement['name'] }}</option>
             {% endfor %}
         </select>
         <br>
         <label for="comment">Account Comments</label>
-         <textarea class="form-control" name="comment" id="comment" placeholder="Enter comments about this account" rows="3"></textarea>
+         <textarea class="form-control" name="comment" id="comment" placeholder="Enter comments about this account" rows="3">{% if account %}{{ account['comment'] }}{% endif %}</textarea>
         <br>
-        <input class = "submit" type="submit" value="Create Account">
+            <input class = "submit" type="submit" value="{% if account %}Submit Changes{% else %}Create Account{% endif %}">
     </form>
     </div>
 {% endblock %}
