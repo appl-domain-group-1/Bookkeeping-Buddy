@@ -77,14 +77,14 @@ def create_acct():
 
                 # Create ledger table for the new account
                 db.execute(
-                    "CREATE TABLE ? ("
+                    f"CREATE TABLE ledger_{this_account_num} ("
                     "date TEXT NOT NULL,"
                     "description TEXT,"
                     "debit_accounts TEXT NOT NULL,"
                     "credit_accounts TEXT NOT NULL,"
                     "post_reference TEXT NOT NULL,"
                     "balance INTEGER NOT NULL"
-                    ")", (f"ledger_{this_account_num}",)
+                    ")"
                 )
 
                 # Commit the change
@@ -178,3 +178,17 @@ def edit_account(account_num):
 @login_required
 def deactivate_account(account_num):
     return "Ok"
+
+
+@bp.route('/view_ledger/<account_num>', methods=('GET',))
+@login_required
+def view_ledger(account_num):
+    # Get a handle on the DB
+    db = get_db()
+
+    # Get entries from ledger
+    entries = db.execute(
+        f"SELECT * FROM ledger_{account_num}"
+    ).fetchall()
+
+    return render_template('fin_accts/ledger.html', acct_num=account_num, entries=entries)
