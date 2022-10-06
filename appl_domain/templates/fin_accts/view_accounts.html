@@ -32,7 +32,7 @@
                 {% if account['acct_category'] == category['number'] %}
                     <tr>
                         <td>{{ account['acct_num'] }}</td>
-                        <td>{{ account['acct_name'] }}</td>
+                        <td><a href="{{ url_for("fin_accts.view_ledger", account_num=account['acct_num']) }}">{{ account['acct_name'] }}</a></td>
                         <td>{{ account['acct_desc'] }}</td>
                         {% if account['debit'] %}
                             <td>Debit</td>
