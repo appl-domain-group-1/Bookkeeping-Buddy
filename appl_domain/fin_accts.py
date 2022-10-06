@@ -74,6 +74,19 @@ def create_acct():
                     "?, ?, ?, ?)", (acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal,
                                     initial_bal, today, g.user['username'], statement, comment, this_account_num)
                 ).fetchone()
+
+                # Create ledger table for the new account
+                db.execute(
+                    "CREATE TABLE ? ("
+                    "date TEXT NOT NULL,"
+                    "description TEXT,"
+                    "debit_accounts TEXT NOT NULL,"
+                    "credit_accounts TEXT NOT NULL,"
+                    "post_reference TEXT NOT NULL,"
+                    "balance INTEGER NOT NULL"
+                    ")", (f"ledger_{this_account_num}",)
+                )
+
                 # Commit the change
                 db.commit()
 
