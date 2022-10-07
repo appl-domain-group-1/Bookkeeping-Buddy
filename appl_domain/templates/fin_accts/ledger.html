@@ -6,15 +6,15 @@
 
 {% block content %}
 
-        <table>
-            <tr>
+        <table class="table">
+            <thead>
                 <th>Date</th>
                 <th>Description</th>
                 <th>Debits</th>
                 <th>Credits</th>
                 <th>Post Reference</th>
                 <th>Balance</th>
-            </tr>
+            </thead>
             {% for entry in entries %}
                 <td>entry['date']</td>
                 <td>entry['description']</td>

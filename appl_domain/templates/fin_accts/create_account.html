@@ -15,18 +15,18 @@
   .loginbox h1{
     padding:0; text-align:center; color: white; font-size: x-large;
   }
-  .loginbox form{
+  .loginbox .box{
     position: relative;
     margin-top:16px;
     min-height: 400px;
     background: black;
 }
-  form label{
+  .box label{
     font-size: 14px;
     font-weight: bold;
     color: #185DFF;
   }
-  form input{
+  .box input{
     width: 100%;
     outline: none;
     color: #333;
@@ -37,7 +37,7 @@
     height: 42px;
     margin: 8px 0;
   }
-  form .submit{
+  .box .submit{
         background-color: #185DFF;
         color: white;
         padding: 10px 20px;
@@ -59,11 +59,13 @@
 
 </style>
 <div class = "loginbox">
-    <form method="post">
+    <form class = "box" method="post">
         <h1>
     {% block title %}
         {% if account %}
             Edit Account #{{ account['acct_num'] }}
+            <br>
+            Status: {% if account['active'] == 1 %}Active{% else %}Inactive{% endif %}
         {% else %}
             Create a new financial account
         {% endif %}
