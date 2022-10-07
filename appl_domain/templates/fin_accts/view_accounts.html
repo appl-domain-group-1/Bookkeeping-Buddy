@@ -39,7 +39,7 @@
                             <td>Credit</td>
                         {% endif %}
                         <td>{{ account['balance'] }}</td>
-                        <td>{{ account['statement'] }}</td>
+                        <td>{{ statements[account['statement']] }}</td>
                         <td>{{ account['comment'] }}</td>
                         {% if g.user['role'] == 2 %}
                             <td>

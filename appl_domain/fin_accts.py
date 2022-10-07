@@ -113,8 +113,18 @@ def view_accounts():
     accounts = db.execute(
         "SELECT * FROM accounts ORDER BY acct_num"
     ).fetchall()
+    # Get all the statements
+    statements = db.execute(
+        "SELECT * FROM statements"
+    ).fetchall()
+    statements_dict = {}
+    for statement in statements:
+        statements_dict[statement['number']] = statement['name']
 
-    return render_template('fin_accts/view_accounts.html', acct_categories=acct_categories, accounts=accounts)
+    return render_template('fin_accts/view_accounts.html',
+                           acct_categories=acct_categories,
+                           accounts=accounts,
+                           statements=statements_dict)
 
 
 @bp.route('/edit_acct/<account_num>', methods=('GET', 'POST'))
