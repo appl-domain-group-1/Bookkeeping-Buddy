@@ -184,7 +184,7 @@ def deactivate_account(account_num):
         # Get the current activation status of the account
         active = db.execute(
             "SELECT active from accounts WHERE acct_num = ?", (account_num,)
-        ).fetchone()
+        ).fetchone()['active']
 
         # Toggle the active value
         if active == 1:
@@ -199,10 +199,10 @@ def deactivate_account(account_num):
             db.commit()
 
         # Get fresh DB info
-        acct_categories = db.execute("SELECT * FROM acct_categories")
-        accounts = db.execute("SELECT * FROM accounts")
+        # acct_categories = db.execute("SELECT * FROM acct_categories")
+        # accounts = db.execute("SELECT * FROM accounts")
 
-        return render_template('fin_accts/view_accounts.html', acct_categories=acct_categories, accounts=accounts)
+        return redirect(url_for('fin_accts.view_accounts'))
     else:
         abort(403)
 
