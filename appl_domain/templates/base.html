@@ -6,9 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
      <link rel="stylesheet" href="{{url_for('static', filename = 'index.css') }}"/>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-     <title>{% block title %}{% endblock %} - Bookkeeping Buddy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <title>{% block title %}{% endblock %} - Bookkeeping Buddy</title>
   </head>
 
 <style>
@@ -20,12 +24,7 @@
 </style>
 <body>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
- <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style="position: relative; z-index: 999; overflow: visible">
+     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style="position: relative; z-index: 999; overflow: visible">
       <a class="navbar-brand" href = {{ url_for('mainpage') }} > <img src="{{ url_for('static', filename='logo_cropped.png') }}" width="30" height="30" class="d-inline-block align-top" alt="Site logo">
     Bookkeeping Buddy
   </a>
@@ -83,7 +82,7 @@
  </nav>
 {%  if g.user %}
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-  <div id="fullname" style="text-align: left;">{{ g.user['first_name'] }} {{ g.user['last_name'] }}</div>
+  <div id="fullname" style="text-align: left; margin-right: 30px">{{ g.user['first_name'] }} {{ g.user['last_name'] }}</div>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -91,8 +90,28 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent1">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Calendar</a>
+          <form  class="form-inline">
+        <div class = "row form-group">
+                <label for = "date" class = "col-form-label">Calendar</label>
+                <div >
+                    <div class = "input-group date" id = "datepicker">
+                        <input type = "text" class = "form-control">
+                        <span class = "input-group-append">
+                            <span class = "input-group-text bg-white">
+                                <i class = "fa fa-calendar"></i>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+              </form>
+    <script type="text/javascript">
+       $(function(){
+        $('#datepicker').datepicker();
+       });
+    </script>
       </li>
+
     </ul>
     <form class="form-inline my-2 my-lg-0">
        <div class="dropdown">
@@ -113,7 +132,7 @@
               </ul>
             </div>
             <!--<button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF"  data-toggle="tooltip" data-placement="top" title="Create a new account" onclick="window.location.href='{{ url_for('fin_accts.create_acct')}}'">New Account</button>-->
-          <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="Create a new transaction" style = "background-color: white; color: #185DFF">Transactions</button>
+          <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="Create a new transaction" style = "background-color: white; color: #185DFF" href="#">Transactions</button>
         <button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF" data-toggle="tooltip" data-placement="top" title="Create a journal transaction">Journaling</button>
         <button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF" data-toggle="tooltip" data-placement="top" title="Create a trial balance">Trial balance</button>
     </form>
