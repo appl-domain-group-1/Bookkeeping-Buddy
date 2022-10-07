@@ -174,10 +174,37 @@ def edit_account(account_num):
                            categories=categories)
 
 
-@bp.route('/deactivate_acct/<account_num>', methods=('GET', 'POST'))
+@bp.route('/deactivate_acct/<account_num>', methods=('GET',))
 @login_required
 def deactivate_account(account_num):
-    return "Ok"
+    if g.user['role'] == 2:
+        # Get a handle on the db
+        db = get_db()
+
+        # Get the current activation status of the account
+        active = db.execute(
+            "SELECT active from accounts WHERE acct_num = ?", (account_num,)
+        ).fetchone()
+
+        # Toggle the active value
+        if active == 1:
+            db.execute(
+                "UPDATE accounts SET active = ? WHERE acct_num = ?", (0, account_num)
+            )
+            db.commit()
+        else:
+            db.execute(
+                "UPDATE accounts SET active = ? WHERE acct_num = ?", (1, account_num)
+            )
+            db.commit()
+
+        # Get fresh DB info
+        acct_categories = db.execute("SELECT * FROM acct_categories")
+        accounts = db.execute("SELECT * FROM accounts")
+
+        return render_template('fin_accts/view_accounts.html', acct_categories=acct_categories, accounts=accounts)
+    else:
+        abort(403)
 
 
 @bp.route('/view_ledger/<account_num>', methods=('GET',))

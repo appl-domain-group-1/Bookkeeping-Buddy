@@ -45,7 +45,7 @@
                         {% if g.user['role'] == 2 %}
                             <td>
                                 <button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for("fin_accts.edit_account", account_num=account['acct_num'] )}}'">Edit</button>
-                                <button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('fin_accts.deactivate_account', account_num=account['acct_num'])}}'">Deactivate</button>
+                                <button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('fin_accts.deactivate_account', account_num=account['acct_num'])}}'">{% if account['active'] == 1 %}Deactivate{% else %}Activate{% endif %}</button>
                             </td>
                         {% endif %}
                     </tr>
