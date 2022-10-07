@@ -55,7 +55,9 @@
         </table>
 </div>
     {% endfor %}
-<br>
+{% if g.user['role'] == 2 %}
+    <br>
     <button type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.create_acct')}}'">Create New Account</button>
     <br>
+{% endif %}
 {% endblock %}
