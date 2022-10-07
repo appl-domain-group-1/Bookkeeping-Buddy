@@ -402,21 +402,24 @@ def reset_password():
     return render_template('auth/reset_password.html')
 
 
-@bp.route('/manage_users', methods=('GET', 'POST'))
+@bp.route('/manage_users', methods=('GET',))
 @login_required
 def manage_users():
     """
     Allows administrators to manage users of the system
     """
-    user_list = None
-    if request.method == 'GET':
-        # Get all users from the DB
-        db = get_db()
-        user_list = db.execute(
-            "SELECT * FROM users"
-        ).fetchall()
-        # Display them on the page
-    return render_template('auth/manage_users.html', users=user_list)
+    if g.user['role'] == 2:
+        user_list = None
+        if request.method == 'GET':
+            # Get all users from the DB
+            db = get_db()
+            user_list = db.execute(
+                "SELECT * FROM users"
+            ).fetchall()
+            # Display them on the page
+        return render_template('auth/manage_users.html', users=user_list)
+    else:
+        abort(403)
 
 
 @bp.route('/delete_user/<username>', methods=('GET', 'POST'))
@@ -485,74 +488,77 @@ def edit_user(username):
     """
     Allows administrators to edit info of a single user
     """
-    # Get matching user from the DB
-    db = get_db()
-    user = db.execute(
-        "SELECT * FROM users WHERE username = ?", (username,)
-    ).fetchone()
-
-    # Get the date the user's password will expire. This is a string.
-    password_refresh_date = user['password_refresh_date']
-    # Convert the string to a datetime object
-    password_refresh_date = datetime.fromisoformat(password_refresh_date)
-    # Calculate the date when it will expire
-    password_expires = password_refresh_date + timedelta(days=180)
-    # Convert this date to a string for use on the page
-    password_expires = password_expires.date().__str__()
-
-    if request.method == 'GET':
-        # Display user info on the page
-        return render_template('auth/edit_user.html', user=user, password_expires=password_expires)
-
-    if request.method == 'POST':
-        # Get the info from the form fields
-        email = request.form['email_address']
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        if request.form.get("active"):
-            active = 1
-        else:
-            active = 0
-        role = request.form['role']
-        address = request.form['address']
-        DOB = request.form['DOB']
-
-        # Placeholder variables
-        error = None
-        suspend_start_date = None
-        suspend_end_date = None
-        # If we got both suspend dates, add them to the database
-        if request.form['suspend_start_date'] and request.form['suspend_end_date']:
-            suspend_start_date = request.form['suspend_start_date']
-            suspend_end_date = request.form['suspend_end_date']
-        # If user doesn't give us both a start and an end date, don't commit either
-        if (request.form['suspend_start_date'] and not request.form['suspend_end_date']) or (request.form['suspend_end_date'] and not request.form['suspend_start_date']):
-            error = "To set a suspension period, you must supply both a start date and an end date."
-        # Only write to the database if there are no errors
-        if error is None:
-            # Get a handle on the database
-            db = get_db()
-            try:
-                # Update columns
-                db.execute(
-                    "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, active = ?, role = ?, "
-                    "address = ?, DOB = ?, suspend_start_date = ?, suspend_end_date = ? WHERE username = ?",
-                    (email, first_name, last_name, active, role, address, DOB, suspend_start_date, suspend_end_date,
-                     username)
-                )
-                # Write changes
-                db.commit()
-                flash("Record updated!")
-            except Exception:
-                print(f"Error: {Exception.__traceback__.tb_next}")
-        else:
-            flash(error)
-
-        # Get fresh info from the DB
+    if g.user['role'] == 2:
+        # Get matching user from the DB
+        db = get_db()
         user = db.execute(
             "SELECT * FROM users WHERE username = ?", (username,)
         ).fetchone()
-        return render_template('auth/edit_user.html', user=user, password_expires=password_expires)
+
+        # Get the date the user's password will expire. This is a string.
+        password_refresh_date = user['password_refresh_date']
+        # Convert the string to a datetime object
+        password_refresh_date = datetime.fromisoformat(password_refresh_date)
+        # Calculate the date when it will expire
+        password_expires = password_refresh_date + timedelta(days=180)
+        # Convert this date to a string for use on the page
+        password_expires = password_expires.date().__str__()
+
+        if request.method == 'GET':
+            # Display user info on the page
+            return render_template('auth/edit_user.html', user=user, password_expires=password_expires)
+
+        if request.method == 'POST':
+            # Get the info from the form fields
+            email = request.form['email_address']
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            if request.form.get("active"):
+                active = 1
+            else:
+                active = 0
+            role = request.form['role']
+            address = request.form['address']
+            DOB = request.form['DOB']
+
+            # Placeholder variables
+            error = None
+            suspend_start_date = None
+            suspend_end_date = None
+            # If we got both suspend dates, add them to the database
+            if request.form['suspend_start_date'] and request.form['suspend_end_date']:
+                suspend_start_date = request.form['suspend_start_date']
+                suspend_end_date = request.form['suspend_end_date']
+            # If user doesn't give us both a start and an end date, don't commit either
+            if (request.form['suspend_start_date'] and not request.form['suspend_end_date']) or (request.form['suspend_end_date'] and not request.form['suspend_start_date']):
+                error = "To set a suspension period, you must supply both a start date and an end date."
+            # Only write to the database if there are no errors
+            if error is None:
+                # Get a handle on the database
+                db = get_db()
+                try:
+                    # Update columns
+                    db.execute(
+                        "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, active = ?, role = ?, "
+                        "address = ?, DOB = ?, suspend_start_date = ?, suspend_end_date = ? WHERE username = ?",
+                        (email, first_name, last_name, active, role, address, DOB, suspend_start_date, suspend_end_date,
+                         username)
+                    )
+                    # Write changes
+                    db.commit()
+                    flash("Record updated!")
+                except Exception:
+                    print(f"Error: {Exception.__traceback__.tb_next}")
+            else:
+                flash(error)
+
+            # Get fresh info from the DB
+            user = db.execute(
+                "SELECT * FROM users WHERE username = ?", (username,)
+            ).fetchone()
+            return render_template('auth/edit_user.html', user=user, password_expires=password_expires)
+    else:
+        abort(403)
 
 
 @bp.route('/my_account', methods=('GET', 'POST'))
