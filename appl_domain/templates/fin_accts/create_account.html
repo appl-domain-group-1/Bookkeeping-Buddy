@@ -64,6 +64,8 @@
     {% block title %}
         {% if account %}
             Edit Account #{{ account['acct_num'] }}
+            <br>
+            Status: {% if account['active'] == 1 %}Active{% else %}Inactive{% endif %}
         {% else %}
             Create a new financial account
         {% endif %}
