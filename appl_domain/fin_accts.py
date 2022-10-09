@@ -45,7 +45,8 @@ def create_acct():
         acct_category = request.form['acct_category']
         acct_subcategory = request.form['acct_subcategory']
         debit = request.form['debit']
-        initial_bal = request.form['initial_bal']
+        # Remove unnecessary symbols from initial balance
+        initial_bal = request.form['initial_bal'].replace(',', '').replace('.', '').replace('$', '')
         statement = request.form['statement']
         comment = request.form['comment']
 
