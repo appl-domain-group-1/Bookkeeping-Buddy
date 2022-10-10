@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
-
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
 {% block title %}
     Ledger for account {{ acct_num }}
 {% endblock %}
 
 {% block content %}
+    <style>
+    body {
+        background-color: white;
+        font-color: #185DFF;
+
+    }
+
+    </style>
 
         <table class="table">
             <thead>
@@ -24,5 +34,5 @@
                 <td>entry['balance']</td>
             {% endfor %}
         </table>
-
 {% endblock %}
+</html>

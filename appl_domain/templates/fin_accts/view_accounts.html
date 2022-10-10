@@ -7,7 +7,6 @@
         {% endblock %}
     </header>
 
-
     {% for category in acct_categories %}
         <h2 style="color: white">{{ category['name'] }}</h2>
 <div style="overflow-x:auto; margin-top: -7px">
@@ -38,7 +37,11 @@
                         {% else %}
                             <td>Credit</td>
                         {% endif %}
-                        <td>{{ account['balance'] }}</td>
+
+                        <td>{{ account['balance'] }}
+
+                        </td>
+
                         <td>{{ statements[account['statement']] }}</td>
                         <td>{{ account['comment'] }}</td>
                         {% if g.user['role'] == 2 %}
