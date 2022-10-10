@@ -193,25 +193,28 @@ def deactivate_account(account_num):
         db = get_db()
 
         # Get the current activation status of the account
-        active = db.execute(
-            "SELECT active from accounts WHERE acct_num = ?", (account_num,)
-        ).fetchone()['active']
+        account_info = db.execute(
+            "SELECT active, balance from accounts WHERE acct_num = ?", (account_num,)
+        ).fetchone()
 
-        # Toggle the active value
-        if active == 1:
+        # Toggle the active value if the account is active and doesn't have a positive balance
+        if (account_info['active'] == 1) and (account_info['balance'] <= 0):
             db.execute(
                 "UPDATE accounts SET active = ? WHERE acct_num = ?", (0, account_num)
             )
             db.commit()
+
+        # Do not allow accounts with balance > 0 to be deactivated
+        elif (account_info['active']) and (account_info['balance'] > 0):
+            flash("Accounts with positive balance may not be deactivated")
+            return redirect(url_for('fin_accts.view_accounts'))
+
+        # Always allow an inactive account to be activated
         else:
             db.execute(
                 "UPDATE accounts SET active = ? WHERE acct_num = ?", (1, account_num)
             )
             db.commit()
-
-        # Get fresh DB info
-        # acct_categories = db.execute("SELECT * FROM acct_categories")
-        # accounts = db.execute("SELECT * FROM accounts")
 
         return redirect(url_for('fin_accts.view_accounts'))
     else:
