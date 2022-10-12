@@ -96,7 +96,7 @@
         {% if not account %}
             <br>
            <label for="initial_bal">Initial Account Balance</label>
-         <input name="initial_bal" placeholder="Enter the initial balance for the new account" id="initial_bal" onfocusout="numberWithCommas()" required/>
+         <input name="initial_bal" type="text" onkeyup="this.value=numberWithCommas(this.value);" placeholder="Enter the initial balance for the new account" id="initial_bal" required/>
 
         {% endif %}
         <br>
