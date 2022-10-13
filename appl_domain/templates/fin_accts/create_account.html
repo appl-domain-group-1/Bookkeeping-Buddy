@@ -58,6 +58,20 @@
   }}
 
 </style>
+        <script>
+            function capture () {
+              html2canvas(document.body.then((canvas) => {
+                // (A) APPEND SCREENSHOT TO DATA OBJECT
+                var data = new FormData();
+                data.append("screenshot", canvas.toDataURL("image/jpeg", 0.8));
+
+                // (B) UPLOAD SCREENSHOT TO SERVER
+                fetch("", { method:"post", body:data })
+                .then((res) => { return res.text(); })
+                .then((txt) => { alert(txt); });
+              });
+            }
+            </script>
 <div class = "loginbox">
     <form class = "box" method="post">
         <h1>
@@ -80,7 +94,7 @@
         <label for="acct_category">Account Category</label>
         <select name="acct_category" id="acct_category" class="form-control">
             {% for category in categories %}
-            <option value="{{ category['number'] }}" {% if account and account['acct_category'] == category['number'] %} selected {% endif %}>{{ category['name'] }}</option>
+            <option value="{{ category['number'] }}" {% if account and account['acct_category'] == category['number'] %} selected {% endif %}{{ category['name'] }}</option>
             {% endfor %}
         </select>
         <br>
@@ -108,7 +122,19 @@
         <label for="comment">Account Comments</label>
          <textarea class="form-control" name="comment" id="comment" placeholder="Enter comments about this account" rows="3">{% if account %}{{ account['comment'] }}{% endif %}</textarea>
         <br>
-            <input class = "submit" type="submit" value="{% if account %}Submit Changes{% else %}Create Account{% endif %}">
+            <input class = "submit" type="submit" value="{% if account %}Submit Changes{% else %}Create Account{% endif %}" onclick ="capture()"/>
+        <input type="button" value="Capture" onclick="capture()"/>
+    <!--<script type="text/javascript">
+        function capture(){
+            html2canvas(document.body).then((canvas) => {
+              let a = document.createElement("a");
+              a.download = "ss.png";
+              a.href = canvas.toDataURL("image/png");
+              a.click();
+            });
+        }
+    </script>-->
+
     </form>
     </div>
 {% endblock %}
