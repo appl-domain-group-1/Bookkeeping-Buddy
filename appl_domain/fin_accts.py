@@ -232,4 +232,9 @@ def view_ledger(account_num):
         f"SELECT * FROM ledger_{account_num}"
     ).fetchall()
 
-    return render_template('fin_accts/ledger.html', acct_num=account_num, entries=entries)
+    # Get all account info
+    account = db.execute(
+        "SELECT * FROM accounts WHERE acct_num = ?", (account_num,)
+    ).fetchone()
+
+    return render_template('fin_accts/ledger.html', entries=entries, account=account)
