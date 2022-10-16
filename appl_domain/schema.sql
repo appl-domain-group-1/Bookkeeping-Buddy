@@ -77,5 +77,7 @@ CREATE TABLE events (
     /* User who made the change */
     user_id TEXT NOT NULL REFERENCES users(username),
     /* date and time when the change was committed */
-    timestamp TEXT NOT NULL
+    timestamp TEXT NOT NULL,
+    /* Account associated with the change */
+    account INTEGER NOT NULL REFERENCES accounts(acct_num)
 );

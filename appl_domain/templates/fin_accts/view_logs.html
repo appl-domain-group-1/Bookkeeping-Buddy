@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <header style="color: white; font-size: xx-large; font-weight: bold">
+        {% block title %}
+            View event logs
+        {% endblock %}
+    </header>
+
+    <table class="table">
+        <thead>
+            <th>Account Number</th>
+            <th>Event ID</th>
+            <th>Date/Time</th>
+            <th>Changed By</th>
+            <th>Before</th>
+            <th>After</th>
+        </thead>
+        {% for event in events %}
+            <tr class="table">
+                <td>event['account']</td>
+                <td>event['event_id']</td>
+                <td>event['timestamp']</td>
+                <td>event['user_id']</td>
+                <td>event['before_image']</td>
+                <td>event['after_image']</td>
+            </tr>
+    </table>
+{% endblock %}
