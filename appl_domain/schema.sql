@@ -65,3 +65,17 @@ CREATE TABLE accounts (
     /* Comment about this table */
     comment TEXT
 );
+
+/* Contains all changes to financial accounts */
+CREATE TABLE events (
+    /* Unique identifier for each event logged */
+    event_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    /* Image of the record before modification */
+    before_image BLOB,
+    /* Image of the record after modification */
+    after_image BLOB NOT NULL,
+    /* User who made the change */
+    user_id TEXT NOT NULL REFERENCES users(username),
+    /* date and time when the change was committed */
+    timestamp TEXT NOT NULL
+);
