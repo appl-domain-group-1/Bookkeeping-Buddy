@@ -17,12 +17,12 @@
             </thead>
             {% for entry in entries %}
             <tr class = "table">
-                <td>entry['date']</td>
-                <td>entry['description']</td>
-                <td>entry['debit_accounts']</td>
-                <td>entry['credit_accounts']</td>
-                <td>entry['post_reference']</td>
-                <td>entry['balance']</td>
+                <td>{{ entry['date'] }}</td>
+                <td>{{ entry['description'] }}</td>
+                <td>{{ entry['debit_accounts'] }}</td>
+                <td>{{ entry['credit_accounts'] }}</td>
+                <td>{{ entry['post_reference'] }}</td>
+                <td>{{ entry['balance'] }}</td>
             </tr>
             {% endfor %}
         </table>
