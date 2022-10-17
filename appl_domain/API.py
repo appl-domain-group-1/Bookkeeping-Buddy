@@ -170,14 +170,14 @@ def log_edit():
     after_image = temp_buffer1.getvalue()
 
     try:
-        # # Add the new row
-        # db.execute(
-        #     "INSERT INTO events (before_image, after_image, user_id, timestamp, account) VALUES (?, ?, ?, ?, ?)",
-        #     (before_image, after_image, user_id, timestamp, account)
-        # )
-        #
-        # # Commit the change
-        # db.commit()
+        # Add the new row
+        db.execute(
+            "INSERT INTO events (before_image, after_image, user_id, timestamp, account) VALUES (?, ?, ?, ?, ?)",
+            (before_image, after_image, user_id, timestamp, account)
+        )
+
+        # Commit the change
+        db.commit()
 
         # Return ok
         return jsonify(200)
