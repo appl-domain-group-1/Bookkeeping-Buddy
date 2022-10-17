@@ -7,6 +7,7 @@ from datetime import date, datetime, timedelta
 from appl_domain.auth import login_required
 from PIL import Image
 from io import BytesIO
+from flask_cors import cross_origin
 
 # Get today's date
 today = datetime.today().date()
@@ -141,33 +142,57 @@ def update_expired():
 
 
 @bp.route('log_edit', methods=('POST',))
-@login_required
+# @login_required
+@cross_origin()
 def log_edit():
     # Get a hande on the database
     db = get_db()
 
-    # Get information from the request
-    before_image = request.files['before_image']
-    after_image = request.files['after_image']
+    # Process the before screenshot
+    if ("before_image" in request.form) and (request.form['before_image'] != 'null'):
+        # If a before screenshot was included, get it from the request
+        before_image = request.form['before_image']
+        # Open the image with the PIL library
+        before_image = Image.open(before_image)
+        # Create temporary byte buffer for the image
+        temp_buffer0 = BytesIO()
+        # Write the image to the temporary byte buffer
+        before_image.save(temp_buffer0, format='JPEG')
+        # Get the byte representation of the image
+        before_image = temp_buffer0.getvalue()
+    else:
+        before_image = None
+
+    # Get the after screenshot from the request
+    after_image = request.form['after_image']
+    # Open the image with the PIL library
+    after_image = Image.open(after_image)
+    # Create temporary byte buffer for the image
+    temp_buffer1 = BytesIO()
+    # Write the image to the temporary byte buffer
+    after_image.save(temp_buffer1, format='JPEG')
+    # Get the byte representation of the image
+    after_image = temp_buffer1.getvalue()
+
+    # Get the rest of the data from the request
     user_id = request.form['user_id']
     timestamp = request.form['timestamp']
     account = request.form['account']
 
-    # Open the images with the PIL library
-    before_image = Image.open(before_image)
-    after_image = Image.open(after_image)
-        
-    # Create temporary byte buffers for the images
-    temp_buffer0 = BytesIO()
-    temp_buffer1 = BytesIO()
-    
-    # Write the images to the temporary byte buffers
-    before_image.save(temp_buffer0, format='JPEG')
-    after_image.save(temp_buffer1, format='JPEG')
 
-    # Get the byte representation of the image
-    before_image = temp_buffer0.getvalue()
-    after_image = temp_buffer1.getvalue()
+
+        
+
+
+
+    
+
+
+
+
+
+
+
 
     try:
         # Add the new row
