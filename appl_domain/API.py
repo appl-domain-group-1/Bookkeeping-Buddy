@@ -5,6 +5,8 @@ from werkzeug.exceptions import abort
 from appl_domain.db import get_db
 from datetime import date, datetime, timedelta
 from appl_domain.auth import login_required
+from PIL import Image
+from io import BytesIO
 
 # Get today's date
 today = datetime.today().date()
@@ -115,11 +117,13 @@ def update_expired():
     """
     Updates the rows for the example users with expiring passwords
     """
+
     def __get_date(delta):
         # Calculate (180 - delta) days back from today
         expire_on = today - timedelta(days=(176 + delta))
         # Format the date for the DB
         return f"{expire_on.year}-{expire_on.month:02d}-{expire_on.day:02d}"
+
     # Get a handle on the DB
     db = get_db()
 
@@ -127,10 +131,55 @@ def update_expired():
         # Update the rows
         for num in range(0, 11):
             db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(num),
-                                                                                         f"Expired{num+1:02d}"))
+                                                                                         f"Expired{num + 1:02d}"))
         # Write the changes out
         db.commit()
     except Exception as err:
         print(f"Exception in {__name__}: {err}")
         return jsonify(500)
     return jsonify(200)
+
+
+@bp.route('log_edit', methods=('POST',))
+@login_required
+def log_edit():
+    # Get a hande on the database
+    db = get_db()
+
+    # Get information from the request
+    before_image = request.files['before_image']
+    after_image = request.files['after_image']
+    user_id = request.form['user_id']
+    timestamp = request.form['timestamp']
+    account = request.form['account']
+
+    # Open the images with the PIL library
+    before_image = Image.open(before_image)
+    after_image = Image.open(after_image)
+        
+    # Create temporary byte buffers for the images
+    temp_buffer0 = BytesIO()
+    temp_buffer1 = BytesIO()
+    
+    # Write the images to the temporary byte buffers
+    before_image.save(temp_buffer0, format='JPEG')
+    after_image.save(temp_buffer1, format='JPEG')
+
+    # Get the byte representation of the image
+    before_image = temp_buffer0.getvalue()
+    after_image = temp_buffer1.getvalue()
+
+    try:
+        # # Add the new row
+        # db.execute(
+        #     "INSERT INTO events (before_image, after_image, user_id, timestamp, account) VALUES (?, ?, ?, ?, ?)",
+        #     (before_image, after_image, user_id, timestamp, account)
+        # )
+        #
+        # # Commit the change
+        # db.commit()
+
+        # Return ok
+        return jsonify(200)
+    except Exception:
+        return jsonify(500)
