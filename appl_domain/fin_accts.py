@@ -238,3 +238,17 @@ def view_ledger(account_num):
     ).fetchone()
 
     return render_template('fin_accts/ledger.html', entries=entries, account=account)
+
+
+@bp.route('/view_logs/<account_num>', methods=('GET',))
+@login_required
+def view_logs(account_num):
+    # Get a handle on the DB
+    db = get_db()
+
+    # Get all the events for this account number
+    events = db.execute(
+        "SELECT * FROM events WHERE account = ?", (account_num,)
+    ).fetchall()
+
+    return render_template('fin_accts/view_logs.html', events=events, account_num=account_num)

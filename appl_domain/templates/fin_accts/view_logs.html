@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <header style="color: white; font-size: xx-large; font-weight: bold">
+        {% block title %}
+            View event logs for account {{ account_num }}
+        {% endblock %}
+    </header>
+
+    <table class="table">
+        <thead>
+            <th>Event ID</th>
+            <th>Date/Time</th>
+            <th>Changed By</th>
+            <th>Before</th>
+            <th>After</th>
+        </thead>
+        {% for event in events %}
+            <tr class="table">
+                <td>{{ event['event_id'] }}</td>
+                <td>{{ event['timestamp'] }}</td>
+                <td>{{ event['user_id'] }}</td>
+                <td><img src="data:image/png;base64, {{ event['before_image'] | make_image }}" height="100" width="100"></td>
+                <td><img src="data:image/png;base64, {{ event['after_image'] | make_image }}" height="100" width="100"></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
