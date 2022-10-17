@@ -3,13 +3,12 @@
 {% block content %}
     <header style="color: white; font-size: xx-large; font-weight: bold">
         {% block title %}
-            View event logs
+            View event logs for account {{ account_num }}
         {% endblock %}
     </header>
 
     <table class="table">
         <thead>
-            <th>Account Number</th>
             <th>Event ID</th>
             <th>Date/Time</th>
             <th>Changed By</th>
@@ -18,12 +17,12 @@
         </thead>
         {% for event in events %}
             <tr class="table">
-                <td>event['account']</td>
-                <td>event['event_id']</td>
-                <td>event['timestamp']</td>
-                <td>event['user_id']</td>
-                <td>event['before_image']</td>
-                <td>event['after_image']</td>
+                <td>{{ event['event_id'] }}</td>
+                <td>{{ event['timestamp'] }}</td>
+                <td>{{ event['user_id'] }}</td>
+                <td><img src="data:image/png;base64, {{ event['before_image'] | make_image }}" height="100" width="100"></td>
+                <td><img src="data:image/png;base64, {{ event['after_image'] | make_image }}" height="100" width="100"></td>
             </tr>
+        {% endfor %}
     </table>
 {% endblock %}
