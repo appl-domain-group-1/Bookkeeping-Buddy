@@ -60,16 +60,20 @@
 </style>
         <script>
             function capture () {
-              html2canvas(document.body.then((canvas) => {
+              html2canvas(document.body).then((canvas) => {
                 // (A) APPEND SCREENSHOT TO DATA OBJECT
                 var data = new FormData();
-                data.append("screenshot", canvas.toDataURL("image/jpeg", 0.8));
+                data.append("before_image", null);
+                data.append("after_image", canvas.toDataURL("image/jpeg", 0.8));
+                data.append("user_id", "{{ g.user['username'] }}");
+                data.append("timestamp", "test");
+                data.append("account", "test2");
 
                 // (B) UPLOAD SCREENSHOT TO SERVER
-                fetch("api/log_event", { method:"post", body:data })
+                fetch("http://localhost:5000/api/log_edit", { method:"post", body:data })
                 .then((res) => { return res.text(); })
                 .then((txt) => { alert(txt); });
-              }));
+              });
             }
             </script>
 <div class = "loginbox">
@@ -94,7 +98,7 @@
         <label for="acct_category">Account Category</label>
         <select name="acct_category" id="acct_category" class="form-control">
             {% for category in categories %}
-            <option value="{{ category['number'] }}" {% if account and account['acct_category'] == category['number'] %} selected {% endif %}{{ category['name'] }}</option>
+            <option value="{{ category['number'] }}"> {% if account and account['acct_category'] == category['number'] %} selected {% endif %}{{ category['name'] }}</option>
             {% endfor %}
         </select>
         <br>
