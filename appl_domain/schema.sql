@@ -62,8 +62,10 @@ CREATE TABLE accounts (
     created_by TEXT NOT NULL REFERENCES users(username),
     /* financial statement which uses this account */
     statement INTEGER NOT NULL REFERENCES statements(number),
-    /* Comment about this table */
-    comment TEXT
+    /* Comment about this account */
+    comment TEXT,
+    /* Account active? 0 == inactive, 1 == active */
+    active INTEGER DEFAULT 0 NOT NULL
 );
 
 /* Contains all changes to financial accounts */
