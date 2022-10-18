@@ -54,6 +54,9 @@
     {{account['statement']}}<br>
 
     {{account['comment']}}<br>
+
+    <!- This is a link to view the logs for this account. Maybe this should be a button? ->
+    <a href="{{ url_for('fin_accts.view_logs', account_num=account['acct_num']) }}">View Logs</a>
     </div>
 <!------>
 {% endblock %}
