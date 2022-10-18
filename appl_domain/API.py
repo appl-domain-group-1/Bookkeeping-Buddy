@@ -5,9 +5,7 @@ from werkzeug.exceptions import abort
 from appl_domain.db import get_db
 from datetime import date, datetime, timedelta
 from appl_domain.auth import login_required
-from PIL import Image
-from io import BytesIO
-from flask_cors import cross_origin
+
 
 # Get today's date
 today = datetime.today().date()
