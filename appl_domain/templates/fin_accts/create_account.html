@@ -64,12 +64,14 @@
     {% block title %}
         {% if account %}
             Edit Account #{{ account['acct_num'] }}
-            <br>
-            Status: {% if account['active'] == 1 %}Active{% else %}Inactive{% endif %}
         {% else %}
             Create a new financial account
         {% endif %}
     {% endblock %}
+    {% if account %}
+        <br>
+        Status: {% if account['active'] == 1 %}Active{% else %}Inactive{% endif %}
+    {% endif %}
     </h1>
         <label for="acct_name">Account Name</label>
         <input name="acct_name" placeholder="Enter a name for the new account" id="acct_name" {% if account %} value="{{ account['acct_name'] }}" {% endif %}required>
@@ -80,7 +82,7 @@
         <label for="acct_category">Account Category</label>
         <select name="acct_category" id="acct_category" class="form-control">
             {% for category in categories %}
-            <option value="{{ category['number'] }}"> {% if account and account['acct_category'] == category['number'] %} selected {% endif %}{{ category['name'] }}</option>
+            <option value="{{ category['number'] }}" {% if account and account['acct_category'] == category['number'] %} selected {% endif %}>{{ category['name'] }}</option>
             {% endfor %}
         </select>
         <br>
