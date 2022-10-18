@@ -2,6 +2,7 @@ from flask import Blueprint, flash, g, redirect, render_template, request, sessi
 from appl_domain.db import get_db
 from datetime import date, datetime, timedelta
 from appl_domain.auth import login_required
+import json
 
 bp = Blueprint('fin_accts', __name__, url_prefix='/fin_accts')
 
@@ -75,6 +76,18 @@ def create_acct():
                     "?, ?, ?, ?)", (acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal,
                                     initial_bal, today, g.user['username'], statement, comment, this_account_num)
                 ).fetchone()
+
+                # Get the current values which were inserted into the DB and store them as a JSON object
+                new_values = json.dumps([acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal, initial_bal, today, g.user['username'], statement, comment])
+
+                # Log the change
+                db.execute(
+                    "INSERT INTO events (account, user_id, timestamp, before_values, after_values) VALUES (?, ?, ?, ?, ?)",
+                    (this_account_num, g.user['username'], datetime.now(), None, new_values)
+                )
+
+                # This is for debugging
+                db.execute(f"DROP TABLE IF EXISTS ledger_{this_account_num}")
 
                 # Create ledger table for the new account
                 db.execute(
