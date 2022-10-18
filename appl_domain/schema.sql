@@ -1,4 +1,4 @@
-/* Enable foreign key support */
+-- /* Enable foreign key support */
 PRAGMA foreign_keys = ON;
 
 /* Table to store user accounts */
@@ -67,7 +67,7 @@ CREATE TABLE accounts (
 );
 
 /* Contains all changes to financial accounts */
-DROP TABLE IF EXISTS events;
+-- DROP TABLE IF EXISTS events;
 CREATE TABLE events (
     /* Unique identifier for each event logged */
     event_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
