@@ -78,15 +78,19 @@ def create_acct():
                 ).fetchone()
 
                 # Get the current values which were inserted into the DB and store them as a JSON object
-                new_values = json.dumps([acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal, initial_bal, today, g.user['username'], statement, comment])
+                new_values = json.dumps(
+                    [acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal, initial_bal, today,
+                     g.user['username'], statement, comment])
 
                 # Log the change
                 db.execute(
-                    "INSERT INTO events (account, user_id, timestamp, before_values, after_values) VALUES (?, ?, ?, ?, ?)",
-                    (this_account_num, g.user['username'], datetime.now(), None, new_values)
+                    "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) "
+                    "VALUES (?, ?, ?, ?, ?, ?)",
+                    (this_account_num, g.user['username'], datetime.now(), None, new_values, 1)
                 )
 
-                # This is for debugging
+                # If this account already had a ledger table created (ex: if the account creation process failed
+                # for some reason), then drop the table before trying to create it
                 db.execute(f"DROP TABLE IF EXISTS ledger_{this_account_num}")
 
                 # Create ledger table for the new account
@@ -254,14 +258,21 @@ def view_ledger(account_num):
 
 
 @bp.route('/view_logs/<account_num>', methods=('GET',))
+@bp.route('/view_logs', methods=('GET',))
 @login_required
-def view_logs(account_num):
+def view_logs(account_num=None):
     # Get a handle on the DB
     db = get_db()
 
-    # Get all the events for this account number
-    events = db.execute(
-        "SELECT * FROM events WHERE account = ?", (account_num,)
-    ).fetchall()
+    # If account_num was specified, get all the events for this account number
+    if account_num is not None:
+        events = db.execute(
+            "SELECT * FROM events WHERE account = ?", (account_num,)
+        ).fetchall()
+    # If there was no account number, this is a request to view ALL logs, so get them all
+    else:
+        events = db.execute(
+            "SELECT * FROM events"
+        ).fetchall()
 
     return render_template('fin_accts/view_logs.html', events=events, account_num=account_num)
