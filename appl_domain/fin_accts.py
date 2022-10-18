@@ -82,7 +82,7 @@ def create_acct():
                     [acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal, initial_bal, today,
                      g.user['username'], statement, comment])
 
-                # Log the change
+                # Log the change in the event logs table
                 db.execute(
                     "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) "
                     "VALUES (?, ?, ?, ?, ?, ?)",
@@ -183,7 +183,21 @@ def edit_account(account_num):
                 "statement = ?, comment = ? WHERE acct_num = ?", (acct_name, acct_desc, acct_category, acct_subcategory,
                                                                   debit, statement, comment, account_num)
             )
-            # Write changes
+
+            # Put the new values and the old values into JSON objects for the events database
+            new_values = json.dumps(
+                [acct_name, acct_desc, acct_category, acct_subcategory, debit, statement, comment])
+
+            old_values = json.dumps(
+                [account['acct_name'], account['acct_desc'], account['acct_category'], account['acct_subcategory'], account['debit'], account['statement'], account['comment']])
+
+            # Log the change in the event logs table
+            db.execute(
+                "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) VALUES (?, ?, ?, ?, ?, ?)",
+                (account_num, g.user['username'], datetime.now(), old_values, new_values, 2)
+            )
+
+            # Write changes to the databse
             db.commit()
             flash("Account updated!")
 
