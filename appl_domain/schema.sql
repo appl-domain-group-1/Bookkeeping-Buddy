@@ -80,5 +80,12 @@ CREATE TABLE events (
     /* JSON object of all account values before change */
     before_values TEXT,
     /* JSON object of all account values after change */
-    after_values TEXT NOT NULL
+    after_values TEXT NOT NULL,
+    /* Type of edit to the table (New account, deactivate, edit, etc.)
+        Values:
+            New account: 1
+            Existing account edit: 2
+            Deactivate account: 3
+            Activate account: 4 */
+    edit_type INTEGER NOT NULL
 );
