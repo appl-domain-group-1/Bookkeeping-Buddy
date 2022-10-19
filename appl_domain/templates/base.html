@@ -127,7 +127,7 @@
     </ul>
     <form class="form-inline my-2 my-lg-0">
        <div class="dropdown">
-              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: white; color: #185DFF">Statements
+              <button  data-placement="top" title="Create and view financial account statements" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: white; color: #185DFF">Statements
               <span class="caret"></span></button>
               <ul class="dropdown-menu">
                 <li><a href="#">Income Statement</a></li>
@@ -135,9 +135,9 @@
                 <li><a href="#">Balance sheet</a></li>
               </ul>
             </div>
- <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="View accounts" style = "background-color: white; color: #185DFF"  onclick="window.location.href='{{ url_for('fin_accts.view_accounts')}}'">Accounts</button>
-          <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="Create a new transaction" style = "background-color: white; color: #185DFF" href="#">Transactions</button>
-        <button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF" data-toggle="tooltip" data-placement="top" title="Create a journal transaction">Journaling</button>
+ <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="View chart of accounts or create a new account" style = "background-color: white; color: #185DFF"  onclick="window.location.href='{{ url_for('fin_accts.view_accounts')}}'">Accounts</button>
+          <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="View transactions or create a new transaction" style = "background-color: white; color: #185DFF" href="#">Transactions</button>
+        <button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF" data-toggle="tooltip" data-placement="top" title="Create and view journal entries">Journaling</button>
         <button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF" data-toggle="tooltip" data-placement="top" title="Create a trial balance">Trial balance</button>
     </form>
   </div>

@@ -313,13 +313,13 @@ form .fields .input-field{
                             {% endif %}
                     </div>
                     <div>
-                     <input type="submit" class = "submit" value="Save changes">
+                     <input  data-toggle="tooltip" data-placement="top" title="Save changes to user account" type="submit" class = "submit" value="Save changes">
                     </div>
                     <div>
-                     <button class = "submit" style="margin-right: 30px; color: white" type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
+                     <button  data-toggle="tooltip" data-placement="top" title="Delete user account" class = "submit" style="margin-right: 30px; color: white" type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
                     </div>
                     <div>
-                     <button class = "submit" id = "back" type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'" style="margin-right: 30px; ">Back</button>
+                     <button  data-toggle="tooltip" data-placement="top" title="Go to previous page" class = "submit" id = "back" type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'" style="margin-right: 30px; ">Back</button>
                     </div>
                     <div class="instructions" style="color: white; margin-top: 12px;margin-left: 15px;text-align: center">
                         <p style="color: white; margin-top: 12px;margin-left: -20px;text-align: left">

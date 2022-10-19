@@ -11,7 +11,7 @@
         {% endblock %}
     </header>
 
-    <table class="table">
+    <table class = "table table-responsive sortable" style= "width:100%; border-bottom: 1px solid #F89E19">
         <thead>
             <th>Event ID</th>
             {# If we didn't pass in an account number, this must be a request to view ALL logs, so we'll need
@@ -25,9 +25,10 @@
             <th>Before</th>
             <th>After</th>
         </thead>
+        <tbody id="myTable">
             {# Loop through all the events passed in and display them #}
             {% for event in events %}
-                <tr class="table">
+                <tr>
                     <td>{{ event['event_id'] }}</td>
                     {# If we passed in an account number, add the account number to the Account column #}
                     {% if not account_num %}
@@ -61,5 +62,6 @@
                     <td>{{ event['after_values'] }}</td>
                 </tr>
         {% endfor %}
+        </tbody>
     </table>
 {% endblock %}

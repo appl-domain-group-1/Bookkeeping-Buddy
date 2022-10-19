@@ -110,7 +110,7 @@
         <label for="comment">Account Comments</label>
          <textarea class="form-control" name="comment" id="comment" placeholder="Enter comments about this account" rows="3">{% if account %}{{ account['comment'] }}{% endif %}</textarea>
         <br>
-            <input class = "submit" type="submit" value="{% if account %}Submit Changes{% else %}Create Account{% endif %}"/>
+            <input  data-toggle="tooltip" data-placement="top" title="Create a new financial account" class = "submit" type="submit" value="{% if account %}Submit Changes{% else %}Create Account{% endif %}"/>
     </form>
     </div>
 {% endblock %}

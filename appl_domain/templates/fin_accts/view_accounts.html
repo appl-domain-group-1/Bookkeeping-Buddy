@@ -8,9 +8,9 @@
             View financial accounts
         {% endblock %}
   </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+  <div id = "dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       {% for category in acct_categories %}
-        <a class="dropdown-item" href="#myTable">{{ category['name'] }}</a>
+        <a onclick="showOne('{{ category['name'] }}')" class="dropdown-item">{{ category['name'] }}</a>
        {% endfor %}
     <!--<a class="dropdown-item" href="#">Asset accounts</a>
     <a class="dropdown-item" href="#">Liability accounts</a>
@@ -26,8 +26,8 @@
     {% for category in acct_categories %}
         <h2 class = "{{category['name']}}" style="color: white">{{ category['name'] }}</h2>
         <div class = "{{category['name']}}" style="overflow-x:auto; margin-top: -7px">
-        <table id = "example" class = "table table-sm sortable"style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
-            <thead class="thead-dark">
+        <table id = "{{ category['name'] }}" class = "table table-sm sortable" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+            <thead>
             <tr>
                 <th>Number</th>
                 <th>Name</th>
@@ -60,8 +60,8 @@
                         {% if g.user['role'] == 2 %}
                             <td>
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                <button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for("fin_accts.edit_account", account_num=account['acct_num'] )}}'">Edit</button>
-                                <button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('fin_accts.deactivate_account', account_num=account['acct_num'])}}'">{% if account['active'] == 1 %}Deactivate{% else %}Activate{% endif %}</button>
+                                <button data-toggle="tooltip" data-placement="top" title="Edit financial account" type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for("fin_accts.edit_account", account_num=account['acct_num'] )}}'">Edit</button>
+                                <button data-toggle="tooltip" data-placement="top" title="Deactivate or Activate financial account" type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('fin_accts.deactivate_account', account_num=account['acct_num'])}}'">{% if account['active'] == 1 %}Deactivate{% else %}Activate{% endif %}</button>
                                 </div>
                             </td>
                         {% endif %}
@@ -74,11 +74,13 @@
 </div>
     {% endfor %}
     <br>
-    <button type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.view_logs')}}'">View Account Logs</button>
+<div class="d-flex justify-content-center" >
+    <button data-toggle="tooltip" data-placement="top" title="View account logs"  type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.view_logs')}}'">View Account Logs</button>
 {% if g.user['role'] == 2 %}
-    <button type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.create_acct')}}'">Create New Account</button>
+    <button data-toggle="tooltip" data-placement="top" title="Create a new financial account" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.create_acct')}}'">Create New Account</button>
     <br>
 {% endif %}
+</div>
 <script>
 $(document).ready(function(){
   $("#myInput").on("keyup", function() {
@@ -88,5 +90,9 @@ $(document).ready(function(){
     });
   });
 });
+function showOne(id) {
+    $('#' + id).show();
+    $('.hide').not('#' + id).hide();
+}
 </script>
 {% endblock %}

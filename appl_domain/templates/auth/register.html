@@ -223,9 +223,9 @@ form .fields .input-field{
                         <input name="year_graduated_hs" placeholder="Enter graduation year" id="year_graduated_hs" required >
                     </div>
                         {% if (g.user) and (g.user['role'] == 2) %}
-                            <input class = "submit" type="submit" value="Create" >
+                            <input  data-toggle="tooltip" data-placement="top" title="Create new user account" class = "submit" type="submit" value="Create" >
                         {% else %}
-                            <input class = "submit" type="submit" value="Register"  >
+                            <input  data-toggle="tooltip" data-placement="top" title="Register new user account" class = "submit" type="submit" value="Register"  >
                         {% endif %}
                 </div>
             </div>
