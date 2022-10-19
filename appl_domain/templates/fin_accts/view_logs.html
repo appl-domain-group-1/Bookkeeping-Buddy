@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <header style="color: white; font-size: xx-large; font-weight: bold">
+        {% block title %}
+            {% if not account_num %}
+                View all event logs
+            {% else %}
+                View event logs for account {{ account_num }}
+            {% endif %}
+        {% endblock %}
+    </header>
+
+    <table class="table">
+        <thead>
+            <th>Event ID</th>
+            {# If we didn't pass in an account number, this must be a request to view ALL logs, so we'll need
+            a column to tell the user which account number this event happened to #}
+            {% if not account_num %}
+                <th>Account</th>
+            {% endif %}
+            <th>Date/Time</th>
+            <th>Changed By</th>
+            <th>Event Type</th>
+            <th>Before</th>
+            <th>After</th>
+        </thead>
+            {# Loop through all the events passed in and display them #}
+            {% for event in events %}
+                <tr class="table">
+                    <td>{{ event['event_id'] }}</td>
+                    {# If we passed in an account number, add the account number to the Account column #}
+                    {% if not account_num %}
+                        <td>{{ event['account'] }}</td>
+                    {% endif %}
+                    <td>{{ event['timestamp'] }}</td>
+                    <td>{{ event['user_id'] }}</td>
+                    <td>
+                        {# Put the correct text for the event type #}
+                        {% if event['edit_type'] == 1 %}
+                            Create Account
+                        {% elif event['edit_type'] == 2 %}
+                            Edit Account
+                        {% elif event['edit_type'] == 3 %}
+                            Deactivate Account
+                        {% elif event['edit_type'] == 4 %}
+                            Activate Account
+                        {% else %}
+                            Other
+                        {% endif %}
+                    </td>
+                    <td>
+                        {# If before_values is None, then just say N/A. This should only happen on account creation #}
+                        {% if event['before_values'] == None %}
+                            N/A
+                        {# If before_values isn't None, then put what the values were before the edit #}
+                        {% else %}
+                            {{ event['before_values'] }}
+                        {% endif %}
+                    </td>
+                    <td>{{ event['after_values'] }}</td>
+                </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

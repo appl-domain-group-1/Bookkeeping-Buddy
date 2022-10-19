@@ -64,12 +64,14 @@
     {% block title %}
         {% if account %}
             Edit Account #{{ account['acct_num'] }}
-            <br>
-            Status: {% if account['active'] == 1 %}Active{% else %}Inactive{% endif %}
         {% else %}
             Create a new financial account
         {% endif %}
     {% endblock %}
+    {% if account %}
+        <br>
+        Status: {% if account['active'] == 1 %}Active{% else %}Inactive{% endif %}
+    {% endif %}
     </h1>
         <label for="acct_name">Account Name</label>
         <input name="acct_name" placeholder="Enter a name for the new account" id="acct_name" {% if account %} value="{{ account['acct_name'] }}" {% endif %}required>
@@ -108,7 +110,7 @@
         <label for="comment">Account Comments</label>
          <textarea class="form-control" name="comment" id="comment" placeholder="Enter comments about this account" rows="3">{% if account %}{{ account['comment'] }}{% endif %}</textarea>
         <br>
-            <input class = "submit" type="submit" value="{% if account %}Submit Changes{% else %}Create Account{% endif %}">
+            <input class = "submit" type="submit" value="{% if account %}Submit Changes{% else %}Create Account{% endif %}"/>
     </form>
     </div>
 {% endblock %}
