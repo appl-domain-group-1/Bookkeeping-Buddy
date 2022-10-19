@@ -233,6 +233,14 @@ def deactivate_account(account_num):
             db.execute(
                 "UPDATE accounts SET active = ? WHERE acct_num = ?", (0, account_num)
             )
+
+            # Log the event to the events table
+            db.execute(
+                "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) VALUES (?, ?, ?, ?, ?, ?)",
+                (account_num, g.user['username'], datetime.now(), "Active", "Inactive", 3)
+            )
+
+            # Write the changes to the DB
             db.commit()
 
         # Do not allow accounts with balance > 0 to be deactivated
@@ -245,6 +253,14 @@ def deactivate_account(account_num):
             db.execute(
                 "UPDATE accounts SET active = ? WHERE acct_num = ?", (1, account_num)
             )
+
+            # Log the event to the events table
+            db.execute(
+                "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) VALUES (?, ?, ?, ?, ?, ?)",
+                (account_num, g.user['username'], datetime.now(), "Inactive", "Active", 4)
+            )
+
+            # Write the changes to the DB
             db.commit()
 
         return redirect(url_for('fin_accts.view_accounts'))
