@@ -6,6 +6,7 @@ from appl_domain.db import get_db
 from datetime import date, datetime, timedelta
 from appl_domain.auth import login_required
 
+
 # Get today's date
 today = datetime.today().date()
 
@@ -115,11 +116,13 @@ def update_expired():
     """
     Updates the rows for the example users with expiring passwords
     """
+
     def __get_date(delta):
         # Calculate (180 - delta) days back from today
         expire_on = today - timedelta(days=(176 + delta))
         # Format the date for the DB
         return f"{expire_on.year}-{expire_on.month:02d}-{expire_on.day:02d}"
+
     # Get a handle on the DB
     db = get_db()
 
@@ -127,7 +130,7 @@ def update_expired():
         # Update the rows
         for num in range(0, 11):
             db.execute("UPDATE users SET password_refresh_date = ? WHERE username = ?", (__get_date(num),
-                                                                                         f"Expired{num+1:02d}"))
+                                                                                         f"Expired{num + 1:02d}"))
         # Write the changes out
         db.commit()
     except Exception as err:
