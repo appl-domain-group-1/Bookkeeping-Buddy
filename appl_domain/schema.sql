@@ -62,22 +62,32 @@ CREATE TABLE accounts (
     created_by TEXT NOT NULL REFERENCES users(username),
     /* financial statement which uses this account */
     statement INTEGER NOT NULL REFERENCES statements(number),
-    /* Comment about this table */
-    comment TEXT
+    /* Comment about this account */
+    comment TEXT,
+    /* Account active? 0 == inactive, 1 == active */
+    active INTEGER DEFAULT 0 NOT NULL
 );
 
 /* Contains all changes to financial accounts */
+-- DROP TABLE IF EXISTS events;
 CREATE TABLE events (
     /* Unique identifier for each event logged */
     event_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-    /* Image of the record before modification */
-    before_image BLOB,
-    /* Image of the record after modification */
-    after_image BLOB NOT NULL,
+    /* Account associated with the change */
+    account INTEGER NOT NULL REFERENCES accounts(acct_num),
     /* User who made the change */
     user_id TEXT NOT NULL REFERENCES users(username),
     /* date and time when the change was committed */
     timestamp TEXT NOT NULL,
-    /* Account associated with the change */
-    account INTEGER NOT NULL REFERENCES accounts(acct_num)
+    /* JSON object of all account values before change */
+    before_values TEXT,
+    /* JSON object of all account values after change */
+    after_values TEXT NOT NULL,
+    /* Type of edit to the table (New account, deactivate, edit, etc.)
+        Values:
+            New account: 1
+            Existing account edit: 2
+            Deactivate account: 3
+            Activate account: 4 */
+    edit_type INTEGER NOT NULL
 );

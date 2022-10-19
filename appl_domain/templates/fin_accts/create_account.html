@@ -58,36 +58,20 @@
   }}
 
 </style>
-        <script>
-            function capture () {
-              html2canvas(document.body).then((canvas) => {
-                // (A) APPEND SCREENSHOT TO DATA OBJECT
-                var data = new FormData();
-                data.append("before_image", null);
-                data.append("after_image", canvas.toDataURL("image/jpeg", 0.8));
-                data.append("user_id", "{{ g.user['username'] }}");
-                data.append("timestamp", "test");
-                data.append("account", "test2");
-
-                // (B) UPLOAD SCREENSHOT TO SERVER
-                fetch("http://localhost:5000/api/log_edit", { method:"post", body:data })
-                .then((res) => { return res.text(); })
-                .then((txt) => { alert(txt); });
-              });
-            }
-            </script>
 <div class = "loginbox">
     <form class = "box" method="post">
         <h1>
     {% block title %}
         {% if account %}
             Edit Account #{{ account['acct_num'] }}
-            <br>
-            Status: {% if account['active'] == 1 %}Active{% else %}Inactive{% endif %}
         {% else %}
             Create a new financial account
         {% endif %}
     {% endblock %}
+    {% if account %}
+        <br>
+        Status: {% if account['active'] == 1 %}Active{% else %}Inactive{% endif %}
+    {% endif %}
     </h1>
         <label for="acct_name">Account Name</label>
         <input name="acct_name" placeholder="Enter a name for the new account" id="acct_name" {% if account %} value="{{ account['acct_name'] }}" {% endif %}required>
@@ -98,7 +82,7 @@
         <label for="acct_category">Account Category</label>
         <select name="acct_category" id="acct_category" class="form-control">
             {% for category in categories %}
-            <option value="{{ category['number'] }}"> {% if account and account['acct_category'] == category['number'] %} selected {% endif %}{{ category['name'] }}</option>
+            <option value="{{ category['number'] }}" {% if account and account['acct_category'] == category['number'] %} selected {% endif %}>{{ category['name'] }}</option>
             {% endfor %}
         </select>
         <br>
@@ -126,19 +110,7 @@
         <label for="comment">Account Comments</label>
          <textarea class="form-control" name="comment" id="comment" placeholder="Enter comments about this account" rows="3">{% if account %}{{ account['comment'] }}{% endif %}</textarea>
         <br>
-            <input class = "submit" type="submit" value="{% if account %}Submit Changes{% else %}Create Account{% endif %}" onclick ="capture()"/>
-        <input type="button" value="Capture" onclick="capture()"/>
-    <!--<script type="text/javascript">
-        function capture(){
-            html2canvas(document.body).then((canvas) => {
-              let a = document.createElement("a");
-              a.download = "ss.png";
-              a.href = canvas.toDataURL("image/png");
-              a.click();
-            });
-        }
-    </script>-->
-
+            <input class = "submit" type="submit" value="{% if account %}Submit Changes{% else %}Create Account{% endif %}"/>
     </form>
     </div>
 {% endblock %}

@@ -2,6 +2,7 @@ from flask import Blueprint, flash, g, redirect, render_template, request, sessi
 from appl_domain.db import get_db
 from datetime import date, datetime, timedelta
 from appl_domain.auth import login_required
+import json
 
 bp = Blueprint('fin_accts', __name__, url_prefix='/fin_accts')
 
@@ -75,6 +76,22 @@ def create_acct():
                     "?, ?, ?, ?)", (acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal,
                                     initial_bal, today, g.user['username'], statement, comment, this_account_num)
                 ).fetchone()
+
+                # Get the current values which were inserted into the DB and store them as a JSON object
+                new_values = json.dumps(
+                    [acct_name, acct_desc, acct_category, acct_subcategory, debit, initial_bal, initial_bal, today,
+                     g.user['username'], statement, comment])
+
+                # Log the change in the event logs table
+                db.execute(
+                    "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) "
+                    "VALUES (?, ?, ?, ?, ?, ?)",
+                    (this_account_num, g.user['username'], datetime.now(), None, new_values, 1)
+                )
+
+                # If this account already had a ledger table created (ex: if the account creation process failed
+                # for some reason), then drop the table before trying to create it
+                db.execute(f"DROP TABLE IF EXISTS ledger_{this_account_num}")
 
                 # Create ledger table for the new account
                 db.execute(
@@ -166,7 +183,21 @@ def edit_account(account_num):
                 "statement = ?, comment = ? WHERE acct_num = ?", (acct_name, acct_desc, acct_category, acct_subcategory,
                                                                   debit, statement, comment, account_num)
             )
-            # Write changes
+
+            # Put the new values and the old values into JSON objects for the events database
+            new_values = json.dumps(
+                [acct_name, acct_desc, acct_category, acct_subcategory, debit, statement, comment])
+
+            old_values = json.dumps(
+                [account['acct_name'], account['acct_desc'], account['acct_category'], account['acct_subcategory'], account['debit'], account['statement'], account['comment']])
+
+            # Log the change in the event logs table
+            db.execute(
+                "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) VALUES (?, ?, ?, ?, ?, ?)",
+                (account_num, g.user['username'], datetime.now(), old_values, new_values, 2)
+            )
+
+            # Write changes to the databse
             db.commit()
             flash("Account updated!")
 
@@ -202,6 +233,14 @@ def deactivate_account(account_num):
             db.execute(
                 "UPDATE accounts SET active = ? WHERE acct_num = ?", (0, account_num)
             )
+
+            # Log the event to the events table
+            db.execute(
+                "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) VALUES (?, ?, ?, ?, ?, ?)",
+                (account_num, g.user['username'], datetime.now(), "Active", "Inactive", 3)
+            )
+
+            # Write the changes to the DB
             db.commit()
 
         # Do not allow accounts with balance > 0 to be deactivated
@@ -214,6 +253,14 @@ def deactivate_account(account_num):
             db.execute(
                 "UPDATE accounts SET active = ? WHERE acct_num = ?", (1, account_num)
             )
+
+            # Log the event to the events table
+            db.execute(
+                "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) VALUES (?, ?, ?, ?, ?, ?)",
+                (account_num, g.user['username'], datetime.now(), "Inactive", "Active", 4)
+            )
+
+            # Write the changes to the DB
             db.commit()
 
         return redirect(url_for('fin_accts.view_accounts'))
@@ -241,14 +288,21 @@ def view_ledger(account_num):
 
 
 @bp.route('/view_logs/<account_num>', methods=('GET',))
+@bp.route('/view_logs', methods=('GET',))
 @login_required
-def view_logs(account_num):
+def view_logs(account_num=None):
     # Get a handle on the DB
     db = get_db()
 
-    # Get all the events for this account number
-    events = db.execute(
-        "SELECT * FROM events WHERE account = ?", (account_num,)
-    ).fetchall()
+    # If account_num was specified, get all the events for this account number
+    if account_num is not None:
+        events = db.execute(
+            "SELECT * FROM events WHERE account = ?", (account_num,)
+        ).fetchall()
+    # If there was no account number, this is a request to view ALL logs, so get them all
+    else:
+        events = db.execute(
+            "SELECT * FROM events"
+        ).fetchall()
 
     return render_template('fin_accts/view_logs.html', events=events, account_num=account_num)
