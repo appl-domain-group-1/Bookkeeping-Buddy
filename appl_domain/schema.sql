@@ -48,8 +48,8 @@ CREATE TABLE accounts (
     /* category to which this account belongs. Must be in
        the acct_categories table */
     acct_category INTEGER NOT NULL REFERENCES acct_categories(number),
-    /* Account subcategory */
-    acct_subcategory INTEGER NOT NULL,
+    /* Account subcategory. Must be in subcategory table */
+    acct_subcategory INTEGER NOT NULL REFERENCES subcategories(id_num),
     /* debit acct == 1, credit acct == 0 */
     debit INTEGER NOT NULL,
     /* stored as cents (no decimals) */
@@ -91,3 +91,14 @@ CREATE TABLE events (
             Activate account: 4 */
     edit_type INTEGER NOT NULL
 );
+
+/* Contains subcategories for all financial account categories */
+-- DROP TABLE IF EXISTS subcategories;
+CREATE TABLE subcategories (
+    /* Unique ID for this subcategory */
+    id_num INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    /* Which category does this subcategory belong to? */
+    category INTEGER REFERENCES acct_categories(number),
+    /* Name of this subcategory */
+    name TEXT NOT NULL
+)
