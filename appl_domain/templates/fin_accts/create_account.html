@@ -87,7 +87,17 @@
         </select>
         <br>
         <label for="acct_subcategory">Account Subcategory</label>
-        <input name="acct_subcategory" placeholder="Enter the numerical subcategory for the new account" id="acct_subcategory" {% if account %} value="{{ account['acct_subcategory'] }}" {% endif %} required>
+        <select name="acct_subcategory" id="acct_subcategory", class="form-control">
+            {% for category in categories %}
+                <optgroup label="{{ category['name'] }}">
+                    {% for subcategory in subcategories %}
+                        {% if subcategory['category'] == category['number'] %}
+                            <option value="{{ subcategory['id_num'] }}" {% if account and account['acct_subcategory'] == subcategory['id_num'] %} selected {% endif %}>{{ subcategory['name'] }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </optgroup>
+            {% endfor %}
+        </select>
         <br>
         <label for="debit">Account Type</label>
         <select name="debit" id="debit" class="form-control">
