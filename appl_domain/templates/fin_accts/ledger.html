@@ -17,7 +17,7 @@
                 <th>Balance</th>
             </thead>
             {% for entry in entries %}
-            <tr class = "table">
+            <tr>
                 <td>{{ entry['date'] }}</td>
                 <td>{{ entry['description'] }}</td>
                 <td>{{ entry['debit_accounts'] }}</td>
@@ -55,7 +55,6 @@
 
     {{account['comment']}}<br>
 
-    {# This is a link to view the logs for this account. Maybe this should be a button? #}
     <button type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.view_logs', account_num=account['acct_num'])}}'">View Account Logs</button>
     </div>
 <!------>

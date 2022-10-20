@@ -65,7 +65,7 @@
                         User
                     </td>
                 {% endif %}
-                <td style="background-color: white"><button type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('auth.edit_user', username=user['username'])}}'">Edit</button></td>
+                <td style="background-color: white"><button  data-toggle="tooltip" data-placement="top" title="Edit existing user account" type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('auth.edit_user', username=user['username'])}}'">Edit</button></td>
             </tr>
         {% endfor %}
     {% else %}
@@ -76,7 +76,7 @@
 
     </table>
     </div>
- <button type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 150px" onclick="window.location.href='{{ url_for('auth.register')}}'">Create user</button>
+ <button  data-toggle="tooltip" data-placement="top" title="Create a new user account" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 150px" onclick="window.location.href='{{ url_for('auth.register')}}'">Create user</button>
 {% endblock %}
 
 
