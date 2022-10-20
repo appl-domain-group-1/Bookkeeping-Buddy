@@ -146,7 +146,7 @@ def view_accounts():
     # Get all the subcategories
     subcategories = db.execute(
         "SELECT * FROM subcategories"
-    ).fetchall
+    ).fetchall()
 
     # Get all the different accounts
     accounts = db.execute(
@@ -163,6 +163,7 @@ def view_accounts():
 
     return render_template('fin_accts/view_accounts.html',
                            acct_categories=acct_categories,
+                           subcategories=subcategories,
                            accounts=accounts,
                            statements=statements_dict)
 

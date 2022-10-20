@@ -27,51 +27,59 @@
         <h2 class = "{{category['name']}}" style="color: white">{{ category['name'] }}</h2>
         <div class = "{{category['name']}}" style="overflow-x:auto; margin-top: -7px">
         <table id = "{{ category['name'] }}" class = "table table-sm sortable" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
-            <thead>
-            <tr>
-                <th>Number</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Type</th>
-                <th>Balance</th>
-                <th>Statement</th>
-                <th>Comment</th>
-                {% if g.user['role'] == 2 %}
-                    <th>Account Actions</th>
-                {% endif %}
-            </tr>
-            </thead>
-            <tbody id="myTable">
-            {% for account in accounts %}
-                {% if account['acct_category'] == category['number'] %}
-
+            {% for subcategory in subcategories %}
+                {% if subcategory['category'] == category['number'] %}
                     <tr>
-                        <td>{{ account['acct_num'] }}</td>
-                        <td><a href="{{ url_for("fin_accts.view_ledger", account_num=account['acct_num']) }}">{{ account['acct_name'] }}</a></td>
-                        <td>{{ account['acct_desc'] }}</td>
-                        {% if account['debit'] %}
-                            <td>Debit</td>
-                        {% else %}
-                            <td>Credit</td>
-                        {% endif %}
-                        <td>{{ account['balance'] }}</td>
-                        <td>{{ statements[account['statement']] }}</td>
-                        <td>{{ account['comment'] }}</td>
-                        {% if g.user['role'] == 2 %}
-                            <td>
-                                <div class="btn-group" role="group" aria-label="Basic example">
-                                <button data-toggle="tooltip" data-placement="top" title="Edit financial account" type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for("fin_accts.edit_account", account_num=account['acct_num'] )}}'">Edit</button>
-                                <button data-toggle="tooltip" data-placement="top" title="Deactivate or Activate financial account" type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('fin_accts.deactivate_account', account_num=account['acct_num'])}}'">{% if account['active'] == 1 %}Deactivate{% else %}Activate{% endif %}</button>
-                                </div>
-                            </td>
-                        {% endif %}
+                        <td>
+                            <h5>{{ subcategory['name'] }} Accounts</h5>
+                                <table>
+                                    <tr>
+                                        <th>Number</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Type</th>
+                                        <th>Balance</th>
+                                        <th>Statement</th>
+                                        <th>Comment</th>
+                                        {% if g.user['role'] == 2 %}
+                                            <th>Account Actions</th>
+                                        {% endif %}
+                                    </tr>
+                                    <tr>
+                                        {% for account in accounts %}
+                                            {% if (account['acct_category'] == category['number']) and (account['acct_subcategory'] == subcategory['id_num']) %}
+                                                <tr>
+                                                    <td>{{ account['acct_num'] }}</td>
+                                                    <td><a href="{{ url_for("fin_accts.view_ledger", account_num=account['acct_num']) }}">{{ account['acct_name'] }}</a></td>
+                                                    <td>{{ account['acct_desc'] }}</td>
+                                                    {% if account['debit'] %}
+                                                        <td>Debit</td>
+                                                    {% else %}
+                                                        <td>Credit</td>
+                                                    {% endif %}
+                                                    <td>{{ account['balance'] }}</td>
+                                                    <td>{{ statements[account['statement']] }}</td>
+                                                    <td>{{ account['comment'] }}</td>
+                                                    {% if g.user['role'] == 2 %}
+                                                        <td>
+                                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                            <button data-toggle="tooltip" data-placement="top" title="Edit financial account" type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for("fin_accts.edit_account", account_num=account['acct_num'] )}}'">Edit</button>
+                                                            <button data-toggle="tooltip" data-placement="top" title="Deactivate or Activate financial account" type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('fin_accts.deactivate_account', account_num=account['acct_num'])}}'">{% if account['active'] == 1 %}Deactivate{% else %}Activate{% endif %}</button>
+                                                            </div>
+                                                        </td>
+                                                </tr>
+                                                    {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                </table>
+                        </td>
                     </tr>
 
                 {% endif %}
             {% endfor %}
-             </tbody>
         </table>
-</div>
+        </div>
     {% endfor %}
     <br>
 <div class="d-flex justify-content-center" >
