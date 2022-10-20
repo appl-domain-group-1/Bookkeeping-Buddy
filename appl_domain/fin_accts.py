@@ -137,14 +137,22 @@ def create_acct():
 def view_accounts():
     # Get a handle on the DB
     db = get_db()
+
     # Get all the different account categories
     acct_categories = db.execute(
         "SELECT * FROM acct_categories"
     ).fetchall()
+
+    # Get all the subcategories
+    subcategories = db.execute(
+        "SELECT * FROM subcategories"
+    ).fetchall
+
     # Get all the different accounts
     accounts = db.execute(
         "SELECT * FROM accounts ORDER BY acct_num"
     ).fetchall()
+
     # Get all the statements
     statements = db.execute(
         "SELECT * FROM statements"
