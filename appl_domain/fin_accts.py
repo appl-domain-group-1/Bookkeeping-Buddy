@@ -29,6 +29,11 @@ def create_acct():
         "SELECT * FROM statements"
     ).fetchall()
 
+    # Get all subcategories
+    subcategories = db.execute(
+        "SELECT * FROM subcategories"
+    ).fetchall()
+
     if request.method == 'POST':
         error = None
 
@@ -43,18 +48,24 @@ def create_acct():
         # Get info from form
         acct_name = request.form['acct_name']
         acct_desc = request.form['acct_desc']
-        acct_category = request.form['acct_category']
-        acct_subcategory = request.form['acct_subcategory']
-        debit = request.form['debit']
+        acct_category = int(request.form['acct_category'])
+        acct_subcategory = int(request.form['acct_subcategory'])
+        debit = int(request.form['debit'])
         # Remove unnecessary symbols from initial balance
         initial_bal = request.form['initial_bal'].replace(',', '').replace('.', '').replace('$', '')
-        statement = request.form['statement']
+        statement = int(request.form['statement'])
         comment = request.form['comment']
 
         # Validate input  # TODO: perform more field validation
         if not acct_name:
             error = "Account must have a name"
-        # Check that the account category supplied is valid
+
+        # Ensure that the subcategory is valid for the chosen category
+        subcategory_category = db.execute(
+            "SELECT * from subcategories WHERE id_num = ?", (acct_subcategory,)
+        ).fetchone()['category']
+        if subcategory_category != acct_category:
+            error = "Invalid subcategory for account category"
 
         if error is None:
             try:
@@ -115,7 +126,10 @@ def create_acct():
                 return redirect(url_for('fin_accts.view_accounts'))
         flash(error)
 
-    return render_template('fin_accts/create_account.html', categories=categories, statements=statements)
+    return render_template('fin_accts/create_account.html',
+                           categories=categories,
+                           statements=statements,
+                           subcategories=subcategories)
 
 
 @bp.route('/', methods=('GET',))
@@ -161,59 +175,73 @@ def edit_account(account_num):
         "SELECT * FROM acct_categories"
     ).fetchall()
 
+    # Get all subcategories
+    subcategories = db.execute(
+        "SELECT * FROM subcategories"
+    ).fetchall()
+
     # Get all statements
     statements = db.execute(
         "SELECT * FROM statements"
     ).fetchall()
 
     if request.method == 'POST':
-        try:
-            # Get info from form
-            acct_name = request.form['acct_name']
-            acct_desc = request.form['acct_desc']
-            acct_category = request.form['acct_category']
-            acct_subcategory = request.form['acct_subcategory']
-            debit = request.form['debit']
-            statement = request.form['statement']
-            comment = request.form['comment']
 
-            # Update the row
-            db.execute(
-                "UPDATE accounts SET acct_name = ?, acct_desc = ?, acct_category = ?, acct_subcategory = ?, debit = ?, "
-                "statement = ?, comment = ? WHERE acct_num = ?", (acct_name, acct_desc, acct_category, acct_subcategory,
-                                                                  debit, statement, comment, account_num)
-            )
+        # Get info from form
+        acct_name = request.form['acct_name']
+        acct_desc = request.form['acct_desc']
+        acct_category = int(request.form['acct_category'])
+        acct_subcategory = int(request.form['acct_subcategory'])
+        debit = int(request.form['debit'])
+        statement = int(request.form['statement'])
+        comment = request.form['comment']
 
-            # Put the new values and the old values into JSON objects for the events database
-            new_values = json.dumps(
-                [acct_name, acct_desc, acct_category, acct_subcategory, debit, statement, comment])
+        # Check that the subcategory is valid with the chosen category
+        subcategory_category = db.execute(
+            "SELECT * from subcategories WHERE id_num = ?", (acct_subcategory,)
+        ).fetchone()['category']
+        if subcategory_category != acct_category:
+            flash("Invalid subcategory for account category")
+        else:
+            try:
+                # Update the row
+                db.execute(
+                    "UPDATE accounts SET acct_name = ?, acct_desc = ?, acct_category = ?, acct_subcategory = ?, debit = ?, "
+                    "statement = ?, comment = ? WHERE acct_num = ?", (acct_name, acct_desc, acct_category, acct_subcategory,
+                                                                      debit, statement, comment, account_num)
+                )
 
-            old_values = json.dumps(
-                [account['acct_name'], account['acct_desc'], account['acct_category'], account['acct_subcategory'], account['debit'], account['statement'], account['comment']])
+                # Put the new values and the old values into JSON objects for the events database
+                new_values = json.dumps(
+                    [acct_name, acct_desc, acct_category, acct_subcategory, debit, statement, comment])
 
-            # Log the change in the event logs table
-            db.execute(
-                "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) VALUES (?, ?, ?, ?, ?, ?)",
-                (account_num, g.user['username'], datetime.now(), old_values, new_values, 2)
-            )
+                old_values = json.dumps(
+                    [account['acct_name'], account['acct_desc'], account['acct_category'], account['acct_subcategory'], account['debit'], account['statement'], account['comment']])
 
-            # Write changes to the databse
-            db.commit()
-            flash("Account updated!")
+                # Log the change in the event logs table
+                db.execute(
+                    "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) VALUES (?, ?, ?, ?, ?, ?)",
+                    (account_num, g.user['username'], datetime.now(), old_values, new_values, 2)
+                )
 
-            # Get a fresh copy of the DB info
-            account = db.execute(
-                "SELECT * from accounts WHERE acct_num = ?", (account_num,)
-            ).fetchone()
+                # Write changes to the databse
+                db.commit()
+                flash("Account updated!")
 
-        except db.IntegrityError:
-            flash("Duplicate account names not allowed")
+            except db.IntegrityError:
+                flash("Duplicate account names not allowed")
+
+    # Get a fresh copy of the DB info
+    account = db.execute(
+        "SELECT * from accounts WHERE acct_num = ?", (account_num,)
+    ).fetchone()
 
     # Return the template
     return render_template('fin_accts/create_account.html',
                            account=account,
                            statements=statements,
-                           categories=categories)
+                           categories=categories,
+                           subcategories=subcategories)
 
 
 @bp.route('/deactivate_acct/<account_num>', methods=('GET',))
