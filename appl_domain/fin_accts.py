@@ -52,7 +52,7 @@ def create_acct():
         acct_subcategory = int(request.form['acct_subcategory'])
         debit = int(request.form['debit'])
         # Remove unnecessary symbols from initial balance
-        initial_bal = request.form['initial_bal'].replace(',', '').replace('.', '').replace('$', '')
+        initial_bal = int(request.form['initial_bal'].replace(',', '').replace('.', '').replace('$', ''))
         statement = int(request.form['statement'])
         comment = request.form['comment']
 
@@ -213,29 +213,32 @@ def edit_account(account_num):
             flash("Invalid subcategory for account category")
         else:
             try:
-                # Update the row
-                db.execute(
-                    "UPDATE accounts SET acct_name = ?, acct_desc = ?, acct_category = ?, acct_subcategory = ?, debit = ?, "
-                    "statement = ?, comment = ? WHERE acct_num = ?", (acct_name, acct_desc, acct_category, acct_subcategory,
-                                                                      debit, statement, comment, account_num)
-                )
-
                 # Put the new values and the old values into JSON objects for the events database
                 new_values = json.dumps(
                     [acct_name, acct_desc, acct_category, acct_subcategory, debit, statement, comment])
 
                 old_values = json.dumps(
-                    [account['acct_name'], account['acct_desc'], account['acct_category'], account['acct_subcategory'], account['debit'], account['statement'], account['comment']])
+                    [account['acct_name'], account['acct_desc'], account['acct_category'], account['acct_subcategory'],
+                     account['debit'], account['statement'], account['comment']])
 
-                # Log the change in the event logs table
-                db.execute(
-                    "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) VALUES (?, ?, ?, ?, ?, ?)",
-                    (account_num, g.user['username'], datetime.now(), old_values, new_values, 2)
-                )
+                if new_values != old_values:
+                    # Update the row
+                    db.execute(
+                        "UPDATE accounts SET acct_name = ?, acct_desc = ?, acct_category = ?, acct_subcategory = ?, debit = ?, "
+                        "statement = ?, comment = ? WHERE acct_num = ?", (acct_name, acct_desc, acct_category, acct_subcategory,
+                                                                          debit, statement, comment, account_num)
+                    )
 
-                # Write changes to the databse
-                db.commit()
-                flash("Account updated!")
+
+                    # Log the change in the event logs table
+                    db.execute(
+                        "INSERT INTO events (account, user_id, timestamp, before_values, after_values, edit_type) VALUES (?, ?, ?, ?, ?, ?)",
+                        (account_num, g.user['username'], datetime.now(), old_values, new_values, 2)
+                    )
+
+                    # Write changes to the database
+                    db.commit()
+                    flash("Account updated!")
 
             except db.IntegrityError:
                 flash("Duplicate account names not allowed")
@@ -342,4 +345,62 @@ def view_logs(account_num=None):
             "SELECT * FROM events"
         ).fetchall()
 
-    return render_template('fin_accts/view_logs.html', events=events, account_num=account_num)
+    #######################################################
+    # Turn the sqlite Row object into a Python dictionary #
+    #######################################################
+    # Create empty list to hold new dictionaries
+    events2 = []
+    # Loop through each event in the DB
+    for event in events:
+        # Temporary dictionary to hold each key/value
+        temp_dict = {}
+        # Go through each item in the Row object and assign it with the correct key to the temp_dict
+        temp_dict['event_id'] = event[0]
+        temp_dict["event_id"] = event[0]
+        temp_dict["account"] = event[1]
+        temp_dict["user_id"] = event[2]
+        temp_dict["timestamp"] = datetime.fromisoformat(event[3]).strftime("%A, %B %d %X")
+        temp_dict["edit_type"] = event[6]
+        # The 'before_values' column can be: None, 'Active', 'Inactive', or contain a string which is a python list
+        # Don't do anything to the data if 'before_values' isn't a list which has been dumped to a string
+        if (event[4] is None) or (event[4] in ('Active', 'Inactive')):
+            temp_dict['before_values'] = event[4]
+        # If it is a list dumped to a string, convert it back to a list
+        else:
+            temp_dict['before_values'] = json.loads(event[4])
+        # Same thing as above with 'before_values' except 'after_values' should never be None
+        if event[5] in ('Active', 'Inactive'):
+            temp_dict['after_values'] = event[5]
+        else:
+            temp_dict['after_values'] = json.loads(event[5])
+
+        # Append this new dictionary to the list of dictionaries we're building
+        events2.append(temp_dict)
+
+    # Get the names of the account categories
+    categories = db.execute("SELECT * FROM acct_categories").fetchall()
+    # dictionary to hold results
+    cat_dict = {}
+    for count, category in enumerate(categories, start=1):
+        cat_dict[count] = category['name']
+
+    # Get the names of the account subcategories
+    subcategories = db.execute("SELECT * FROM subcategories").fetchall()
+    # dictionary to hold results
+    subcat_dict = {}
+    for count, subcategory in enumerate(subcategories, start=1):
+        subcat_dict[count] = subcategory['name']
+
+    # Get the names of the statements
+    statements = db.execute("SELECT * FROM statements").fetchall()
+    # dictionary to hold results
+    statements_dict = {}
+    for count, statement in enumerate(statements, start=1):
+        statements_dict[count] = statement['name']
+
+    return render_template('fin_accts/view_logs.html',
+                           events=events2,
+                           account_num=account_num,
+                           categories=cat_dict,
+                           subcategories=subcat_dict,
+                           statements=statements_dict)
