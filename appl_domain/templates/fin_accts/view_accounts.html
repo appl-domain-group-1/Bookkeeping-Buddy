@@ -10,7 +10,7 @@
   </button>
   <div id = "dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       {% for category in acct_categories %}
-        <a onclick="showOne('{{ category['name'] }}')" class="dropdown-item">{{ category['name'] }}</a>
+        <a href="#{{ category['name'] }}" class="dropdown-item">{{ category['name'] }}</a>
        {% endfor %}
     <!--<a class="dropdown-item" href="#">Asset accounts</a>
     <a class="dropdown-item" href="#">Liability accounts</a>
@@ -33,6 +33,7 @@
                         <td>
                             <h5>{{ subcategory['name'] }} Accounts</h5>
                                 <table class = "table table-sm sortable">
+                                    <thead>
                                     <tr>
                                         <th>Number</th>
                                         <th>Name</th>
@@ -45,23 +46,25 @@
                                             <th>Account Actions</th>
                                         {% endif %}
                                     </tr>
-                                    <tr id = "myTable">
+                                    </thead>
+                                    <tbody id = "myTable">
+                                    <tr>
                                         {% for account in accounts %}
                                             {% if (account['acct_category'] == category['number']) and (account['acct_subcategory'] == subcategory['id_num']) %}
                                                 <tr>
-                                                    <td>{{ account['acct_num'] }}</td>
-                                                    <td><a href="{{ url_for("fin_accts.view_ledger", account_num=account['acct_num']) }}">{{ account['acct_name'] }}</a></td>
-                                                    <td>{{ account['acct_desc'] }}</td>
+                                                    <td style="width:5%;">{{ account['acct_num'] }}</td>
+                                                    <td style="width:15%;"><a href="{{ url_for("fin_accts.view_ledger", account_num=account['acct_num']) }}">{{ account['acct_name'] }}</a></td>
+                                                    <td style="width:20%;">{{ account['acct_desc'] }}</td>
                                                     {% if account['debit'] %}
-                                                        <td>Debit</td>
+                                                        <td style="width:5%;">Debit</td>
                                                     {% else %}
-                                                        <td>Credit</td>
+                                                        <td style="width:5%;">Credit</td>
                                                     {% endif %}
-                                                    <td>{{ account['balance'] }}</td>
-                                                    <td>{{ statements[account['statement']] }}</td>
-                                                    <td>{{ account['comment'] }}</td>
+                                                    <td style="width:10%;">{{ account['balance'] }}</td>
+                                                    <td style="width:10%;">{{ statements[account['statement']] }}</td>
+                                                    <td  style="width:25%;">{{ account['comment'] }}</td>
                                                     {% if g.user['role'] == 2 %}
-                                                        <td>
+                                                        <td style="width:10%;">
                                                             <div class="btn-group" role="group" aria-label="Basic example">
                                                             <button data-toggle="tooltip" data-placement="top" title="Edit financial account" type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for("fin_accts.edit_account", account_num=account['acct_num'] )}}'">Edit</button>
                                                             <button data-toggle="tooltip" data-placement="top" title="Deactivate or Activate financial account" type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('fin_accts.deactivate_account', account_num=account['acct_num'])}}'">{% if account['active'] == 1 %}Deactivate{% else %}Activate{% endif %}</button>
@@ -72,6 +75,7 @@
                                             {% endif %}
                                         {% endfor %}
                                     </tr>
+                                    </tbody>
                                 </table>
                         </td>
                     </tr>

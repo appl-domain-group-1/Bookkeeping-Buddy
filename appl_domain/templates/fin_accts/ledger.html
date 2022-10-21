@@ -30,30 +30,6 @@
 
 {# Other account info for the frontend team. Delete this when you're done #}
     <div style="color:white">
-    {{account['acct_name']}}<br>
-    {{account['acct_num']}}<br>
-    {{account['acct_desc']}}<br>
-
-    {# Account category can be matched to the actual category name if needed. Just let Ed know #}
-    {{account['acct_category']}}<br>
-
-    {# Subcategory doesn't currently do anything. Not sure what the purpose is #}
-    {{account['acct_subcategory']}}<br>
-
-    {# Debit field == 1 means it's a debit account. Debit field == 0 means it's a credit account #}
-    {{account['debit']}}<br>
-
-    {# Don't forget that the database stores only whole numbers (no decimals). The balances are the number of pennies where 100 pennies == 1 dollar #}
-    {{account['initial_bal']}}<br>
-    {{account['balance']}}<br>
-
-    {{account['date_created']}}<br>
-    {{account['created_by']}}<br>
-
-    {# Statement can be matched to the actual statement name if needed. Just let Ed know #}
-    {{account['statement']}}<br>
-
-    {{account['comment']}}<br>
 
     <button type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.view_logs', account_num=account['acct_num'])}}'">View Account Logs</button>
     </div>
