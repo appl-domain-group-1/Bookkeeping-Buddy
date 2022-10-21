@@ -6,7 +6,6 @@ import json
 
 bp = Blueprint('fin_accts', __name__, url_prefix='/fin_accts')
 
-
 @bp.route('/create_acct', methods=('GET', 'POST'))
 @login_required
 def create_acct():
@@ -27,6 +26,7 @@ def create_acct():
     # Get all statement types
     statements = db.execute(
         "SELECT * FROM statements"
+
     ).fetchall()
 
     # Get all subcategories
@@ -156,6 +156,7 @@ def view_accounts():
     # Get all the statements
     statements = db.execute(
         "SELECT * FROM statements"
+
     ).fetchall()
     statements_dict = {}
     for statement in statements:

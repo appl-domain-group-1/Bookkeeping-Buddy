@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
  <style>
     .loginbox{
    position: relative;
@@ -106,8 +107,9 @@
         </select>
         {% if not account %}
             <br>
-            <label for="initial_bal">Initial Account Balance</label>
-            <input name="initial_bal" placeholder="Enter the initial balance for the new account" id="initial_bal" required>
+           <label for="initial_bal">Initial Account Balance</label>
+         <input name="initial_bal" type="text" datatype='currency' placeholder="Enter initial balance" id="initial_bal" required/>
+
         {% endif %}
         <br>
         <label for="statement">Statement</label>

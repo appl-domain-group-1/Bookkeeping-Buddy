@@ -91,7 +91,7 @@ $('tr.number').each( function () {
                                                         <td style="width:5%;">Credit</td>
                                                     {% endif %}
 
-                                                    <td style="width:10%;">{{ account['balance'] }}</td>
+                                                    <td class="show-comma" style="width:10%;">{{ account['balance'] }}</td>
                                                     <td style="width:10%;">{{ statements[account['statement']] }}</td>
                                                     <td  style="width:25%;">{{ account['comment'] }}</td>
                                                     {% if g.user['role'] == 2 %}
@@ -110,7 +110,6 @@ $('tr.number').each( function () {
                                 </table>
                         </td>
                     </tr>
-
                 {% endif %}
             {% endfor %}
         </table>

@@ -2,13 +2,18 @@
 
 
 {% block content %}
-<header style="color: white; font-size: xx-large; font-weight: bold;">
+<header style="color: white; font-size:xx-large; font-weight: bold;">
 {% block title %}
     Ledger for account {{account['acct_num'] }}
 {% endblock %}</header>
+<style>
+tr {
+    background-color: #CFCFCF;
+  border-bottom: 1px solid #ddd;
+}
+</style>
+    <table class = "table table-sm"></table>
 
-        <table class="table">
-            <thead>
                 <th>Date</th>
                 <th>Description</th>
                 <th>Debits</th>
@@ -35,3 +40,4 @@
     </div>
 <!------>
 {% endblock %}
+</html>

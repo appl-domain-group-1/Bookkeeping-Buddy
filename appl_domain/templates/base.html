@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
      <link rel="stylesheet" href="{{url_for('static', filename = 'index.css') }}"/>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.4/html2canvas.js" integrity="sha512-u8IAPYdG1aL8as3nIGJz2fKZl6gZtN71VTqnB11s5Y9woFF34DK0D3m1ueUjYCT5ZWGHtxNW10U4oA8XQlkd8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -12,15 +14,139 @@
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-      <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <link rel=”stylesheet” href=”https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css”>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
       <link rel="stylesheet" href = "https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
         <link rel = "stylesheet" href = "https://cdn.datatables.net/fixedheader/3.2.3/css/fixedHeader.dataTables.min.css">
         <script src = "https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"> </script>
         <script src = "https://cdn.datatables.net/fixedheader/3.2.3/js/dataTables.fixedHeader.min.js"></script>
+     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
       <script src="{{url_for('static', filename = 'sorttable.js') }}"></script>
       <title>{% block title %}{% endblock %} - Bookkeeping Buddy</title>
   </head>
+{# <script type="text/javascript">#}
+{# function numberWithCommas(input) {#}
+{#     input.value = parseFloat(input.value).toLocaleString()#}
+{#     return input#}
+{#         .replace(/[^0-9\.]/g, '')#}
+{#         .toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",", ".");#}
+{# }#}
+{#</script>#}
+      <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 
+    <script type="text/javascript">
+
+        $(function () {
+            // Jquery Dependency
+
+            $("input[datatype='currency']").on({
+                keyup: function () {
+                    formatCurrency($(this));
+                },
+                blur: function () {
+                    formatCurrency($(this), "blur");
+                }
+            });
+
+
+            function formatNumber(n) {
+                // format number 1000000 to 1,234,567
+                return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+
+
+            function formatCurrency(input, blur) {
+                // appends $ to value, validates decimal side
+                // and puts cursor back in right position.
+
+                // get input value
+                var input_val = input.val();
+
+                // don't validate empty input
+                if (input_val === "") { return; }
+
+                // original length
+                var original_len = input_val.length;
+
+                // initial caret position
+                var caret_pos = input.prop("selectionStart");
+
+                // check for decimal
+                if (input_val.indexOf(".") >= 0) {
+
+                    // get position of first decimal
+                    // this prevents multiple decimals from
+                    // being entered
+                    var decimal_pos = input_val.indexOf(".");
+
+                    // split number by decimal point
+                    var left_side = input_val.substring(0, decimal_pos);
+                    var right_side = input_val.substring(decimal_pos);
+
+                    // add commas to left side of number
+                    left_side = formatNumber(left_side);
+
+                    // validate right side
+                    right_side = formatNumber(right_side);
+
+                    // On blur make sure 2 numbers after decimal
+                    if (blur === "blur") {
+                        right_side += "00";
+                    }
+
+                    // Limit decimal to only 2 digits
+                    right_side = right_side.substring(0, 2);
+
+                    // join number by .
+                    input_val = "$" + left_side + "." + right_side;
+
+                } else {
+                    // no decimal entered
+                    // add commas to number
+                    // remove all non-digits
+                    input_val = formatNumber(input_val);
+                    input_val = "$" + input_val;
+
+                    // final formatting
+                    if (blur === "blur") {
+                        input_val += ".00";
+                    }
+                }
+
+                // send updated string to input
+                input.val(input_val);
+
+                // put caret back in the right position
+                var updated_len = input_val.length;
+                caret_pos = updated_len - original_len + caret_pos;
+                input[0].setSelectionRange(caret_pos, caret_pos);
+            }
+        })
+    </script>
+
+  <script type="text/javascript">
+     {
+    function numberWithComma(number) {
+        let parts = number.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+    }
+
+    $(function () {
+        $('.show-comma').each(function () {
+            let num = $(this).text();
+            let commaNum = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(num/100);
+           $(this).text(commaNum);
+    });
+});
+}
+
+  </script>
 <style>
     *{
         margin: 0;
@@ -116,7 +242,9 @@
                 </div>-->
 
                 </div>
-          </form>
+            </div>
+
+              </form>
     <script type="text/javascript">
        $(function(){
         $('#datepicker').datepicker();
