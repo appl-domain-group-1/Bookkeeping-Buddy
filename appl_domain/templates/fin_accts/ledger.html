@@ -2,18 +2,13 @@
 
 
 {% block content %}
-<header style="color: white; font-size:xx-large; font-weight: bold;">
+<header style="color: white; font-size: xx-large; font-weight: bold;">
 {% block title %}
     Ledger for account {{account['acct_num'] }}
 {% endblock %}</header>
-<style>
-tr {
-    background-color: #CFCFCF;
-  border-bottom: 1px solid #ddd;
-}
-</style>
-    <table class = "table table-sm"></table>
 
+        <table class="table">
+            <thead>
                 <th>Date</th>
                 <th>Description</th>
                 <th>Debits</th>
@@ -33,11 +28,8 @@ tr {
             {% endfor %}
         </table>
 
-{# Other account info for the frontend team. Delete this when you're done #}
     <div style="color:white">
-
     <button type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.view_logs', account_num=account['acct_num'])}}'">View Account Logs</button>
     </div>
-<!------>
 {% endblock %}
 </html>

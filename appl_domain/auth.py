@@ -686,3 +686,13 @@ def approve_user(username):
             return redirect(url_for('mainpage'))
     else:
         return abort(403)
+
+
+@bp.route('/help')
+def help():
+    """
+    View the help page selected from the page header
+    """
+
+    # Load the help page
+    return render_template('auth/help.html')

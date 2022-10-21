@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+<link href="form.css" rel="stylesheet" type = text/css>
+
+
+{% block content %}
+<style>
+  .helpbox{
+   position: relative;
+    max-width: 900px;
+    width: 100%;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;
+  }
+  .helpbox form{
+    position: relative;
+    margin-top:16px;
+    min-height: 400px;
+    background: black;
+}
+  .helpbox h1{
+    padding:0; text-align:center; color: white; font-size: x-large;
+  }
+
+  .helpbox p{
+    padding:10px; text-align:left; color: white; font-size: medium;
+  }
+
+  .collapsible {
+  background-color: #185DFF;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  }
+
+  .activate, .collapsible:hover {
+  background-color: #185DDD;
+  }
+
+  .collapsible:after {
+  content: '\02795'; /* Unicode character for plus */
+  font-size: 15px;
+  color: white;
+  float: right;
+  margin-left: 5px;
+  }
+
+  .activate:after {
+  content: "\2715"; /* Unicode character for an X */
+  }
+
+  .storage {
+  padding: 0 18px;
+  background-color: black;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  }
+
+</style>
+  <div class = helpbox>
+  <h1>{% block title %}Bookkeeping Buddy FAQ{% endblock %}</h1>
+
+    <br>
+      <h1>General Questions About Bookkeeping Buddy</h1>
+        <button class="collapsible">What is Bookkeeping Buddy?</button>
+          <div class="storage">
+            <p>Bookkeeping Buddy is and accounting software designed for users to easily track income, expenses, and more for their accounting needs.</p>
+          </div>
+        <br>
+        <button class="collapsible">Why use Bookkeeping Buddy?</button>
+          <div class="storage">
+            <p>Bookkeeping Buddy comes with a variety of features to help manage accounts and accounting as a whole. It stores data about users and their financial status for secure and easy viewing.</p>
+          </div>
+        <br><br>
+
+      <h1>Login Page</h1>
+        <button class="collapsible">General Information</button>
+          <div class="storage">
+            <p>All active users of Bookkeeping Buddy come here to login and access their account by signing in with their username and password.</p>
+          </div>
+        <br>
+        <button class="collapsible">Forgot Password</button>
+          <div class="storage">
+            <p>Users that have an account but have forgotten their password can fill out the forgot password page to reset their password. Users will have to enter their E-mail, Username, and answer their three security questions.</p>
+              <a href="{{ url_for('auth.forgot_password') }}" style="color:white">Click here to reset your password.</a>
+          </div>
+        <br>
+        <button class="collapsible">Create New User Account</button>
+          <div class="storage">
+            <p>This link will redirect users to the Register page.</p>
+              <a href="{{ url_for('auth.register') }}" style="color:white">Click here to create a new user account.</a>
+          </div>
+        <br><br>
+
+      <h1>Register Page</h1>
+        <button class="collapsible">General Information</button>
+          <div class="storage">
+            <p>New users of Bookkeeping Buddy set up their account here. All new users must submit their E-mail, Password, First name, Last name, Address, Date of birth, and answer three security questions. After all information is submitted, an administrator will respond by activating the account within 3-5 business days.</p>
+          </div>
+        <br><br>
+
+      <h1>Accounts Page</h1>
+        <button class="collapsible">General Information</button>
+          <div class="storage">
+            <p>The Accounts page allows users to view, find, and create accounts to be added to the database.</p>
+          </div>
+        <br>
+        <button class="collapsible">View Financial Accounts</button>
+          <div class="storage">
+            <p>This button will reveal all accounts related to either assets, liabilities, equities, revenues, or expenses.</p>
+          </div>
+        <br>
+        <button class="collapsible">View Logs Button</button>
+          <div class="storage">
+            <p>Use this button to view all the changes that have occurred to financial accounts.</p>
+          </div>
+        <br>
+        <button class="collapsible">Create New Accounts</button>
+          <div class="storage">
+            <p>Create a new account for the server by giving it a name, description, category (asset, liability, equity, etc...), subcategory, debit or credit, inital balance #, statement, and possibly a comment.</p>
+          </div>
+        <br>
+        <button class="collapsible">Account Actions</button>
+          <div class="storage">
+            <p>An account can either be edited or activated/deactivated. Editing accounts allows users to change any information within an account. Activating or deactivating will change if the account will be counted. Deactivating will not delete an account.</p>
+          </div>
+        <br><br>
+
+      <h1>Statements</h1>
+        <button class="collapsible">Income Statements</button>
+          <div class="storage">
+            <p>-----</p>
+          </div>
+        <br>
+        <button class="collapsible">Retained Earnings Statement</button>
+          <div class="storage">
+            <p>-----</p>
+          </div>
+        <br>
+        <button class="collapsible">Balance Sheet</button>
+          <div class="storage">
+            <p>-----</p>
+          </div>
+        <br><br>
+
+      <h1>Transactions</h1>
+        <button class="collapsible">-----</button>
+          <div class="storage">
+            <p>-----</p>
+          </div>
+        <br><br>
+
+      <h1>Journaling</h1>
+        <button class="collapsible">-----</button>
+          <div class="storage">
+            <p>-----</p>
+          </div>
+        <br><br>
+
+      <h1>Trial Balance</h1>
+        <button class="collapsible">-----</button>
+          <div class="storage">
+            <p>-----</p>
+          </div>
+        <br><br>
+
+      <h1>My Account</h1>
+        <button class="collapsible">General Information</button>
+          <div class="storage">
+            <p>Shows account information about the users account and allows it to be edited. The users profile picture and password can be changed here as well.</p>
+          </div>
+        <br>
+        <button class="collapsible">Change Profile Picture</button>
+          <div class="storage">
+            <p>A .png can be uploaded to Bookkeeping Buddy to represent a users account page.</p>
+          </div>
+        <br>
+        <button class="collapsible">Save Changes</button>
+          <div class="storage">
+            <p>All new information entered to the fields above will be saved to the users account.</p>
+          </div>
+        <br>
+        <button class="collapsible">Change Password</button>
+          <div class="storage">
+            <p>This will allow the user to update their password with all the necessary criteria.</p>
+          </div>
+        <br><br>
+
+        <h1>Manage Users</h1>
+        <button class="collapsible">General Information</button>
+          <div class="storage">
+            <p>Shows a table of user accounts that allow administrators to create users, change information about a user, activate/deactivate users, or delete users.</p>
+          </div>
+        <br>
+        <button class="collapsible">Create User</button>
+          <div class="storage">
+            <p>Allows administrator to add users to Bookkeeping Buddy if necessary. The administrator will have to fill out all the required information for a new user to be created.</p>
+          </div>
+        <br>
+        <button class="collapsible">Edit User</button>
+          <div class="storage">
+            <p>Each entry on the user accounts table has an edit button. This will allow administrators to change user account information including the ability to activate or deactivate the account.</p>
+          </div>
+
+  </div>
+
+
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("activate");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+  });
+}
+</script>
+{% endblock %}

@@ -112,8 +112,9 @@ $('tr.number').each( function () {
                     </tr>
                 {% endif %}
             {% endfor %}
+             </tbody>
         </table>
-        </div>
+</div>
     {% endfor %}
     <br>
 <div class="d-flex justify-content-center" >
@@ -123,5 +124,18 @@ $('tr.number').each( function () {
     <br>
 {% endif %}
 </div>
-
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+function showOne(id) {
+    $('#' + id).show();
+    $('.hide').not('#' + id).hide();
+}
+</script>
 {% endblock %}
