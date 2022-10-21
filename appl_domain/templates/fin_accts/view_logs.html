@@ -22,8 +22,7 @@
             <th>Date/Time</th>
             <th>Changed By</th>
             <th>Event Type</th>
-            <th>Before</th>
-            <th>After</th>
+            <th>Changes</th>
         </thead>
             {# Loop through all the events passed in and display them #}
             {% for event in events %}
@@ -50,15 +49,88 @@
                         {% endif %}
                     </td>
                     <td>
-                        {# If before_values is None, then just say N/A. This should only happen on account creation #}
-                        {% if event['before_values'] == None %}
-                            N/A
-                        {# If before_values isn't None, then put what the values were before the edit #}
-                        {% else %}
-                            {{ event['before_values'] }}
+                        {% if event['edit_type'] == 1 %}
+                            <table>
+                                <h5>Account created with these values:</h5>
+                                <tr><th>Account Name:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ event['after_values'][0] }}</td></tr>
+                                <tr><th>Account Description:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ event['after_values'][1] }}</td></tr>
+                                <tr><th>Account Category:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ categories[event['after_values'][2]] }}</td></tr>
+                                <tr><th>Subcategory:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ subcategories[event['after_values'][3]] }}</td></tr>
+                                <tr><th>Account Type:</th></tr>
+                                <tr><td style="text-indent: 2em">
+                                    {% if event['before_values'][4] == 1 %}
+                                        Debit
+                                    {% else %}
+                                        Credit
+                                    {% endif %}
+                                </td></tr>
+                                <tr><th>Initial Balance:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ event['after_values'][5] }}</td></tr>
+                                <tr><th>Statement:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ statements[event['after_values'][9]] }}</td></tr>
+                                <tr><th>Comment:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ event['after_values'][10] }}</td></tr>
+                            </table>
+                        {% elif event['edit_type'] == 2 %}
+                            <table>
+                                {% if event['before_values'][0] != event['after_values'][0] %}
+                                    <tr><th>Account Name:</th></tr>
+                                    <tr><td>{{ event['before_values'][0] }}</td><td>➡</td><td>{{ event['after_values'][0] }}</td></tr>
+                                {% endif %}
+                                {% if event['before_values'][1] != event['after_values'][1] %}
+                                    <tr><th>Account Description:</th></tr>
+                                    <tr><td>{{ event['before_values'][1] }}</td><td>➡</td><td>{{ event['after_values'][1] }}</td></tr>
+                                {% endif %}
+                                {% if event['before_values'][2] != event['after_values'][2] %}
+                                    <tr><th>Account Category:</th></tr>
+                                    <tr><td>{{ categories[event['before_values'][2]] }}</td><td>➡</td><td>{{ categories[event['after_values'][2]] }}</td></tr>
+                                {% endif %}
+                                {% if event['before_values'][3] != event['after_values'][3] %}
+                                    <tr><th>Subcategory:</th></tr>
+                                    <tr><td>{{ subcategories[event['before_values'][3]] }}</td><td>➡</td><td>{{ subcategories[event['after_values'][3]] }}</td></tr>
+                                {% endif %}
+                                {% if event['before_values'][4] != event['after_values'][4] %}
+                                    <tr><th>Account Type:</th></tr>
+                                    <tr>
+                                        <td>
+                                            {% if event['before_values'][4] == 1 %}
+                                                Debit
+                                            {% else %}
+                                                Credit
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            ➡
+                                        </td>
+                                        <td>
+                                            {% if event['after_values'][4] == 1 %}
+                                                Debit
+                                            {% else %}
+                                                Credit
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                {% if event['before_values'][5] != event['after_values'][5] %}
+                                    <tr><th>Statement:</th></tr>
+                                    <tr><td>{{ statements[event['before_values'][5]] }}</td><td>➡</td><td>{{ statements[event['after_values'][5]] }}</td></tr>
+                                {% endif %}
+                                {% if event['before_values'][6] != event['after_values'][6] %}
+                                    <tr><th>Comment:</th></tr>
+                                    <tr><td>{{ event['before_values'][6] }}</td><td>➡</td><td>{{ event['after_values'][6] }}</td></tr>
+                                {% endif %}
+                            </table>
+                        {% elif (event['edit_type'] == 3) or (event['edit_type'] == 4) %}
+                            <table>
+                                <tr><th>Account Status:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ event['before_values'] }}</td><td>➡</td><td>{{ event['after_values'] }}</td></tr>
+                            </table>
                         {% endif %}
                     </td>
-                    <td>{{ event['after_values'] }}</td>
                 </tr>
         {% endfor %}
     </table>

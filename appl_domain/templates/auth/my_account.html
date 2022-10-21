@@ -249,8 +249,8 @@ form .fields .input-field{
                          <input class ="file" type="file" name="uploaded_pic" id="uploaded_pic">
                     </div>
                     <div class="btn-group-vertical-justified" style="margin-bottom: 10px">
-                      <button type="submit" class="btn btn-secondary" style = "color: white; background-color: #185DFF">Save changes</button>
-                      <button type="button" class="btn btn-secondary" style = "color: white; background-color: #185DFF" onclick="window.location.href='{{ url_for('auth.reset_password')}}'" >Change password</button>
+                      <button data-toggle="tooltip" data-placement="top" title="Save changes made to user account"  type="submit" class="btn btn-secondary" style = "color: white; background-color: #185DFF">Save changes</button>
+                      <button data-toggle="tooltip" data-placement="top" title="Change user password" type="button" class="btn btn-secondary" style = "color: white; background-color: #185DFF" onclick="window.location.href='{{ url_for('auth.reset_password')}}'" >Change password</button>
                     </div>
                     <div class="instructions" style="color: white; margin-top: 12px">
                         <p style="margin-left: 0px">
