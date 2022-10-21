@@ -1,6 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+function CurrencyFormatted(amount) {
+	var i = parseFloat(amount);
+	if(isNaN(i)) { i = 0.00; }
+	var minus = '';
+	if(i < 0) { minus = '-'; }
+	i = Math.abs(i);
+	i = parseInt((i + .005) * 100);
+	i = i / 100;
+	s = new String(i);
+	if(s.indexOf('.') < 0) { s += '.00'; }
+	if(s.indexOf('.') == (s.length - 2)) { s += '0'; }
+	s = minus + s;
+	return s;
+}
+$('tr.number').each( function () {
+    // get value of table cell and convert to number...
+    var val = parseFloat($(this).text());
+    // put it back as fixed point value
+    $(this).text(val.toFixed(2));
+});
+</script>
     <header style="color: white; font-size: xx-large; font-weight: bold;">
         <div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle bg-transparent" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white; font-size: xx-large; font-weight: bold">
@@ -60,6 +90,7 @@
                                                     {% else %}
                                                         <td style="width:5%;">Credit</td>
                                                     {% endif %}
+
                                                     <td style="width:10%;">{{ account['balance'] }}</td>
                                                     <td style="width:10%;">{{ statements[account['statement']] }}</td>
                                                     <td  style="width:25%;">{{ account['comment'] }}</td>
@@ -93,18 +124,5 @@
     <br>
 {% endif %}
 </div>
-<script>
-$(document).ready(function(){
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-});
-function showOne(id) {
-    $('#' + id).show();
-    $('.hide').not('#' + id).hide();
-}
-</script>
+
 {% endblock %}
