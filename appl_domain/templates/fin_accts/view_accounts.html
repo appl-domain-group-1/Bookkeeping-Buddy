@@ -26,13 +26,13 @@
     {% for category in acct_categories %}
         <h2 class = "{{category['name']}}" style="color: white">{{ category['name'] }}</h2>
         <div class = "{{category['name']}}" style="overflow-x:auto; margin-top: -7px">
-        <table id = "{{ category['name'] }}" class = "table table-sm sortable" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+        <table id = "{{ category['name'] }}" class = "table table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
             {% for subcategory in subcategories %}
                 {% if subcategory['category'] == category['number'] %}
-                    <tr>
+                    <tbody>
                         <td>
                             <h5>{{ subcategory['name'] }} Accounts</h5>
-                                <table>
+                                <table class = "table table-sm sortable">
                                     <tr>
                                         <th>Number</th>
                                         <th>Name</th>
@@ -45,7 +45,7 @@
                                             <th>Account Actions</th>
                                         {% endif %}
                                     </tr>
-                                    <tr>
+                                    <tbody id="myTable">
                                         {% for account in accounts %}
                                             {% if (account['acct_category'] == category['number']) and (account['acct_subcategory'] == subcategory['id_num']) %}
                                                 <tr>
@@ -74,7 +74,7 @@
                                     </tr>
                                 </table>
                         </td>
-                    </tr>
+                    </tbody>
 
                 {% endif %}
             {% endfor %}
