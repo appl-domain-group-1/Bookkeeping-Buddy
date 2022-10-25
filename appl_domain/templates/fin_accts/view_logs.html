@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <header style="color: white; font-size: xx-large; font-weight: bold">
+        {% block title %}
+            {% if not account_num %}
+                View all event logs
+            {% else %}
+                View event logs for account {{ account_num }}
+            {% endif %}
+        {% endblock %}
+    </header>
+
+    <table class="table">
+        <thead>
+            <th>Event ID</th>
+            {# If we didn't pass in an account number, this must be a request to view ALL logs, so we'll need
+            a column to tell the user which account number this event happened to #}
+            {% if not account_num %}
+                <th>Account</th>
+            {% endif %}
+            <th>Date/Time</th>
+            <th>Changed By</th>
+            <th>Event Type</th>
+            <th>Changes</th>
+        </thead>
+            {# Loop through all the events passed in and display them #}
+            {% for event in events %}
+                <tr class="table">
+                    <td>{{ event['event_id'] }}</td>
+                    {# If we passed in an account number, add the account number to the Account column #}
+                    {% if not account_num %}
+                        <td>{{ event['account'] }}</td>
+                    {% endif %}
+                    <td>{{ event['timestamp'] }}</td>
+                    <td>{{ event['user_id'] }}</td>
+                    <td>
+                        {# Put the correct text for the event type #}
+                        {% if event['edit_type'] == 1 %}
+                            Create Account
+                        {% elif event['edit_type'] == 2 %}
+                            Edit Account
+                        {% elif event['edit_type'] == 3 %}
+                            Deactivate Account
+                        {% elif event['edit_type'] == 4 %}
+                            Activate Account
+                        {% else %}
+                            Other
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if event['edit_type'] == 1 %}
+                            <table>
+                                <h5>Account created with these values:</h5>
+                                <tr><th>Account Name:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ event['after_values'][0] }}</td></tr>
+                                <tr><th>Account Description:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ event['after_values'][1] }}</td></tr>
+                                <tr><th>Account Category:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ categories[event['after_values'][2]] }}</td></tr>
+                                <tr><th>Subcategory:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ subcategories[event['after_values'][3]] }}</td></tr>
+                                <tr><th>Account Type:</th></tr>
+                                <tr><td style="text-indent: 2em">
+                                    {% if event['before_values'][4] == 1 %}
+                                        Debit
+                                    {% else %}
+                                        Credit
+                                    {% endif %}
+                                </td></tr>
+                                <tr><th>Initial Balance:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ event['after_values'][5] }}</td></tr>
+                                <tr><th>Statement:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ statements[event['after_values'][9]] }}</td></tr>
+                                <tr><th>Comment:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ event['after_values'][10] }}</td></tr>
+                            </table>
+                        {% elif event['edit_type'] == 2 %}
+                            <table>
+                                {% if event['before_values'][0] != event['after_values'][0] %}
+                                    <tr><th>Account Name:</th></tr>
+                                    <tr><td>{{ event['before_values'][0] }}</td><td>➡</td><td>{{ event['after_values'][0] }}</td></tr>
+                                {% endif %}
+                                {% if event['before_values'][1] != event['after_values'][1] %}
+                                    <tr><th>Account Description:</th></tr>
+                                    <tr><td>{{ event['before_values'][1] }}</td><td>➡</td><td>{{ event['after_values'][1] }}</td></tr>
+                                {% endif %}
+                                {% if event['before_values'][2] != event['after_values'][2] %}
+                                    <tr><th>Account Category:</th></tr>
+                                    <tr><td>{{ categories[event['before_values'][2]] }}</td><td>➡</td><td>{{ categories[event['after_values'][2]] }}</td></tr>
+                                {% endif %}
+                                {% if event['before_values'][3] != event['after_values'][3] %}
+                                    <tr><th>Subcategory:</th></tr>
+                                    <tr><td>{{ subcategories[event['before_values'][3]] }}</td><td>➡</td><td>{{ subcategories[event['after_values'][3]] }}</td></tr>
+                                {% endif %}
+                                {% if event['before_values'][4] != event['after_values'][4] %}
+                                    <tr><th>Account Type:</th></tr>
+                                    <tr>
+                                        <td>
+                                            {% if event['before_values'][4] == 1 %}
+                                                Debit
+                                            {% else %}
+                                                Credit
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            ➡
+                                        </td>
+                                        <td>
+                                            {% if event['after_values'][4] == 1 %}
+                                                Debit
+                                            {% else %}
+                                                Credit
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                {% if event['before_values'][5] != event['after_values'][5] %}
+                                    <tr><th>Statement:</th></tr>
+                                    <tr><td>{{ statements[event['before_values'][5]] }}</td><td>➡</td><td>{{ statements[event['after_values'][5]] }}</td></tr>
+                                {% endif %}
+                                {% if event['before_values'][6] != event['after_values'][6] %}
+                                    <tr><th>Comment:</th></tr>
+                                    <tr><td>{{ event['before_values'][6] }}</td><td>➡</td><td>{{ event['after_values'][6] }}</td></tr>
+                                {% endif %}
+                            </table>
+                        {% elif (event['edit_type'] == 3) or (event['edit_type'] == 4) %}
+                            <table>
+                                <tr><th>Account Status:</th></tr>
+                                <tr><td style="text-indent: 2em">{{ event['before_values'] }}</td><td>➡</td><td>{{ event['after_values'] }}</td></tr>
+                            </table>
+                        {% endif %}
+                    </td>
+                </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

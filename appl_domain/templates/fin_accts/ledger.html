@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<header style="color: white; font-size: xx-large; font-weight: bold;">
+{% block title %}
+    Ledger for account {{account['acct_num'] }}
+{% endblock %}</header>
+
+        <table class="table">
+            <thead>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Debits</th>
+                <th>Credits</th>
+                <th>Post Reference</th>
+                <th>Balance</th>
+            </thead>
+            {% for entry in entries %}
+            <tr>
+                <td>{{ entry['date'] }}</td>
+                <td>{{ entry['description'] }}</td>
+                <td>{{ entry['debit_accounts'] }}</td>
+                <td>{{ entry['credit_accounts'] }}</td>
+                <td>{{ entry['post_reference'] }}</td>
+                <td>{{ entry['balance'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    <div style="color:white">
+    <button type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.view_logs', account_num=account['acct_num'])}}'">View Account Logs</button>
+    </div>
+{% endblock %}
+</html>
