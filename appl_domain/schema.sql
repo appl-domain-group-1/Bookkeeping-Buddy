@@ -101,4 +101,27 @@ CREATE TABLE subcategories (
     category INTEGER REFERENCES acct_categories(number),
     /* Name of this subcategory */
     name TEXT NOT NULL
+);
+
+/* Contains the entire journal of transactions */
+-- DROP TABLE IF EXISTS journal;
+CREATE TABLE journal (
+    /* Unique ID for this journal entry */
+    id_num INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+    /* Status of this journal entry. -1 == rejected, 0 == pending, 1 == approved */
+    status INTEGER NOT NULL,
+    /* Date this journal entry was submitted */
+    date_submitted TEXT NOT NULL,
+    /* User who submitted this journal entry */
+    user TEXT NOT NULL REFERENCES users(username),
+    /* Manager which approved the journal entry */
+    approver TEXT REFERENCES users(username),
+    /* Which accounts that this journal entry credited. Stored as a JSON object */
+    credits TEXT NOT NULL,
+    /* Which accounts that this journal entry debits. Stored as a JSON object */
+    debits TEXT NOT NULL,
+    /* Attachment provided as supporting documentation of this journal entry */
+    attachment BLOB,
+    /* Description of this journal entry */
+    description TEXT
 )
