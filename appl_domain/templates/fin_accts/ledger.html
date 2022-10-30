@@ -5,9 +5,23 @@
 <header style="color: white; font-size: xx-large; font-weight: bold;">
 {% block title %}
     Ledger for account {{account['acct_num'] }}
-{% endblock %}</header>
 
-        <table class="table">
+{% endblock %}</header>
+<style>
+
+</style>
+<table id="example1" style="color: ghostwhite">
+        <tbody><tr>
+            <td>From:</td>
+            <td><input type="text" id="min" name="min" style="color: #185DFF;"></td>
+        </tr>
+        <tr>
+            <td>To:</td>
+            <td><input type="text" id="max" name="max" style="color: #185DFF;"></td>
+        </tr>
+    </tbody>
+</table>
+        <table class="table" id="searchID" >
             <thead>
                 <th>Date</th>
                 <th>Description</th>
