@@ -1,4 +1,6 @@
-/* Enable foreign key support */
+
+/* Reason that this entry was rejected */
+reject_reason TEXT/* Enable foreign key support */
 PRAGMA foreign_keys = ON;
 
 /* Table to store user accounts */
@@ -123,5 +125,7 @@ CREATE TABLE journal (
     /* Attachment provided as supporting documentation of this journal entry */
     attachment BLOB,
     /* Description of this journal entry */
-    description TEXT
+    description TEXT,
+    /* Reason that this entry was rejected */
+    reject_reason TEXT
 )

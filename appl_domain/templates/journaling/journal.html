@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script>
+    function get_reject_reason() {
+        let reject_reason = prompt("Enter reason this entry should be rejected");
+        return reject_reason;
+    }
+</script>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Entry ID</th>
+                <th>Date Submitted</th>
+                <th>Submitted By</th>
+                <th>Approved By</th>
+                <th>Description</th>
+                <th>Accounts Credited</th>
+                <th>Accounts Debited</th>
+                <th>Attachment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in approved_entries %}
+                <tr>
+                    <td>{{entry['id_num']}}</td>
+                    <td>{{entry['date_submitted']}}</td>
+                    <td>{{entry['user']}}</td>
+                    <td>{{entry['approver']}}</td>
+                    <td>{{entry['description']}}</td>
+                    <td>{{entry['credits']}}</td>
+                    <td>{{entry['debits']}}</td>
+                    <td>{{entry['attachment']}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Entry ID</th>
+                <th>Date Submitted</th>
+                <th>Submitted By</th>
+                <th>Description</th>
+                <th>Accounts Credited</th>
+                <th>Accounts Debited</th>
+                <th>Attachment</th>
+                {% if g.user['role'] == 1 or g.user['role'] == 2 %}
+                    <th>Entry Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in pending_entries %}
+                <tr>
+                    <td>{{entry['id_num']}}</td>
+                    <td>{{entry['date_submitted']}}</td>
+                    <td>{{entry['user']}}</td>
+                    <td>{{entry['description']}}</td>
+                    <td>{{entry['credits']}}</td>
+                    <td>{{entry['debits']}}</td>
+                    <td>{{entry['attachment']}}</td>
+                    {% if g.user['role'] == 1 or g.user['role'] == 2 %}
+                        <td>
+                            <button>Approve</button>
+                        <button onclick="window.location.href='{{ url_for('journaling.reject_entry', entry_id=entry['id_num'], reject_reason="Test123") }}'">Reject</button>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Entry ID</th>
+                <th>Date Submitted</th>
+                <th>Submitted By</th>
+                <th>Rejected By</th>
+                <th>Rejection Reason</th>
+                <th>Description</th>
+                <th>Accounts Credited</th>
+                <th>Accounts Debited</th>
+                <th>Attachment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in rejected_entries %}
+                <tr>
+                    <td>{{entry['id_num']}}</td>
+                    <td>{{entry['date_submitted']}}</td>
+                    <td>{{entry['user']}}</td>
+                    <td>{{entry['approver']}}</td>
+                    <td>{{entry['reject_reason']}}</td>
+                    <td>{{entry['description']}}</td>
+                    <td>{{entry['credits']}}</td>
+                    <td>{{entry['debits']}}</td>
+                    <td>{{entry['attachment']}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+<button data-toggle="tooltip" data-placement="top" title="Create a new journal entry" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('journaling.add_entry')}}'">Create New Entry</button>
+
+{% endblock %}
