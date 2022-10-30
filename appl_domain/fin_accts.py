@@ -109,9 +109,9 @@ def create_acct():
                     f"CREATE TABLE ledger_{this_account_num} ("
                     "date TEXT NOT NULL,"
                     "description TEXT,"
-                    "debit_accounts TEXT NOT NULL,"
-                    "credit_accounts TEXT NOT NULL,"
-                    "post_reference TEXT NOT NULL,"
+                    "debit INTEGER,"
+                    "credit INTEGER,"
+                    "post_reference TEXT NOT NULL REFERENCES journal(id_num),"
                     "balance INTEGER NOT NULL"
                     ")"
                 )

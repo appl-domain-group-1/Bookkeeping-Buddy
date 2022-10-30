@@ -124,13 +124,60 @@ def approve_entry():
     # Get a handle on the DB
     db = get_db()
 
+    # Grab the journal entry
+    this_entry = db.execute(
+        "SELECT * from journal WHERE id_num = ?", (entry_id,)
+    ).fetchone()
+
     # Update the row for this ID number
     db.execute(
         "UPDATE journal SET status = ?, approver = ? WHERE id_num = ?", (1, approved_by, entry_id)
     )
 
-    # Write the change to the DB
+    # Write the change
     db.commit()
+
+    # Get all of the different transactions for this journal entry
+    credits = json.loads(this_entry['credits'])
+    debits = json.loads(this_entry['debits'])
+
+    # Update all the credits
+    for account, value in credits:
+        # Get the current balance
+        current_balance = db.execute(
+            "SELECT * FROM accounts WHERE acct_num = ?", (account,)
+        ).fetchone()['balance']
+
+        # Calculate the new balance
+        new_bal = current_balance - value
+
+        # Update the row
+        db.execute(
+            f"INSERT into ledger_{account} (date, description, credit, post_reference, balance) VALUES (?, ?, ?, ?, ?)",
+            (this_entry['date'], this_entry['description'], value, this_entry['id_num'], new_bal)
+        )
+
+        # Write the change
+        db.commit()
+
+    # Update all the debits
+    for account, value in debits:
+        # Get current balance
+        current_balance = db.execute(
+            "SELECT * FROM accounts WHERE acct_num = ?", (account,)
+        ).fetchone()['balance']
+
+        # Calculate the new balance
+        new_bal = current_balance + value
+
+        # Update the row
+        db.execute(
+            f"INSERT INTO ledger_{account} (date, description, debit, post_reference, balance VALUES (?, ?, ?, ?, ?)",
+            (this_entry['date'], this_entry['description'], value, this_entry['id_num'], new_bal)
+        )
+
+        # Write the change
+        db.commit()
 
     return redirect(url_for('journaling.journal'))
 
@@ -144,14 +191,14 @@ def fix_db():
     db = get_db()
 
     db.execute(
-        "DROP TABLE IF EXISTS journal;"
+        "UPDATE journal SET status = ? WHERE id_num = ?", (0, 7)
     )
 
-    db.commit()
-
-    db.execute(
-        "CREATE TABLE journal (id_num INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, status INTEGER NOT NULL, date_submitted TEXT NOT NULL, user TEXT NOT NULL REFERENCES users(username), approver TEXT REFERENCES users(username), credits TEXT NOT NULL, debits TEXT NOT NULL, attachment BLOB, description TEXT, reject_reason TEXT)"
-    )
+    # db.commit()
+    #
+    # db.execute(
+    #     "CREATE TABLE journal (id_num INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, status INTEGER NOT NULL, date_submitted TEXT NOT NULL, user TEXT NOT NULL REFERENCES users(username), approver TEXT REFERENCES users(username), credits TEXT NOT NULL, debits TEXT NOT NULL, attachment BLOB, description TEXT, reject_reason TEXT)"
+    # )
 
     db.commit()
 
