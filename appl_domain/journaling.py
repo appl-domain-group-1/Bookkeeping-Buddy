@@ -92,11 +92,51 @@ def journal():
 @bp.route('/reject_entry')
 @login_required
 def reject_entry():
+    if (g.user['role'] != 1) or (g.user['role'] != 2):
+        abort(403)
+    else:
+        # Get the parameters from the request
+        entry_idg.user['username']
+        reject_reason = request.args.get('reject_reason')
+        rejected_by = g.user['username']
+
+        # Get a handle on the DB
+        db = get_db()
+
+        # Update the row for this ID number
+        db.execute(
+            "UPDATE journal SET status = ?, reject_reason = ?, approver = ? WHERE id_num = ?", (-1, reject_reason, rejected_by, entry_id)
+        )
+
+        # Write the change to the DB
+        db.commit()
+
+        return redirect(url_for('journaling.journal'))
+
+
+@bp.route('/approve_entry')
+@login_required
+def approve_entry():
+    # Get the parameters from the request
     entry_id = request.args.get('entry_id')
-    reject_reason = request.args.get('reject_reason')
-    print(f"Entry ID: {entry_id}")
-    print(f"Reject reason: {reject_reason}")
+    approved_by = g.user['username']
+
+    # Get a handle on the DB
+    db = get_db()
+
+    # Update the row for this ID number
+    db.execute(
+        "UPDATE journal SET status = ?, approver = ? WHERE id_num = ?", (1, approved_by, entry_id)
+    )
+
+    # Write the change to the DB
+    db.commit()
+
     return redirect(url_for('journaling.journal'))
+
+
+
+
 
 @bp.route('/fix_db', methods=('GET', 'POST'))
 @login_required

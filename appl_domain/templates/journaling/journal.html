@@ -3,9 +3,11 @@
 {% block content %}
 
 <script>
-    function get_reject_reason() {
-        let reject_reason = prompt("Enter reason this entry should be rejected");
-        return reject_reason;
+    function get_reject_reason(id) {
+        let reject_reason = prompt("Enter reason this entry should be rejected:");
+        if reject_reason != null or reject_reason != ""{
+            window.location.href='/journaling/reject_entry?entry_id=' + id + '&reject_reason=' + reject_reason;
+        }
     }
 </script>
 
@@ -65,8 +67,8 @@
                     <td>{{entry['attachment']}}</td>
                     {% if g.user['role'] == 1 or g.user['role'] == 2 %}
                         <td>
-                            <button>Approve</button>
-                        <button onclick="window.location.href='{{ url_for('journaling.reject_entry', entry_id=entry['id_num'], reject_reason="Test123") }}'">Reject</button>
+                            <button onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'">Approve</button>
+                            <button onclick="get_reject_reason({{entry['id_num']}})">Reject</button>
                         </td>
                     {% endif %}
                 </tr>
