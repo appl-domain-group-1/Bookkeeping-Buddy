@@ -20,10 +20,22 @@
             <tr>
                 <td>{{ entry['date'] }}</td>
                 <td>{{ entry['description'] }}</td>
-                <td>{{ entry['debit_accounts'] }}</td>
-                <td>{{ entry['credit_accounts'] }}</td>
-                <td>{{ entry['post_reference'] }}</td>
-                <td>{{ entry['balance'] }}</td>
+                {% if entry['debit'] %}
+                    <td class="show-comma">{{ entry['debit'] }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                {% if entry['credit'] %}
+                    <td class="show-comma">{{ entry['credit'] }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                {% if entry['post_reference'] %}
+                    <td>{{ entry['post_reference'] }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                <td class="show-comma">{{ entry['balance'] }}</td>
             </tr>
             {% endfor %}
         </table>
