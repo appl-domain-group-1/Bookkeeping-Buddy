@@ -27,7 +27,7 @@
         </thead>
         <tbody>
             {% for entry in approved_entries %}
-                <tr>
+                <tr id="entry_{{ entry['id_num'] }}">
                     <td>{{entry['id_num']}}</td>
                     <td>{{entry['date_submitted']}}</td>
                     <td>{{entry['user']}}</td>
@@ -89,7 +89,7 @@
         </thead>
         <tbody>
             {% for entry in pending_entries %}
-                <tr>
+                <tr id="entry_{{ entry['id_num'] }}">
                     <td>{{entry['id_num']}}</td>
                     <td>{{entry['date_submitted']}}</td>
                     <td>{{entry['user']}}</td>
@@ -155,7 +155,7 @@
         </thead>
         <tbody>
             {% for entry in rejected_entries %}
-                <tr>
+                <tr id="entry_{{ entry['id_num'] }}">
                     <td>{{entry['id_num']}}</td>
                     <td>{{entry['date_submitted']}}</td>
                     <td>{{entry['user']}}</td>
