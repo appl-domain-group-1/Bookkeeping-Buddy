@@ -169,11 +169,12 @@ def journal():
 @bp.route('/reject_entry')
 @login_required
 def reject_entry():
-    if (g.user['role'] != 1) or (g.user['role'] != 2):
+    # If the user is not a manager or admin, boot them
+    if g.user['role'] not in (1, 2):
         abort(403)
     else:
         # Get the parameters from the request
-        entry_idg.user['username']
+        entry_id = request.args.get('entry_id')
         reject_reason = request.args.get('reject_reason')
         rejected_by = g.user['username']
 
@@ -219,7 +220,7 @@ def approve_entry():
     debits = json.loads(this_entry['debits'])
 
     # Update all the credits
-    for account, value in credits:
+    for account, value in credits.items():
         # Get the current balance
         current_balance = db.execute(
             "SELECT * FROM accounts WHERE acct_num = ?", (account,)
@@ -228,17 +229,25 @@ def approve_entry():
         # Calculate the new balance
         new_bal = current_balance - value
 
-        # Update the row
+        # Update the row in the ledger
         db.execute(
             f"INSERT into ledger_{account} (date, description, credit, post_reference, balance) VALUES (?, ?, ?, ?, ?)",
-            (this_entry['date'], this_entry['description'], value, this_entry['id_num'], new_bal)
+            (this_entry['date_submitted'], this_entry['description'], value, this_entry['id_num'], new_bal)
+        )
+
+        # Write the change
+        db.commit()
+
+        # Update the balance in the account table
+        db.execute(
+            "UPDATE accounts SET balance = ? WHERE acct_num = ?", (new_bal, account)
         )
 
         # Write the change
         db.commit()
 
     # Update all the debits
-    for account, value in debits:
+    for account, value in debits.items():
         # Get current balance
         current_balance = db.execute(
             "SELECT * FROM accounts WHERE acct_num = ?", (account,)
@@ -249,8 +258,16 @@ def approve_entry():
 
         # Update the row
         db.execute(
-            f"INSERT INTO ledger_{account} (date, description, debit, post_reference, balance VALUES (?, ?, ?, ?, ?)",
-            (this_entry['date'], this_entry['description'], value, this_entry['id_num'], new_bal)
+            f"INSERT INTO ledger_{account} (date, description, debit, post_reference, balance) VALUES (?, ?, ?, ?, ?)",
+            (this_entry['date_submitted'], this_entry['description'], value, this_entry['id_num'], new_bal)
+        )
+
+        # Write the change
+        db.commit()
+
+        # Update the balance in the account table
+        db.execute(
+            "UPDATE accounts SET balance = ? WHERE acct_num = ?", (new_bal, account)
         )
 
         # Write the change
