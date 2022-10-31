@@ -5,13 +5,14 @@
 <script>
     function get_reject_reason(id) {
         let reject_reason = prompt("Enter reason this entry should be rejected:");
-        if reject_reason != null or reject_reason != ""{
+        if (reject_reason != null || reject_reason !== ""){
             window.location.href='/journaling/reject_entry?entry_id=' + id + '&reject_reason=' + reject_reason;
         }
     }
 </script>
 
-    <table>
+    <h2 style="color: white">Approved Entries</h2>
+    <table class="table">
         <thead>
             <tr>
                 <th>Entry ID</th>
@@ -32,15 +33,46 @@
                     <td>{{entry['user']}}</td>
                     <td>{{entry['approver']}}</td>
                     <td>{{entry['description']}}</td>
-                    <td>{{entry['credits']}}</td>
-                    <td>{{entry['debits']}}</td>
-                    <td>{{entry['attachment']}}</td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Value</th>
+                                </tr>
+                                    {% for credit in entry['credits'] %}
+                                    <tr>
+                                        <td>#{{ credit }}</td>
+                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </thead>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Value</th>
+                                </tr>
+                                    {% for debit in entry['debits'] %}
+                                    <tr>
+                                        <td>#{{ debit }}</td>
+                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </thead>
+                        </table>
+                    </td>
+                    <td>{{entry['attachment_name']}}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <table>
+    <h2 style="color: white">Pending Entries</h2>
+    <table class="table">
         <thead>
             <tr>
                 <th>Entry ID</th>
@@ -62,9 +94,39 @@
                     <td>{{entry['date_submitted']}}</td>
                     <td>{{entry['user']}}</td>
                     <td>{{entry['description']}}</td>
-                    <td>{{entry['credits']}}</td>
-                    <td>{{entry['debits']}}</td>
-                    <td>{{entry['attachment']}}</td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Value</th>
+                                </tr>
+                                    {% for credit in entry['credits'] %}
+                                    <tr>
+                                        <td>#{{ credit }}</td>
+                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </thead>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Value</th>
+                                </tr>
+                                    {% for debit in entry['debits'] %}
+                                    <tr>
+                                        <td>#{{ debit }}</td>
+                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </thead>
+                        </table>
+                    </td>
+                    <td>{{entry['attachment_name']}}</td>
                     {% if g.user['role'] == 1 or g.user['role'] == 2 %}
                         <td>
                             <button onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'">Approve</button>
@@ -76,7 +138,8 @@
         </tbody>
     </table>
 
-    <table>
+    <h2 style="color: white">Rejected Entries</h2>
+    <table class="table">
         <thead>
             <tr>
                 <th>Entry ID</th>
@@ -99,9 +162,39 @@
                     <td>{{entry['approver']}}</td>
                     <td>{{entry['reject_reason']}}</td>
                     <td>{{entry['description']}}</td>
-                    <td>{{entry['credits']}}</td>
-                    <td>{{entry['debits']}}</td>
-                    <td>{{entry['attachment']}}</td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Value</th>
+                                </tr>
+                                    {% for credit in entry['credits'] %}
+                                    <tr>
+                                        <td>#{{ credit }}</td>
+                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </thead>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Value</th>
+                                </tr>
+                                    {% for debit in entry['debits'] %}
+                                    <tr>
+                                        <td>#{{ debit }}</td>
+                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </thead>
+                        </table>
+                    </td>
+                    <td>{{entry['attachment_name']}}</td>
                 </tr>
             {% endfor %}
         </tbody>
