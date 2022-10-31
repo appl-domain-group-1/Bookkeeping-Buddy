@@ -274,26 +274,3 @@ def approve_entry():
         db.commit()
 
     return redirect(url_for('journaling.journal'))
-
-
-
-
-
-@bp.route('/fix_db', methods=('GET', 'POST'))
-@login_required
-def fix_db():
-    db = get_db()
-
-    db.execute(
-        "UPDATE journal SET status = ? WHERE id_num = ?", (0, 7)
-    )
-
-    # db.commit()
-    #
-    # db.execute(
-    #     "CREATE TABLE journal (id_num INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, status INTEGER NOT NULL, date_submitted TEXT NOT NULL, user TEXT NOT NULL REFERENCES users(username), approver TEXT REFERENCES users(username), credits TEXT NOT NULL, debits TEXT NOT NULL, attachment BLOB, description TEXT, reject_reason TEXT)"
-    # )
-
-    db.commit()
-
-    return "OK"
