@@ -3,16 +3,47 @@
 {% block content %}
 
 <script>
+    $(document).ready(function(){
+    $("select").change(function(){
+        $(this).find("option:selected").each(function(){
+            var optionValue = $(this).attr("value");
+            if(optionValue){
+                $(".entry").not("." + optionValue).hide();
+                $("." + optionValue).show();
+            } else{
+                $(".entry").hide();
+            }
+        });
+    }).change();
+});
     function get_reject_reason(id) {
         let reject_reason = prompt("Enter reason this entry should be rejected:");
         if (reject_reason != null || reject_reason !== ""){
             window.location.href='/journaling/reject_entry?entry_id=' + id + '&reject_reason=' + reject_reason;
         }
     }
+    $(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
 </script>
+<div >
+        <select style=" font-size: x-large; font-weight: bold; height: 50px; color: white; background: transparent">
+            <option style="color: black; font-size: large" value = "entry">Choose a Journal Entry</option>
+            <option style="color: black; font-size: large" value="approved">Approved Entries</option>
+            <option style="color: black; font-size: large" value="pending">Pending Entries</option>
+            <option style="color: black; font-size: large" value="rejected">Rejected Entries</option>
+        </select>
+    </div>
 
-    <h2 style="color: white">Approved Entries</h2>
-    <table class="table">
+<br>
+<input style="width: 25%" class="form-control" id="myInput" type="text" placeholder="Search by account number or account name">
+   <h2 style="color: white" class = "approved entry">Approved Entries</h2>
+    <table class="table approved entry">
         <thead>
             <tr>
                 <th>Entry ID</th>
@@ -25,7 +56,7 @@
                 <th>Attachment</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id = "myTable">
             {% for entry in approved_entries %}
                 <tr id="entry_{{ entry['id_num'] }}">
                     <td>{{entry['id_num']}}</td>
@@ -71,8 +102,8 @@
         </tbody>
     </table>
 
-    <h2 style="color: white">Pending Entries</h2>
-    <table class="table">
+    <h2  class = "pending entry" style="color: white">Pending Entries</h2>
+    <table class="table pending entry">
         <thead>
             <tr>
                 <th>Entry ID</th>
@@ -87,7 +118,7 @@
                 {% endif %}
             </tr>
         </thead>
-        <tbody>
+        <tbody id = "myTable">
             {% for entry in pending_entries %}
                 <tr id="entry_{{ entry['id_num'] }}">
                     <td>{{entry['id_num']}}</td>
@@ -138,8 +169,8 @@
         </tbody>
     </table>
 
-    <h2 style="color: white">Rejected Entries</h2>
-    <table class="table">
+    <h2  class = "rejected entry" style="color: white">Rejected Entries</h2>
+    <table class="table rejected entry">
         <thead>
             <tr>
                 <th>Entry ID</th>
@@ -153,7 +184,7 @@
                 <th>Attachment</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id = "myTable">
             {% for entry in rejected_entries %}
                 <tr id="entry_{{ entry['id_num'] }}">
                     <td>{{entry['id_num']}}</td>

@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<style>
+    label{
+        color: white;
+    }
+</style>
     <form class="box" method="post" enctype="multipart/form-data">
-        <table>
+        <table class = "table table-sm">
             <thead>
                 <th>Account to credit</th>
                 <th>Amount</th>
@@ -18,13 +22,13 @@
                             </select>
                         </td>
                         <td>
-                            <input name="credit_{{ number }}_value" type="text" datatype="currency" placeholder="$0" id="credit_{{ number }}_value">
+                            <input style ="border: none" name="credit_{{ number }}_value" type="text" datatype="currency" placeholder="$0" id="credit_{{ number }}_value">
                         </td>
                     </tr>
                 {% endfor %}
         </table>
 
-                <table>
+                <table class = "table table-sm">
             <thead>
                 <th>Account to debit</th>
                 <th>Amount</th>
@@ -34,23 +38,24 @@
                         <td>
                             <select name="debit_{{ number }}_account">
                                 {% for account in accounts %}
-                                    <option value="{{ account['acct_num'] }}">{{ account['acct_num'] }} - {{ account['acct_name'] }}</option>
+                                    <option  value="{{ account['acct_num'] }}">{{ account['acct_num'] }} - {{ account['acct_name'] }}</option>
                                 {% endfor %}
                             </select>
                         </td>
                         <td>
-                            <input name="debit_{{ number }}_value" type="text" datatype="currency" placeholder="$0" id="debit_{{ number }}_value">
+                            <input style ="border: none" name="debit_{{ number }}_value" type="text" datatype="currency" placeholder="$0" id="debit_{{ number }}_value">
                         </td>
                     </tr>
                 {% endfor %}
         </table>
+
         <label for="description">Entry description</label>
-        <textarea name="description" id="description"></textarea>
+        <textarea class="form-control" name="description" id="description" rows = "2" style="width: 100%"></textarea>
         <br>
-        <label for="attachment">Upload supporting documentation</label>
-        <input class="file" type="file" name="attachment" id="attachment">
+        <label for="attachment">Upload supporting documentation</label><br>
+        <input style="color: white" class="file" type="file" name="attachment" id="attachment">
         <br>
-        <input class="submit" type="submit" value="Add entry">
+        <input  style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px" class="submit" type="submit" value="Add entry">
     </form>
 
 {% endblock %}
