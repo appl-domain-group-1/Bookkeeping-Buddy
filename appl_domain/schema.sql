@@ -122,8 +122,10 @@ CREATE TABLE journal (
     credits TEXT NOT NULL,
     /* Which accounts that this journal entry debits. Stored as a JSON object */
     debits TEXT NOT NULL,
-    /* Attachment provided as supporting documentation of this journal entry */
-    attachment BLOB,
+    /* Data of attachment provided as supporting documentation of this journal entry */
+    attachment_data BLOB,
+    /* Name of attachment file */
+    attachment_name TEXT,
     /* Description of this journal entry */
     description TEXT,
     /* Reason that this entry was rejected */
