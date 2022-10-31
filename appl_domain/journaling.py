@@ -31,7 +31,7 @@ def add_entry():
         for number in range(1, 6):
             value = request.form[f'credit_{number}_value'].replace(',', '').replace('.', '').replace('$', '')
             if (len(value) > 0) and (int(value) > 0):
-                entry_credits[request.form[f'credit_{number}_account']] = value
+                entry_credits[request.form[f'credit_{number}_account']] = int(value)
         # Dump the dictionary to a JSON object to be stored in the DB
         entry_credits = json.dumps(entry_credits)
 
@@ -41,7 +41,7 @@ def add_entry():
         for number in range(1, 6):
             value = request.form[f'debit_{number}_value'].replace(',', '').replace('.', '').replace('$', '')
             if (len(value) > 0) and (int(value) > 0):
-                entry_debits[request.form[f'debit_{number}_account']] = value
+                entry_debits[request.form[f'debit_{number}_account']] = int(value)
         # Dump the dictionary to a JSON object to be stored in the DB
         entry_debits = json.dumps(entry_debits)
 
