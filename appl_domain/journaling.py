@@ -1,10 +1,9 @@
-
-
-from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
+from flask import Blueprint, g, redirect, render_template, request, url_for, abort, send_file
 from appl_domain.db import get_db
-from datetime import date, datetime, timedelta
+from datetime import datetime
 from appl_domain.auth import login_required
 import json
+from io import BytesIO
 
 bp = Blueprint('journaling', __name__, url_prefix='/journaling')
 
@@ -274,3 +273,29 @@ def approve_entry():
         db.commit()
 
     return redirect(url_for('journaling.journal'))
+
+@bp.route('/get_attachment')
+@login_required
+def get_attachment():
+    entry_id = request.args.get('entry_id')
+
+    # Get a handle on the DB
+    db = get_db()
+
+    # Get the file's raw data and filename
+    file_info = db.execute(
+        "SELECT attachment_data, attachment_name FROM journal WHERE id_num = ?", (entry_id,)
+    ).fetchone()
+
+    # Get file data and store it in a temporary byte buffer
+    file_data = file_info['attachment_data']
+    temp_file = BytesIO()
+    temp_file.write(file_data)
+    # Seek back to the beginning of the file so it's ready to download
+    temp_file.seek(0)
+
+    # Get the filename of the new file
+    file_name = file_info['attachment_name']
+
+    # Send the file to the user
+    return send_file(temp_file, download_name=file_name)
