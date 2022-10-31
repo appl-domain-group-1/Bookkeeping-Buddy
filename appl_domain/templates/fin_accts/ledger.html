@@ -31,7 +31,7 @@
                     <td></td>
                 {% endif %}
                 {% if entry['post_reference'] %}
-                    <td>{{ entry['post_reference'] }}</td>
+                    <td><a href="{{ url_for('journaling.journal')}}#entry_{{ entry['post_reference'] }}">{{ entry['post_reference'] }}</a></td>
                 {% else %}
                     <td></td>
                 {% endif %}
