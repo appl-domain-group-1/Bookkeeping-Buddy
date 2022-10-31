@@ -78,18 +78,93 @@ def journal():
     approved_entries = db.execute(
         "SELECT * FROM journal WHERE status = ?", (1,)
     ).fetchall()
+    # Convert each entry to a Python dictionary
+    approved_entries2 = []
+    for entry in approved_entries:
+        # Temporary dictionary to hold each key/value
+        temp_dict = {}
+        # Go through each item in the Row object and assign it with the correct key to the temp_dict
+        temp_dict['id_num'] = entry[0]
+        temp_dict['status'] = entry[1]
+        temp_dict['date_submitted'] = datetime.fromisoformat(entry[2]).strftime("%A, %B %d %X")
+        temp_dict['user'] = entry[3]
+        temp_dict['approver'] = entry[4]
+        if entry[5] is not None:
+            temp_dict['credits'] = json.loads(entry[5])
+        else:
+            temp_dict['credits'] = None
+        if entry[6] is not None:
+            temp_dict['debits'] = json.loads(entry[6])
+        else:
+            temp_dict['debits'] = None
+        temp_dict['attachment_name'] = entry[8]
+        temp_dict['description'] = entry[9]
+
+        # Append this new dictionary to the list of dictionaries
+        approved_entries2.append(temp_dict)
+
 
     # Get all pending entries
     pending_entries = db.execute(
         "SELECT * FROM journal WHERE status = ?", (0,)
     ).fetchall()
+    # Convert each entry to a Python dictionary
+    pending_entries2 = []
+    for entry in pending_entries:
+        # Temporary dictionary to hold each key/value
+        temp_dict = {}
+        # Go through each item in the Row object and assign it with the correct key to the temp_dict
+        temp_dict['id_num'] = entry[0]
+        temp_dict['status'] = entry[1]
+        temp_dict['date_submitted'] = datetime.fromisoformat(entry[2]).strftime("%A, %B %d %X")
+        temp_dict['user'] = entry[3]
+        temp_dict['approver'] = entry[4]
+        if entry[5] is not None:
+            temp_dict['credits'] = json.loads(entry[5])
+        else:
+            temp_dict['credits'] = None
+        if entry[6] is not None:
+            temp_dict['debits'] = json.loads(entry[6])
+        else:
+            temp_dict['debits'] = None
+        temp_dict['attachment_name'] = entry[8]
+        temp_dict['description'] = entry[9]
+
+        # Append this new dictionary to the list of dictionaries
+        pending_entries2.append(temp_dict)
+
 
     # Get all rejected entries
     rejected_entries = db.execute(
         "SELECT * FROM journal WHERE status = ?", (-1,)
     ).fetchall()
+    # Convert each entry to a Python dictionary
+    rejected_entries2 = []
+    for entry in rejected_entries:
+        # Temporary dictionary to hold each key/value
+        temp_dict = {}
+        # Go through each item in the Row object and assign it with the correct key to the temp_dict
+        temp_dict['id_num'] = entry[0]
+        temp_dict['status'] = entry[1]
+        temp_dict['date_submitted'] = datetime.fromisoformat(entry[2]).strftime("%A, %B %d %X")
+        temp_dict['user'] = entry[3]
+        temp_dict['approver'] = entry[4]
+        if entry[5] is not None:
+            temp_dict['credits'] = json.loads(entry[5])
+        else:
+            temp_dict['credits'] = None
+        if entry[6] is not None:
+            temp_dict['debits'] = json.loads(entry[6])
+        else:
+            temp_dict['debits'] = None
+        temp_dict['attachment_name'] = entry[8]
+        temp_dict['description'] = entry[9]
+        temp_dict['reject_reason'] = entry[10]
 
-    return render_template('journaling/journal.html', approved_entries=approved_entries, pending_entries=pending_entries, rejected_entries=rejected_entries)
+        # Append this new dictionary to the list of dictionaries
+        rejected_entries2.append(temp_dict)
+
+    return render_template('journaling/journal.html', approved_entries=approved_entries2, pending_entries=pending_entries2, rejected_entries=rejected_entries2)
 
 @bp.route('/reject_entry')
 @login_required
