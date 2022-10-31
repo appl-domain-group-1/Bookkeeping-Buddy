@@ -47,17 +47,19 @@ def add_entry():
 
         # Get any attachments that the user uploaded
         if request.files['attachment'].filename:
-            attachment = request.files['attachment'].read()
+            attachment_data = request.files['attachment'].read()
+            attachment_name = request.files['attachment'].filename
         else:
-            attachment = None
+            attachment_data = None
+            attachment_name = None
 
         # Get entry's description
         description = request.form['description']
 
         db.execute(
-            "INSERT INTO journal (status, date_submitted, user, credits, debits, attachment, description) "
-            "VALUES (?, ? ,? ,? ,?, ?, ?)",
-            (0, datetime.now(), g.user['username'], entry_credits, entry_debits, attachment, description)
+            "INSERT INTO journal (status, date_submitted, user, credits, debits, attachment_data, attachment_name, "
+            "description) VALUES (?, ? ,? ,? ,?, ?, ?, ?)",
+            (0, datetime.now(), g.user['username'], entry_credits, entry_debits, attachment_data, attachment_name, description)
         )
 
         # Write the change
