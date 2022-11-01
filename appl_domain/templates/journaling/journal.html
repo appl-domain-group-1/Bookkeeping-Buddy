@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script>
+    function get_reject_reason(id) {
+        let reject_reason = prompt("Enter reason this entry should be rejected:");
+        if (reject_reason != null || reject_reason !== ""){
+            window.location.href='/journaling/reject_entry?entry_id=' + id + '&reject_reason=' + reject_reason;
+        }
+    }
+</script>
+
+    <h2 style="color: white">Approved Entries</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Entry ID</th>
+                <th>Date Submitted</th>
+                <th>Submitted By</th>
+                <th>Approved By</th>
+                <th>Description</th>
+                <th>Accounts Credited</th>
+                <th>Accounts Debited</th>
+                <th>Attachment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in approved_entries %}
+                <tr id="entry_{{ entry['id_num'] }}">
+                    <td>{{entry['id_num']}}</td>
+                    <td>{{entry['date_submitted']}}</td>
+                    <td>{{entry['user']}}</td>
+                    <td>{{entry['approver']}}</td>
+                    <td>{{entry['description']}}</td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Value</th>
+                                </tr>
+                                    {% for credit in entry['credits'] %}
+                                    <tr>
+                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a></td>
+                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </thead>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Value</th>
+                                </tr>
+                                    {% for debit in entry['debits'] %}
+                                    <tr>
+                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a></td>
+                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </thead>
+                        </table>
+                    </td>
+                    <td><a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2 style="color: white">Pending Entries</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Entry ID</th>
+                <th>Date Submitted</th>
+                <th>Submitted By</th>
+                <th>Description</th>
+                <th>Accounts Credited</th>
+                <th>Accounts Debited</th>
+                <th>Attachment</th>
+                {% if g.user['role'] == 1 or g.user['role'] == 2 %}
+                    <th>Entry Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in pending_entries %}
+                <tr id="entry_{{ entry['id_num'] }}">
+                    <td>{{entry['id_num']}}</td>
+                    <td>{{entry['date_submitted']}}</td>
+                    <td>{{entry['user']}}</td>
+                    <td>{{entry['description']}}</td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Value</th>
+                                </tr>
+                                    {% for credit in entry['credits'] %}
+                                    <tr>
+                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a></td>
+                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </thead>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Value</th>
+                                </tr>
+                                    {% for debit in entry['debits'] %}
+                                    <tr>
+                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a></td>
+                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </thead>
+                        </table>
+                    </td>
+                    <td><a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a></td>
+                    {% if g.user['role'] == 1 or g.user['role'] == 2 %}
+                        <td>
+                            <button onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'">Approve</button>
+                            <button onclick="get_reject_reason({{entry['id_num']}})">Reject</button>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2 style="color: white">Rejected Entries</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Entry ID</th>
+                <th>Date Submitted</th>
+                <th>Submitted By</th>
+                <th>Rejected By</th>
+                <th>Rejection Reason</th>
+                <th>Description</th>
+                <th>Accounts Credited</th>
+                <th>Accounts Debited</th>
+                <th>Attachment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in rejected_entries %}
+                <tr id="entry_{{ entry['id_num'] }}">
+                    <td>{{entry['id_num']}}</td>
+                    <td>{{entry['date_submitted']}}</td>
+                    <td>{{entry['user']}}</td>
+                    <td>{{entry['approver']}}</td>
+                    <td>{{entry['reject_reason']}}</td>
+                    <td>{{entry['description']}}</td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Value</th>
+                                </tr>
+                                    {% for credit in entry['credits'] %}
+                                    <tr>
+                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a></td>
+                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </thead>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Value</th>
+                                </tr>
+                                    {% for debit in entry['debits'] %}
+                                    <tr>
+                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a></td>
+                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </thead>
+                        </table>
+                    </td>
+                    <td><a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+<button data-toggle="tooltip" data-placement="top" title="Create a new journal entry" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('journaling.add_entry')}}'">Create New Entry</button>
+
+{% endblock %}

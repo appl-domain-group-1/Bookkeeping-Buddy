@@ -52,4 +52,7 @@ def create_app(test_config=None):
     import appl_domain.fin_accts as fin_accts
     app.register_blueprint(fin_accts.bp)
 
+    import appl_domain.journaling as journaling
+    app.register_blueprint(journaling.bp)
+
     return app
