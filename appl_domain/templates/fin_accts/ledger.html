@@ -2,12 +2,67 @@
 
 
 {% block content %}
+<style>
+
+</style>
+<script>
+    var minDate, maxDate;
+
+// Custom filtering function which will search data in column four between two values
+$.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+        var min = minDate.val();
+        var max = maxDate.val();
+        var date = new Date( data[0] );
+
+        if (
+            ( min === null && max === null ) ||
+            ( min === null && date <= max ) ||
+            ( min <= date   && max === null ) ||
+            ( min <= date   && date <= max )
+        ) {
+            return true;
+        }
+        return false;
+    }
+);
+
+$(document).ready(function() {
+    // Create date inputs
+    minDate = new DateTime($('#min'), {
+        format: 'MMMM Do YYYY'
+    });
+    maxDate = new DateTime($('#max'), {
+        format: 'MMMM Do YYYY'
+    });
+
+    // DataTables initialisation
+    var table = $('#myTable').DataTable();
+
+    // Refilter the table
+    $('#min, #max').on('change', function () {
+        table.draw();
+    });
+});
+</script>
 <header style="color: white; font-size: xx-large; font-weight: bold;">
 {% block title %}
     Ledger for account {{account['acct_num'] }}
 {% endblock %}</header>
 
-        <table class="table">
+<table border="0" cellspacing="5" cellpadding="5">
+        <tbody><tr>
+            <td style="color: white">Start date:</td>
+            <td><input type="text" id="min" name="min"></td>
+        </tr>
+        <tr>
+            <td style="color: white">End date:</td>
+            <td><input type="text" id="max" name="max"></td>
+        </tr>
+    </tbody></table>
+<div  class="table-responsive">
+    <table class = "table table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+
             <thead>
                 <th>Date</th>
                 <th>Description</th>
@@ -39,7 +94,7 @@
             </tr>
             {% endfor %}
         </table>
-
+</div>
     <div style="color:white">
     <button type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.view_logs', account_num=account['acct_num'])}}'">View Account Logs</button>
     </div>
