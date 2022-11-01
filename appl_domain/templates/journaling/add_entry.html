@@ -4,7 +4,7 @@
 
     <form class="box" method="post" enctype="multipart/form-data">
         <table>
-            <thead>
+            <thead style="color: #185DFF; background-color: #CFCFCF">
                 <th>Account to credit</th>
                 <th>Amount</th>
             </thead>
@@ -17,7 +17,7 @@
                                 {% endfor %}
                             </select>
                         </td>
-                        <td>
+                        <td style="padding-bottom: 1px">
                             <input name="credit_{{ number }}_value" type="text" datatype="currency" placeholder="$0" id="credit_{{ number }}_value">
                         </td>
                     </tr>
@@ -25,7 +25,7 @@
         </table>
 
                 <table>
-            <thead>
+            <thead style="color: #185DFF; background-color: #CFCFCF">
                 <th>Account to debit</th>
                 <th>Amount</th>
             </thead>
@@ -38,19 +38,19 @@
                                 {% endfor %}
                             </select>
                         </td>
-                        <td>
+                        <td style="padding-bottom: 1px">
                             <input name="debit_{{ number }}_value" type="text" datatype="currency" placeholder="$0" id="debit_{{ number }}_value">
                         </td>
                     </tr>
                 {% endfor %}
         </table>
-        <label for="description">Entry description</label>
-        <textarea name="description" id="description"></textarea>
+        <label for="description" style="color: #185DFF">Entry description</label>
+        <textarea style="border-color: #185DFF; border-radius: 4px" name="description" id="description"></textarea>
         <br>
-        <label for="attachment">Upload supporting documentation</label>
-        <input class="file" type="file" name="attachment" id="attachment">
+        <label for="attachment" style="color: #185DFF">Upload supporting documentation</label>
+        <input class="file" type="file" name="attachment" id="attachment"style="color: white">
         <br>
-        <input class="submit" type="submit" value="Add entry">
+        <input class="submit" type="submit" value="Add entry" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">
     </form>
 
 {% endblock %}

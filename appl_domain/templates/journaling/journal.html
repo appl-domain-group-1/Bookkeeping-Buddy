@@ -129,8 +129,8 @@
                     <td><a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a></td>
                     {% if g.user['role'] == 1 or g.user['role'] == 2 %}
                         <td>
-                            <button onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'">Approve</button>
-                            <button onclick="get_reject_reason({{entry['id_num']}})">Reject</button>
+                            <button onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Approve</button>
+                            <button onclick="get_reject_reason({{entry['id_num']}})" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Reject</button>
                         </td>
                     {% endif %}
                 </tr>
@@ -200,6 +200,5 @@
         </tbody>
     </table>
 
-<button data-toggle="tooltip" data-placement="top" title="Create a new journal entry" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('journaling.add_entry')}}'">Create New Entry</button>
-
+<button data-toggle="tooltip" data-placement="top" title="Create a new journal entry" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px" onclick="window.location.href='{{ url_for('journaling.add_entry')}}'">Create New Entry</button>
 {% endblock %}
