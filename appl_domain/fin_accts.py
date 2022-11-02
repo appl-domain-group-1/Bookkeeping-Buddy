@@ -447,6 +447,6 @@ def email():
     if request.method == 'POST':
         user_email = request.form['user_email']
         subject = request.form['subject']
-        message = request.form['message']
+        message = f"New message from {g.user['first_name']} {g.user['last_name']}:<br><br><br>{request.form['message']}"
         send_email(user_email, subject, message)
     return render_template('fin_accts/email.html', email_info=email_info)
