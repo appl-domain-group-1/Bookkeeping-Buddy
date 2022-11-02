@@ -48,14 +48,28 @@
                     </tr>
                 {% endfor %}
         </table>
-        <label for="description" style="color: #185DFF">Entry description</label>
-        <textarea  class="form-control" name="description" id="description" rows = "2" style="width: 100%; border-color: #185DFF; border-radius: 4px"></textarea>
+        <table class = "table table-sm">
+            <thead style="color: #185DFF; background-color: #CFCFCF">
+                <th><label for="description" style="color: #185DFF">Entry description</label></th>
+            </thead>
+            <tr>
+                <td><textarea  class="form-control" name="description" id="description" rows = "2" style="width: 100%; border-color: #185DFF; border-radius: 4px"></textarea></td>
+            </tr>
+        </table>
+
+        <table class = "table table-sm">
+            <thead style="color: #185DFF; background-color: #CFCFCF">
+                <th><label for="attachment" style="color: #185DFF">Upload supporting documentation</label></th>
+            </thead>
+            <tr>
+                <td><input style="color: black" class="file" type="file" name="attachment" id="attachment"></td>
+            </tr>
+        </table>
         <br>
-        <label for="attachment" style="color: #185DFF">Upload supporting documentation</label><br>
-        <input style="color: white" class="file" type="file" name="attachment" id="attachment">
+        <input style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px" type="reset" value="Reset">
         <br>
         <input style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px" class="submit" type="submit" value="Add entry">
-        <input type="reset" value="Reset">
+
     </form>
 
 {% endblock %}
