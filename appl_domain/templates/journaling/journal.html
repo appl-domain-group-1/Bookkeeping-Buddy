@@ -60,14 +60,6 @@ $(document).ready(function() {
             window.location.href='/journaling/reject_entry?entry_id=' + id + '&reject_reason=' + reject_reason;
         }
     }
-    //$(document).ready(function(){
-  //$("#myInput").on("keyup", function() {
-   // var value = $(this).val().toLowerCase();
-   // $("#myTable tr").filter(function() {
-    //  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    //});
- // });
-//});
 </script>
 <div >
         <select style=" font-size: x-large; font-weight: bold; height: 50px; color: white; background: transparent">
@@ -105,7 +97,7 @@ $(document).ready(function() {
                 <th>Attachment</th>
             </tr>
         </thead>
-        <tbody >
+        <tbody>
             {% for entry in approved_entries %}
                 <tr id="entry_{{ entry['id_num'] }}">
                     <td>{{entry['id_num']}}</td>
@@ -222,8 +214,8 @@ $(document).ready(function() {
                     </td>
                     {% if g.user['role'] == 1 or g.user['role'] == 2 %}
                         <td>
-                            <button onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'">Approve</button>
-                            <button onclick="get_reject_reason({{entry['id_num']}})">Reject</button>
+                            <button onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Approve</button>
+                            <button onclick="get_reject_reason({{entry['id_num']}})" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Reject</button>
                         </td>
                     {% endif %}
                 </tr>

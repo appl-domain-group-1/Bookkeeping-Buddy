@@ -48,9 +48,10 @@ $(document).ready(function() {
 <header style="color: white; font-size: xx-large; font-weight: bold;">
 {% block title %}
     Ledger for account {{account['acct_num'] }}
+
 {% endblock %}</header>
 
-<table border="0" cellspacing="5" cellpadding="5">
+<table border="0" cellspacing="5" cellpadding="5" id="example1" style="color: ghostwhite">
         <tbody><tr>
             <td style="color: white">Start date:</td>
             <td><input type="text" id="min" name="min"></td>

@@ -8,7 +8,7 @@
 </style>
     <form class="box" method="post" enctype="multipart/form-data">
         <table class = "table table-sm">
-            <thead>
+            <thead style="color: #185DFF; background-color: #CFCFCF">
                 <th>Account to credit</th>
                 <th>Amount</th>
             </thead>
@@ -21,7 +21,7 @@
                                 {% endfor %}
                             </select>
                         </td>
-                        <td>
+                        <td  style="padding-bottom: 1px">
                             <input style ="border: none" name="credit_{{ number }}_value" type="text" datatype="currency" placeholder="$0" id="credit_{{ number }}_value">
                         </td>
                     </tr>
@@ -29,7 +29,7 @@
         </table>
 
                 <table class = "table table-sm">
-            <thead>
+            <thead style="color: #185DFF; background-color: #CFCFCF">
                 <th>Account to debit</th>
                 <th>Amount</th>
             </thead>
@@ -38,24 +38,23 @@
                         <td>
                             <select name="debit_{{ number }}_account">
                                 {% for account in accounts %}
-                                    <option  value="{{ account['acct_num'] }}">{{ account['acct_num'] }} - {{ account['acct_name'] }}</option>
+                                    <option value="{{ account['acct_num'] }}">{{ account['acct_num'] }} - {{ account['acct_name'] }}</option>
                                 {% endfor %}
                             </select>
                         </td>
-                        <td>
-                            <input style ="border: none" name="debit_{{ number }}_value" type="text" datatype="currency" placeholder="$0" id="debit_{{ number }}_value">
+                        <td style="padding-bottom: 1px">
+                            <input  style ="border: none" name="debit_{{ number }}_value" type="text" datatype="currency" placeholder="$0" id="debit_{{ number }}_value">
                         </td>
                     </tr>
                 {% endfor %}
         </table>
-
-        <label for="description">Entry description</label>
-        <textarea class="form-control" name="description" id="description" rows = "2" style="width: 100%"></textarea>
+        <label for="description" style="color: #185DFF">Entry description</label>
+        <textarea  class="form-control" name="description" id="description" rows = "2" style="width: 100%; border-color: #185DFF; border-radius: 4px"></textarea>
         <br>
-        <label for="attachment">Upload supporting documentation</label><br>
+        <label for="attachment" style="color: #185DFF">Upload supporting documentation</label><br>
         <input style="color: white" class="file" type="file" name="attachment" id="attachment">
         <br>
-         <input  style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px" class="submit" type="submit" value="Add entry">
+         <input style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px" class="submit" type="submit" value="Add entry">
 
     </form>
 
