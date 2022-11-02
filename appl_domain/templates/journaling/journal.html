@@ -20,8 +20,8 @@
                 <th>Submitted By</th>
                 <th>Approved By</th>
                 <th>Description</th>
-                <th>Accounts Credited</th>
                 <th>Accounts Debited</th>
+                <th>Accounts Credited</th>
                 <th>Attachment</th>
             </tr>
         </thead>
@@ -40,10 +40,10 @@
                                     <th>Account</th>
                                     <th>Value</th>
                                 </tr>
-                                    {% for credit in entry['credits'] %}
+                                    {% for debit in entry['debits'] %}
                                     <tr>
-                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a></td>
-                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
+                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a></td>
+                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
                                     </tr>
                                 {% endfor %}
                             </thead>
@@ -56,10 +56,10 @@
                                     <th>Account</th>
                                     <th>Value</th>
                                 </tr>
-                                    {% for debit in entry['debits'] %}
+                                    {% for credit in entry['credits'] %}
                                     <tr>
-                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a></td>
-                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
+                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a></td>
+                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
                                     </tr>
                                 {% endfor %}
                             </thead>
@@ -79,8 +79,8 @@
                 <th>Date Submitted</th>
                 <th>Submitted By</th>
                 <th>Description</th>
-                <th>Accounts Credited</th>
                 <th>Accounts Debited</th>
+                <th>Accounts Credited</th>
                 <th>Attachment</th>
                 {% if g.user['role'] == 1 or g.user['role'] == 2 %}
                     <th>Entry Actions</th>
@@ -101,10 +101,10 @@
                                     <th>Account</th>
                                     <th>Value</th>
                                 </tr>
-                                    {% for credit in entry['credits'] %}
+                                    {% for debit in entry['debits'] %}
                                     <tr>
-                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a></td>
-                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
+                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a></td>
+                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
                                     </tr>
                                 {% endfor %}
                             </thead>
@@ -117,10 +117,10 @@
                                     <th>Account</th>
                                     <th>Value</th>
                                 </tr>
-                                    {% for debit in entry['debits'] %}
+                                    {% for credit in entry['credits'] %}
                                     <tr>
-                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a></td>
-                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
+                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a></td>
+                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
                                     </tr>
                                 {% endfor %}
                             </thead>
@@ -148,8 +148,8 @@
                 <th>Rejected By</th>
                 <th>Rejection Reason</th>
                 <th>Description</th>
-                <th>Accounts Credited</th>
                 <th>Accounts Debited</th>
+                <th>Accounts Credited</th>
                 <th>Attachment</th>
             </tr>
         </thead>
@@ -169,10 +169,10 @@
                                     <th>Account</th>
                                     <th>Value</th>
                                 </tr>
-                                    {% for credit in entry['credits'] %}
+                                    {% for debit in entry['debits'] %}
                                     <tr>
-                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a></td>
-                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
+                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a></td>
+                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
                                     </tr>
                                 {% endfor %}
                             </thead>
@@ -185,10 +185,10 @@
                                     <th>Account</th>
                                     <th>Value</th>
                                 </tr>
-                                    {% for debit in entry['debits'] %}
+                                    {% for credit in entry['credits'] %}
                                     <tr>
-                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a></td>
-                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
+                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a></td>
+                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
                                     </tr>
                                 {% endfor %}
                             </thead>
