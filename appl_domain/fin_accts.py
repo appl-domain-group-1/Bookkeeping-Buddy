@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 from appl_domain.db import get_db
+from appl_domain.email_tasks import send_email
 from datetime import date, datetime, timedelta
 from appl_domain.auth import login_required
 import json
@@ -416,3 +417,16 @@ def view_logs(account_num=None):
                            categories=cat_dict,
                            subcategories=subcat_dict,
                            statements=statements_dict)
+
+@bp.route('/email', methods=('GET', 'POST'))
+@login_required
+def email():
+    """
+    Allow an administrator to email other users
+    """
+    if request.method == 'POST':
+        user_email = request.form['user_email']
+        subject = request.form['subject']
+        message = request.form['message']
+        send_email(user_email, subject, message)
+    return render_template('fin_accts/email.html')

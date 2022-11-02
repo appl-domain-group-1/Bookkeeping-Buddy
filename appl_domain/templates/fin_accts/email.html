@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+<link href="form.css" rel="stylesheet" type = text/css>
+
+{% block content %}
+<style>
+  .acct-email{
+   position: relative;
+    max-width: 900px;
+    width: 100%;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;
+  }
+  .acct-email form{
+    position: relative;
+    margin-top:16px;
+    min-height: 400px;
+    background: black;
+}
+
+  .acct-email h1{
+    padding:0; text-align:center; color: white; font-size: x-large;
+  }
+
+  form label{
+    font-weight: bold;
+    color: #185DFF;
+  }
+
+  form .submit{
+        background-color: #185DFF;
+        color: white;
+        padding: 10px 20px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+        font-size: 14px;
+  }
+</style>
+
+<div class = acct-email>
+  <h1>{% block title %}Email Users{% endblock %}</h1>
+    <br>
+    <form method="post">
+    <div class="form-group">
+    <label for="user_email">User Email</label>
+    <input type="email" name="user_email" id="user_email" placeholder="Enter Users E-mail" class="form-control">
+    </div>
+    <div class="form-group">
+    <label for="subject">Subject</label>
+    <input name="subject" id="subject" placeholder="Subject Title" class="form-control">
+    </div>
+    <div class="form-group">
+    <label for="message">Message</label>
+    <textarea name="message" placeholder="Write message here..." id="message" class="form-control" rows="4" cols="25"></textarea>
+    </div>
+    <input class = "submit" type="submit" value="Send E-mail">
+    </form>
+</div>
+{% endblock %}

@@ -122,6 +122,8 @@ $('tr.number').each( function () {
 {% if g.user['role'] == 2 %}
     <button data-toggle="tooltip" data-placement="top" title="Create a new financial account" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.create_acct')}}'">Create New Account</button>
     <br>
+    <button data-toggle="tooltip" data-placement="top" title="Email Users" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.email')}}'">Email Users</button>
+    <br>
 {% endif %}
 </div>
 <script>
