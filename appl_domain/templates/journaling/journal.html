@@ -145,7 +145,13 @@ $(document).ready(function() {
                             </thead>
                         </table>
                     </td>
-                    <td><a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a></td>
+                    <td>
+                        {% if entry['attachment_name'] != None %}
+                            <a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a>
+                        {% else %}
+                            {{entry['attachment_name']}}
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -207,7 +213,13 @@ $(document).ready(function() {
                             </thead>
                         </table>
                     </td>
-                    <td><a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a></td>
+                    <td>
+                        {% if entry['attachment_name'] != None %}
+                            <a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a>
+                        {% else %}
+                            {{entry['attachment_name']}}
+                        {% endif %}
+                    </td>
                     {% if g.user['role'] == 1 or g.user['role'] == 2 %}
                         <td>
                             <button onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'">Approve</button>
@@ -276,7 +288,13 @@ $(document).ready(function() {
                             </thead>
                         </table>
                     </td>
-                    <td><a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a></td>
+                    <td>
+                        {% if entry['attachment_name'] != None %}
+                            <a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a>
+                        {% else %}
+                            {{entry['attachment_name']}}
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
