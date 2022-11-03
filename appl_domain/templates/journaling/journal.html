@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<link rel="stylesheet" type="text/css" href="extensions/filter-control/bootstrap-table-filter-control.css">
-<script src="extensions/filter-control/bootstrap-table-filter-control.js"></script>
 <script>
     var minDate, maxDate;
 
@@ -61,18 +59,17 @@ $(document).ready(function() {
     <a class="dropdown-item" href="#myTable">Approved Entries</a>
     <a class="dropdown-item" href="#myTable1">Pending Entries</a>
       <a class="dropdown-item" href="#myTable2">Rejected Entries</a>
-
   </div>
-
 <br>
-<table border="0" cellspacing="5" cellpadding="5">
+<br>
+<table>
         <tbody><tr>
             <td style="color: white">Start date:</td>
-            <td><input type="text" id="min" name="min"></td>
+            <td><input type="text" id="min" name="min" style="width: 250px"></td>
         </tr>
         <tr>
             <td style="color: white">End date:</td>
-            <td><input type="text" id="max" name="max"></td>
+            <td><input type="text" id="max" name="max" style="width: 250px"></td>
         </tr>
     </tbody></table>
    <h2 style="color: white" class = "approved entry">Approved Entries</h2>
@@ -80,10 +77,10 @@ $(document).ready(function() {
     <table class = "table table-sm approved entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
         <thead>
             <tr>
-                <th data-filter-control="input">Entry ID</th>
-                <th data-filter-control="select">Date Submitted</th>
-                <th data-filter-control="input">Submitted By</th>
-                <th data-filter-control="input">Approved By</th>
+                <th>Entry ID</th>
+                <th>Date Submitted</th>
+                <th>Submitted By</th>
+                <th>Approved By</th>
                 <th>Description</th>
                 <th>Accounts Debited</th>
                 <th>Accounts Credited</th>
@@ -207,8 +204,8 @@ $(document).ready(function() {
                     </td>
                     {% if g.user['role'] == 1 or g.user['role'] == 2 %}
                         <td>
-                            <button onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Approve</button>
-                            <button onclick="get_reject_reason({{entry['id_num']}})" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Reject</button>
+                            <button data-toggle="tooltip" data-placement="top" title="Approve journal entry" onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Approve</button>
+                            <button data-toggle="tooltip" data-placement="top" title="Reject journal entry" onclick="get_reject_reason({{entry['id_num']}})" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Reject</button>
                         </td>
                     {% endif %}
                 </tr>
