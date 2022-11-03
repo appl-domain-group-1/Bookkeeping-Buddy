@@ -7,7 +7,7 @@
     var minDate, maxDate;
 
 // Custom filtering function which will search data in column four between two values
-/*$.fn.dataTable.ext.search.push(
+$.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
         var min = minDate.val();
         var max = maxDate.val();
@@ -28,36 +28,25 @@
 $(document).ready(function() {
     // Create date inputs
     minDate = new DateTime($('#min'), {
-        format: 'MMMM Do YYYY'
+        format: 'dddd, MMMM DD HH:mm:ss'
     });
     maxDate = new DateTime($('#max'), {
-        format: 'MMMM Do YYYY'
+        format: 'dddd, MMMM DD HH:mm:ss'
     });
 
     // DataTables initialisation
     var table = $('#myTable').DataTable();
-    var table = $('#myTable1').DataTable();
-    var table = $('#myTable2').DataTable();
+    var table1 = $('#myTable1').DataTable();
+    var table2 = $('#myTable2').DataTable();
 
     // Refilter the table
     $('#min, #max').on('change', function () {
         table.draw();
+        table1.draw(false);
+        table2.draw(false);
     });
-});*/
-
-    $(document).ready(function(){
-    $("select").change(function(){
-        $(this).find("option:selected").each(function(){
-            var optionValue = $(this).attr("value");
-            if(optionValue){
-                $(".entry").not("." + optionValue).hide();
-                $("." + optionValue).show();
-            } else{
-                $(".entry").hide();
-            }
-        });
-    }).change();
 });
+
     function get_reject_reason(id) {
         let reject_reason = prompt("Enter reason this entry should be rejected:");
         if (reject_reason != null || reject_reason !== ""){
@@ -65,22 +54,17 @@ $(document).ready(function() {
         }
     }
 </script>
-<script>
-  $(function() {
-    $('#myTable').bootstrapTable()
-  })
-</script>
-<div >
-        <select style=" font-size: x-large; font-weight: bold; height: 50px; color: white; background: transparent">
-            <option style="color: black; font-size: large" value = "entry" selected>Choose a Journal Entry</option>
-            <option style="color: black; font-size: large" value="approved">Approved Entries</option>
-            <option style="color: black; font-size: large" value="pending">Pending Entries</option>
-            <option style="color: black; font-size: large" value="rejected">Rejected Entries</option>
-        </select>
-    </div>
+<button class="btn btn-secondary dropdown-toggle bg-transparent" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white; font-size: xx-large; font-weight: bold">
+       Choose a Journal Entry
+  </button>
+<div id = "dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#myTable">Approved Entries</a>
+    <a class="dropdown-item" href="#myTable1">Pending Entries</a>
+      <a class="dropdown-item" href="#myTable2">Rejected Entries</a>
+
+  </div>
 
 <br>
-<!--<input style="width: 100%" class="form-control" id="myInput" type="text" placeholder="Search by account number or account name">-->
 <table border="0" cellspacing="5" cellpadding="5">
         <tbody><tr>
             <td style="color: white">Start date:</td>
@@ -93,8 +77,7 @@ $(document).ready(function() {
     </tbody></table>
    <h2 style="color: white" class = "approved entry">Approved Entries</h2>
 <div  class="table-responsive">
-    <table data-filter-control="true"
-  data-show-search-clear-button="true" class = "table table-sm approved entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+    <table class = "table table-sm approved entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
         <thead>
             <tr>
                 <th data-filter-control="input">Entry ID</th>
