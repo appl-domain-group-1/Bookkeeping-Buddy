@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<link rel="stylesheet" type="text/css" href="extensions/filter-control/bootstrap-table-filter-control.css">
+<script src="extensions/filter-control/bootstrap-table-filter-control.js"></script>
 <script>
     var minDate, maxDate;
 
 // Custom filtering function which will search data in column four between two values
-$.fn.dataTable.ext.search.push(
+/*$.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
         var min = minDate.val();
         var max = maxDate.val();
@@ -35,12 +36,15 @@ $(document).ready(function() {
 
     // DataTables initialisation
     var table = $('#myTable').DataTable();
+    var table = $('#myTable1').DataTable();
+    var table = $('#myTable2').DataTable();
 
     // Refilter the table
     $('#min, #max').on('change', function () {
         table.draw();
     });
-});
+});*/
+
     $(document).ready(function(){
     $("select").change(function(){
         $(this).find("option:selected").each(function(){
@@ -61,9 +65,14 @@ $(document).ready(function() {
         }
     }
 </script>
+<script>
+  $(function() {
+    $('#myTable').bootstrapTable()
+  })
+</script>
 <div >
         <select style=" font-size: x-large; font-weight: bold; height: 50px; color: white; background: transparent">
-            <option style="color: black; font-size: large" value = "entry">Choose a Journal Entry</option>
+            <option style="color: black; font-size: large" value = "entry" selected>Choose a Journal Entry</option>
             <option style="color: black; font-size: large" value="approved">Approved Entries</option>
             <option style="color: black; font-size: large" value="pending">Pending Entries</option>
             <option style="color: black; font-size: large" value="rejected">Rejected Entries</option>
@@ -84,13 +93,14 @@ $(document).ready(function() {
     </tbody></table>
    <h2 style="color: white" class = "approved entry">Approved Entries</h2>
 <div  class="table-responsive">
-    <table class = "table table-sm approved entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+    <table data-filter-control="true"
+  data-show-search-clear-button="true" class = "table table-sm approved entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
         <thead>
             <tr>
-                <th>Entry ID</th>
-                <th>Date Submitted</th>
-                <th>Submitted By</th>
-                <th>Approved By</th>
+                <th data-filter-control="input">Entry ID</th>
+                <th data-filter-control="select">Date Submitted</th>
+                <th data-filter-control="input">Submitted By</th>
+                <th data-filter-control="input">Approved By</th>
                 <th>Description</th>
                 <th>Accounts Debited</th>
                 <th>Accounts Credited</th>
@@ -151,7 +161,7 @@ $(document).ready(function() {
 </div>
     <h2  class = "pending entry" style="color: white">Pending Entries</h2>
 <div  class="table-responsive" >
-    <table class = "table table-sm  pending entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+    <table class = "table table-sm  pending entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable1">
         <thead>
             <tr>
                 <th>Entry ID</th>
@@ -225,7 +235,7 @@ $(document).ready(function() {
 </div>
     <h2  class = "rejected entry" style="color: white">Rejected Entries</h2>
 <div  class="table-responsive">
-    <table class = "table table-sm rejected entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+    <table class = "table table-sm rejected entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable2">
         <thead>
             <tr>
                 <th>Entry ID</th>
