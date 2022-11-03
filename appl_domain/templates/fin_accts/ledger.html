@@ -30,10 +30,10 @@ $.fn.dataTable.ext.search.push(
 $(document).ready(function() {
     // Create date inputs
     minDate = new DateTime($('#min'), {
-        format: 'MMMM Do YYYY'
+        format: 'dddd, MMMM DD HH:mm:ss'
     });
     maxDate = new DateTime($('#max'), {
-        format: 'MMMM Do YYYY'
+        format: 'dddd, MMMM DD HH:mm:ss'
     });
 
     // DataTables initialisation
@@ -51,14 +51,14 @@ $(document).ready(function() {
 
 {% endblock %}</header>
 
-<table border="0" cellspacing="5" cellpadding="5" id="example1" style="color: ghostwhite">
+<table>
         <tbody><tr>
             <td style="color: white">Start date:</td>
-            <td><input type="text" id="min" name="min"></td>
+            <td><input type="text" id="min" name="min" style="width: 250px"></td>
         </tr>
         <tr>
             <td style="color: white">End date:</td>
-            <td><input type="text" id="max" name="max"></td>
+            <td><input type="text" id="max" name="max" style="width: 250px"></td>
         </tr>
     </tbody></table>
 <div  class="table-responsive">

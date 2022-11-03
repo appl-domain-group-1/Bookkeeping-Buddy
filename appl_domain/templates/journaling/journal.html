@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <script>
     var minDate, maxDate;
 
@@ -27,33 +26,25 @@ $.fn.dataTable.ext.search.push(
 $(document).ready(function() {
     // Create date inputs
     minDate = new DateTime($('#min'), {
-        format: 'MMMM Do YYYY'
+        format: 'dddd, MMMM DD HH:mm:ss'
     });
     maxDate = new DateTime($('#max'), {
-        format: 'MMMM Do YYYY'
+        format: 'dddd, MMMM DD HH:mm:ss'
     });
 
     // DataTables initialisation
     var table = $('#myTable').DataTable();
+    var table1 = $('#myTable1').DataTable();
+    var table2 = $('#myTable2').DataTable();
 
     // Refilter the table
     $('#min, #max').on('change', function () {
         table.draw();
+        table1.draw(false);
+        table2.draw(false);
     });
 });
-    $(document).ready(function(){
-    $("select").change(function(){
-        $(this).find("option:selected").each(function(){
-            var optionValue = $(this).attr("value");
-            if(optionValue){
-                $(".entry").not("." + optionValue).hide();
-                $("." + optionValue).show();
-            } else{
-                $(".entry").hide();
-            }
-        });
-    }).change();
-});
+
     function get_reject_reason(id) {
         let reject_reason = prompt("Enter reason this entry should be rejected:");
         if (reject_reason != null || reject_reason !== ""){
@@ -61,25 +52,24 @@ $(document).ready(function() {
         }
     }
 </script>
-<div >
-        <select style=" font-size: x-large; font-weight: bold; height: 50px; color: white; background: transparent">
-            <option style="color: black; font-size: large" value = "entry">Choose a Journal Entry</option>
-            <option style="color: black; font-size: large" value="approved">Approved Entries</option>
-            <option style="color: black; font-size: large" value="pending">Pending Entries</option>
-            <option style="color: black; font-size: large" value="rejected">Rejected Entries</option>
-        </select>
-    </div>
-
+<button class="btn btn-secondary dropdown-toggle bg-transparent" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white; font-size: xx-large; font-weight: bold">
+       Choose a Journal Entry
+  </button>
+<div id = "dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#myTable">Approved Entries</a>
+    <a class="dropdown-item" href="#myTable1">Pending Entries</a>
+      <a class="dropdown-item" href="#myTable2">Rejected Entries</a>
+  </div>
 <br>
-<!--<input style="width: 100%" class="form-control" id="myInput" type="text" placeholder="Search by account number or account name">-->
-<table border="0" cellspacing="5" cellpadding="5">
+<br>
+<table>
         <tbody><tr>
             <td style="color: white">Start date:</td>
-            <td><input type="text" id="min" name="min"></td>
+            <td><input type="text" id="min" name="min" style="width: 250px"></td>
         </tr>
         <tr>
             <td style="color: white">End date:</td>
-            <td><input type="text" id="max" name="max"></td>
+            <td><input type="text" id="max" name="max" style="width: 250px"></td>
         </tr>
     </tbody></table>
    <h2 style="color: white" class = "approved entry">Approved Entries</h2>
@@ -151,7 +141,7 @@ $(document).ready(function() {
 </div>
     <h2  class = "pending entry" style="color: white">Pending Entries</h2>
 <div  class="table-responsive" >
-    <table class = "table table-sm  pending entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+    <table class = "table table-sm  pending entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable1">
         <thead>
             <tr>
                 <th>Entry ID</th>
@@ -214,8 +204,8 @@ $(document).ready(function() {
                     </td>
                     {% if g.user['role'] == 1 or g.user['role'] == 2 %}
                         <td>
-                            <button onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Approve</button>
-                            <button onclick="get_reject_reason({{entry['id_num']}})" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Reject</button>
+                            <button data-toggle="tooltip" data-placement="top" title="Approve journal entry" onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Approve</button>
+                            <button data-toggle="tooltip" data-placement="top" title="Reject journal entry" onclick="get_reject_reason({{entry['id_num']}})" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Reject</button>
                         </td>
                     {% endif %}
                 </tr>
@@ -225,7 +215,7 @@ $(document).ready(function() {
 </div>
     <h2  class = "rejected entry" style="color: white">Rejected Entries</h2>
 <div  class="table-responsive">
-    <table class = "table table-sm rejected entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+    <table class = "table table-sm rejected entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable2">
         <thead>
             <tr>
                 <th>Entry ID</th>
