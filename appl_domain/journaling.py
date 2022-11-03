@@ -85,7 +85,7 @@ def journal():
         # Go through each item in the Row object and assign it with the correct key to the temp_dict
         temp_dict['id_num'] = entry[0]
         temp_dict['status'] = entry[1]
-        temp_dict['date_submitted'] = datetime.fromisoformat(entry[2]).strftime("%A, %B %d %X")
+        temp_dict['date_submitted'] = entry[2]
         temp_dict['user'] = entry[3]
         temp_dict['approver'] = entry[4]
         if entry[5] is not None:
@@ -115,7 +115,7 @@ def journal():
         # Go through each item in the Row object and assign it with the correct key to the temp_dict
         temp_dict['id_num'] = entry[0]
         temp_dict['status'] = entry[1]
-        temp_dict['date_submitted'] = datetime.fromisoformat(entry[2]).strftime("%A, %B %d %X")
+        temp_dict['date_submitted'] = entry[2]
         temp_dict['user'] = entry[3]
         temp_dict['approver'] = entry[4]
         if entry[5] is not None:
@@ -145,7 +145,7 @@ def journal():
         # Go through each item in the Row object and assign it with the correct key to the temp_dict
         temp_dict['id_num'] = entry[0]
         temp_dict['status'] = entry[1]
-        temp_dict['date_submitted'] = datetime.fromisoformat(entry[2]).strftime("%A, %B %d %X")
+        temp_dict['date_submitted'] = entry[2]
         temp_dict['user'] = entry[3]
         temp_dict['approver'] = entry[4]
         if entry[5] is not None:
