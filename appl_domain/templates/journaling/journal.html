@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    .dataTables_filter, .dataTables_info, .dataTables_length, .dataTables_paginate { display: none; }
+</style>
 <script>
+    $(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#table2 tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
     var minDate, maxDate;
 
 // Custom filtering function which will search data in column four between two values
@@ -72,6 +83,9 @@ $(document).ready(function() {
             <td><input type="text" id="max" name="max" style="width: 250px"></td>
         </tr>
     </tbody></table>
+<br>
+<input class="form-control" id="myInput" type="text" placeholder="Search by account number or account name">
+<br>
    <h2 style="color: white" class = "approved entry">Approved Entries</h2>
 <div  class="table-responsive">
     <table class = "table table-sm approved entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
@@ -87,7 +101,7 @@ $(document).ready(function() {
                 <th>Attachment</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id ="table2">
             {% for entry in approved_entries %}
                 <tr id="entry_{{ entry['id_num'] }}">
                     <td>{{entry['id_num']}}</td>
@@ -156,7 +170,7 @@ $(document).ready(function() {
                 {% endif %}
             </tr>
         </thead>
-        <tbody>
+        <tbody id ="table2">
             {% for entry in pending_entries %}
                 <tr id="entry_{{ entry['id_num'] }}">
                     <td>{{entry['id_num']}}</td>
@@ -229,7 +243,7 @@ $(document).ready(function() {
                 <th>Attachment</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id ="table2">
             {% for entry in rejected_entries %}
                 <tr id="entry_{{ entry['id_num'] }}">
                     <td>{{entry['id_num']}}</td>
@@ -282,6 +296,7 @@ $(document).ready(function() {
         </tbody>
     </table>
 </div>
+<br>
 <button data-toggle="tooltip" data-placement="top" title="Create a new journal entry" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('journaling.add_entry')}}'">Create New Entry</button>
 
 {% endblock %}
