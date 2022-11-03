@@ -2,10 +2,20 @@
 
 
 {% block content %}
-<style>
 
+<style>
+    .dataTables_filter, .dataTables_info, .dataTables_length, .dataTables_paginate { display: none; }
 </style>
+
 <script>
+    $(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#table2 tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
     var minDate, maxDate;
 
 // Custom filtering function which will search data in column four between two values
@@ -61,18 +71,25 @@ $(document).ready(function() {
             <td><input type="text" id="max" name="max" style="width: 250px"></td>
         </tr>
     </tbody></table>
+<br>
+<input class="form-control" id="myInput" type="text" placeholder="Search by account number or account name">
+<br>
+
 <div  class="table-responsive">
     <table class = "table table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
 
             <thead>
+            <tr>
                 <th>Date</th>
                 <th>Description</th>
                 <th>Debits</th>
                 <th>Credits</th>
                 <th>Post Reference</th>
                 <th>Balance</th>
+            </tr>
             </thead>
             {% for entry in entries %}
+        <tbody id = "table2">
             <tr>
                 <td>{{ entry['date'] }}</td>
                 <td>{{ entry['description'] }}</td>
@@ -94,8 +111,10 @@ $(document).ready(function() {
                 <td class="show-comma">{{ entry['balance'] }}</td>
             </tr>
             {% endfor %}
+        </tbody>
         </table>
 </div>
+<br>
     <div style="color:white">
     <button type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.view_logs', account_num=account['acct_num'])}}'">View Account Logs</button>
     </div>
