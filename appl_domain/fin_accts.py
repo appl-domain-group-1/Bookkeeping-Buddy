@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 from appl_domain.db import get_db
+from appl_domain.email_tasks import send_email
 from datetime import date, datetime, timedelta
 from appl_domain.auth import login_required
 import json
@@ -109,9 +110,9 @@ def create_acct():
                     f"CREATE TABLE ledger_{this_account_num} ("
                     "date TEXT NOT NULL,"
                     "description TEXT,"
-                    "debit_accounts TEXT NOT NULL,"
-                    "credit_accounts TEXT NOT NULL,"
-                    "post_reference TEXT NOT NULL,"
+                    "debit INTEGER,"
+                    "credit INTEGER,"
+                    "post_reference TEXT REFERENCES journal(id_num),"
                     "balance INTEGER NOT NULL"
                     ")"
                 )
@@ -119,9 +120,20 @@ def create_acct():
                 # Commit the change
                 db.commit()
 
+                # Add the first row to the account with creation info
+                db.execute(
+                    f"INSERT INTO ledger_{this_account_num} "
+                    f"(date, description, debit, credit, post_reference, balance) "
+                    f"VALUES (?, ?, ?, ?, ?, ?)",
+                    (datetime.now(), "Account creation", None, None, None, initial_bal)
+                )
+
+                # Commit the change
+                db.commit()
+
             except (db.InternalError,
-                    db.IntegrityError):
-                error = f"Database error. Contact your administrator."
+                    db.IntegrityError) as E:
+                error = f"Database error. Contact your administrator.{E}"
             else:
                 return redirect(url_for('fin_accts.view_accounts'))
         flash(error)
@@ -405,3 +417,36 @@ def view_logs(account_num=None):
                            categories=cat_dict,
                            subcategories=subcat_dict,
                            statements=statements_dict)
+
+@bp.route('/email', methods=('GET', 'POST'))
+@login_required
+def email():
+    """
+    Allow an administrator to email other users
+    """
+    # Get a handle on the DB
+    db = get_db()
+
+    # Get users' names and email addresses
+    db_info = db.execute(
+        "SELECT first_name, last_name, email_address, role FROM users WHERE role = ? OR role = ? OR role = ?", (0, 1, 2)
+    ).fetchall()
+
+    # Put all entries into a dictionary
+    email_info = {}
+    for row in db_info:
+        if row['role'] == 0:
+            title = "Accountant"
+        elif row['role'] == 1:
+            title = "Manager"
+        else:
+            title = "Administrator"
+        name = f"{row['first_name']} {row['last_name']} -- {title}"
+        email_info[name] = row['email_address']
+
+    if request.method == 'POST':
+        user_email = request.form['user_email']
+        subject = request.form['subject']
+        message = f"New message from {g.user['first_name']} {g.user['last_name']}:<br><br><br>{request.form['message']}"
+        send_email(user_email, subject, message)
+    return render_template('fin_accts/email.html', email_info=email_info)

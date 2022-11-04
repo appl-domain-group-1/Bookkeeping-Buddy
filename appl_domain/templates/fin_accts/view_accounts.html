@@ -42,11 +42,6 @@ $('tr.number').each( function () {
       {% for category in acct_categories %}
         <a href="#{{ category['name'] }}" class="dropdown-item">{{ category['name'] }}</a>
        {% endfor %}
-    <!--<a class="dropdown-item" href="#">Asset accounts</a>
-    <a class="dropdown-item" href="#">Liability accounts</a>
-      <a class="dropdown-item" href="#"> Owner's Equity Accounts</a>
-      <a class="dropdown-item" href="#">Operating Revenue Accounts</a>
-        <a class="dropdown-item" href="#">Operating Expense Accounts</a>-->
   </div>
 </div>
     </header>
@@ -121,6 +116,8 @@ $('tr.number').each( function () {
     <button data-toggle="tooltip" data-placement="top" title="View account logs"  type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.view_logs')}}'">View Account Logs</button>
 {% if g.user['role'] == 2 %}
     <button data-toggle="tooltip" data-placement="top" title="Create a new financial account" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.create_acct')}}'">Create New Account</button>
+    <br>
+    <button data-toggle="tooltip" data-placement="top" title="Email Users" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.email')}}'">Email Users</button>
     <br>
 {% endif %}
 </div>

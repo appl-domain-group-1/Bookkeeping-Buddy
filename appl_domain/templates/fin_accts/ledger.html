@@ -2,32 +2,119 @@
 
 
 {% block content %}
+
+<style>
+    .dataTables_filter, .dataTables_info, .dataTables_length, .dataTables_paginate { display: none; }
+</style>
+
+<script>
+    $(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#table2 tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+    var minDate, maxDate;
+
+// Custom filtering function which will search data in column four between two values
+$.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+        var min = minDate.val();
+        var max = maxDate.val();
+        var date = new Date( data[0] );
+
+        if (
+            ( min === null && max === null ) ||
+            ( min === null && date <= max ) ||
+            ( min <= date   && max === null ) ||
+            ( min <= date   && date <= max )
+        ) {
+            return true;
+        }
+        return false;
+    }
+);
+
+$(document).ready(function() {
+    // Create date inputs
+    minDate = new DateTime($('#min'), {
+        format: 'dddd, MMMM DD HH:mm:ss'
+    });
+    maxDate = new DateTime($('#max'), {
+        format: 'dddd, MMMM DD HH:mm:ss'
+    });
+
+    // DataTables initialisation
+    var table = $('#myTable').DataTable();
+
+    // Refilter the table
+    $('#min, #max').on('change', function () {
+        table.draw();
+    });
+});
+</script>
 <header style="color: white; font-size: xx-large; font-weight: bold;">
 {% block title %}
     Ledger for account {{account['acct_num'] }}
+
 {% endblock %}</header>
 
-        <table class="table">
+<table>
+        <tbody><tr>
+            <td style="color: white">Start date:</td>
+            <td><input type="text" id="min" name="min" style="width: 250px"></td>
+        </tr>
+        <tr>
+            <td style="color: white">End date:</td>
+            <td><input type="text" id="max" name="max" style="width: 250px"></td>
+        </tr>
+    </tbody></table>
+<br>
+<input class="form-control" id="myInput" type="text" placeholder="Search by account number or account name">
+<br>
+
+<div  class="table-responsive">
+    <table class = "table table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+
             <thead>
+            <tr>
                 <th>Date</th>
                 <th>Description</th>
                 <th>Debits</th>
                 <th>Credits</th>
                 <th>Post Reference</th>
                 <th>Balance</th>
+            </tr>
             </thead>
             {% for entry in entries %}
+        <tbody id = "table2">
             <tr>
                 <td>{{ entry['date'] }}</td>
                 <td>{{ entry['description'] }}</td>
-                <td>{{ entry['debit_accounts'] }}</td>
-                <td>{{ entry['credit_accounts'] }}</td>
-                <td>{{ entry['post_reference'] }}</td>
-                <td>{{ entry['balance'] }}</td>
+                {% if entry['debit'] %}
+                    <td class="show-comma">{{ entry['debit'] }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                {% if entry['credit'] %}
+                    <td class="show-comma">{{ entry['credit'] }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                {% if entry['post_reference'] %}
+                    <td><a href="{{ url_for('journaling.journal')}}#entry_{{ entry['post_reference'] }}">{{ entry['post_reference'] }}</a></td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                <td class="show-comma">{{ entry['balance'] }}</td>
             </tr>
             {% endfor %}
+        </tbody>
         </table>
-
+</div>
+<br>
     <div style="color:white">
     <button type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.view_logs', account_num=account['acct_num'])}}'">View Account Logs</button>
     </div>
