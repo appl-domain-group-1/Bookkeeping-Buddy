@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+<header style="color: white; font-size: xx-large; font-weight: bold;">
+{% block title %}
+    Income Statement for Date Range
+
+{% endblock %}
+</header>
+<table>
+        <tbody><tr>
+            <td style="color: white">Start date:</td>
+            <td><input type="text" id="min" name="min" style="width: 250px"></td>
+        </tr>
+        <tr>
+            <td style="color: white">End date:</td>
+            <td><input type="text" id="max" name="max" style="width: 250px"></td>
+        </tr>
+    </tbody></table>
+
+<div  class="table-responsive">
+    <table class = "table table-sm approved entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+            <tr>
+                <th>Revenue</th>
+                <td>Revenue</td>
+            </tr>
+            <tr>
+                <th>Expenses</th>
+                <td>Revenue</td>
+            </tr>
+            <tr>
+                <th>Net Income</th>
+                <td>Revenue</td>
+            </tr>
+
+    </table>
+</div>
+{% block content %}
+{% endblock %}
