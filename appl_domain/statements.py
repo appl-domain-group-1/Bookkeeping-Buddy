@@ -61,6 +61,34 @@ def balance_sheet():
                            total_liabilities=total_liabilities,
                            total_equity=total_equity)
 
+@bp.route('/income_statement', methods=('GET', 'POST'))
+@login_required
+def income_statement():
+
+    # Get a handle on the db
+    db = get_db()
+
+    revenue_accounts = db.execute(
+        "SELECT * from accounts WHERE acct_category = 4"
+    ).fetchall()
+
+    expense_accounts = db.execute(
+        "SELECT * FROM accounts WHERE acct_category = 5"
+    ).fetchall()
+
+    total_revenue = 0
+    total_expenses = 0
+    for account in revenue_accounts:
+        total_revenue = total_revenue + account['balance']
+    for account in expense_accounts:
+        total_expenses = total_expenses + account['balance']
+
+    return render_template('statements/income.html',
+                           revenue_accounts=revenue_accounts,
+                           expense_accounts=expense_accounts,
+                           total_revenue=total_revenue,
+                           total_expenses=total_expenses)
+
 
 @bp.route('/email_statement', methods=('GET', 'POST'))
 @login_required

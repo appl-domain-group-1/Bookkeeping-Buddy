@@ -245,7 +245,7 @@
               <button  data-placement="top" title="Create and view financial account statements" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: white; color: #185DFF">Statements
               <span class="caret"></span></button>
               <ul class="dropdown-menu">
-                <li><a href="#">Income Statement</a></li>
+                <li><a href="{{ url_for('statements.income_statement') }}">Income Statement</a></li>
                 <li><a href="#">Retained Earnings statement</a></li>
                 <li><a href="{{ url_for('statements.balance_sheet') }}">Balance sheet</a></li>
               </ul>
