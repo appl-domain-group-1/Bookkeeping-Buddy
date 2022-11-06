@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
   {% block content %}
 
+      <script>
+        function email_income_statement() {
+            let income_html = encodeURIComponent(document.getElementById('income_statement').innerHTML);
+            let test2 = '{{url_for('statements.email_statement', statement='Income Statement')}}';
+            window.location.href=test2 + '&&included_message=' + income_html;
+        }
+      </script>
+
 <br>
 <table>
         <tbody><tr>
@@ -13,40 +21,51 @@
         </tr>
     </tbody></table>
 <br>
-<div class="table-responsive">
+<div class="table-responsive" id="income_statement">
     <table class = "table" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
         <thead><th>Income Statement</th></thead>
             <tr>
                 <th>Revenue</th>
                 <td>
-                    <div class="my_extra_cells">Name of Revenue account</div>
-                    <div class="my_extra_cells">Name of Revenue account</div>
+                    {% for account in revenue_accounts %}
+                        <div class="my_extra_cells">{{ account['acct_name'] }}</div>
+                    {% endfor %}
                     <div class="my_extra_cells" style="font-weight: bold">Total Revenue</div>
                 </td>
-                <td><div class="my_extra_cells">Amount</div>
-                    <div class="my_extra_cells">Amount</div>
-
+                <td>
+                    {% for account in revenue_accounts %}
+                        <div class="my_extra_cells show-comma">{{ account['balance'] }}</div>
+                    {% endfor %}
+                    <div class="my_extra_cells show-comma" style="font-weight: bold">{{ total_revenue }}</div>
                 </td>
             </tr>
             <tr>
                 <th>Expenses</th>
                 <td>
-                    <div class="my_extra_cells">Name of Expense account</div>
-                    <div class="my_extra_cells">Name of Expense account</div>
+                    {% for account in expense_accounts %}
+                        <div class="my_extra_cells">{{ account['acct_name'] }}</div>
+                    {% endfor %}
                     <div class="my_extra_cells" style="font-weight: bold">Total Expenses</div>
                 </td>
-                <td><div class="my_extra_cells">Amount</div>
-                    <div class="my_extra_cells">Amount</div>
-
+                <td>
+                    {% for account in expense_accounts %}
+                        <div class="my_extra_cells show-comma">{{ account['balance'] }}</div>
+                    {% endfor %}
+                    <div class="my_extra_cells show-comma" style="font-weight: bold">{{ total_expenses }}</div>
                 </td>
             </tr>
             <tr>
                 <th>Net Income</th>
-                <td>Renenue - Expenses</td>
-                <td>Amount</td>
+                <td><span class="show-comma">{{ total_revenue }}</span> - <span class="show-comma">{{ total_expenses }}</span></td>
+                <td class="show-comma">{{ total_revenue - total_expenses }}</td>
             </tr>
-
     </table>
 </div>
+      <div class="d-flex justify-content-center" >
+        <button data-toggle="tooltip" data-placement="top" title="Print a copy of the income statement"  type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="alert('To save the income statement, select Save as PDF from the Print dialog' ); window.print()">Save/Print Income Statement</button>
+        {% if g.user['role'] == 2 %}
+            <button data-toggle="tooltip" data-placement="top" title="Email this income statement to someone" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="email_income_statement()">Email Income Statement</button>
+        {% endif %}
+      </div>
 
 {% endblock %}
