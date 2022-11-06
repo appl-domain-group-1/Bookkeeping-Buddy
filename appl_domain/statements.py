@@ -44,13 +44,24 @@ def balance_sheet():
         "Equity Accounts": []
     }
 
-    # Walk the data from each of the account types into the dictionary
+    # Walk the data from each of the account types into the dictionary and calculate totals for each category
+    total_assets = 0
+    total_liabilities = 0
+    total_equity = 0
     for account in asset_accounts:
         balance_sheet_dict["Asset Accounts"].append([account['acct_num'], account['acct_name'], account['balance']])
+        total_assets = total_assets + account['balance']
     for account in liability_accounts:
         balance_sheet_dict["Liability Accounts"].append([account['acct_num'], account['acct_name'], account['balance']])
+        total_liabilities = total_liabilities + account['balance']
     for account in equity_accounts:
         balance_sheet_dict["Equity Accounts"].append([account['acct_num'], account['acct_name'], account['balance']])
+        total_equity = total_equity + account['balance']
 
-    return render_template('statements/balance_sheet.html', data=balance_sheet_dict)
+
+    return render_template('statements/balance_sheet.html',
+                           data=balance_sheet_dict,
+                           total_assets=total_assets,
+                           total_liabilities=total_liabilities,
+                           total_equity=total_equity)
 
