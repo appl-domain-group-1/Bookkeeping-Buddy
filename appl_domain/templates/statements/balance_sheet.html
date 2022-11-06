@@ -19,22 +19,17 @@
             <tr>
                 <tr><th>Assets</th></tr>
             <td>
-                <table>
-            <thead>
-
-                    <tr>
-                        <td><div>Name of asset account</div>
-                            <div style="font-weight: bold">Total Assets {{ total_assets }}</div></td>
-                        <td >Amount</td>
-                    </tr>
-
-            </thead>
+                <table style="width: 100%">
+                    <tfoot>
+                    <td style="font-weight: bold">Total Assets</td>
+                    <td  style="font-weight: bold" class="show-comma">{{ total_assets }}</td>
+                    </tfoot>
                     {% for account in data['Asset Accounts'] %}
                         <tr>
-                            <td>
+                            <td style="width:50%;">
                                 {{ account[1] }}
                             </td>
-                            <td class="show-comma">
+                            <td style="width:50%;"class="show-comma">
                                 {{ account[2] }}
                             </td>
                         </tr>
@@ -45,21 +40,17 @@
     <td>
             <tr><th>Liability</th></tr>
             <td>
-                <table>
-                    <thead>
-                            <tr>
-                                <td><div>Name of liability account</div>
-                                    <div style="font-weight: bold">Total Liabilities {{ total_liabilities }}</div></td>
-                                <td >Amount</td>
-                            </tr>
-
-                    </thead>
+                <table style="width: 100%">
+                    <tfoot>
+                    <td style="font-weight: bold">Total Liability</td>
+                    <td  style="font-weight: bold" class="show-comma">{{ total_liabilities }}</td>
+                    </tfoot>
                     {% for account in data['Liability Accounts'] %}
                         <tr>
-                            <td>
+                            <td style="width:50%;">
                                 {{ account[1] }}
                             </td>
-                            <td class="show-comma">
+                            <td style="width:50%;" class="show-comma">
                                 {{ account[2] }}
                             </td>
                         </tr>
@@ -69,22 +60,17 @@
 <td>
         <tr><th>Stock Holders Equity</th></tr>
     <td>
-            <table>
-                <thead>
-
-                        <tr>
-                            <td><div>Name of equity account</div>
-                                <div style="font-weight: bold">Total Equity {{ total_equity }}</div></td>
-                            <td >Amount</td>
-                        </tr>
-
-                </thead>
+            <table style="width: 100%">
+                <tfoot>
+                    <td style="font-weight: bold">Total Equity</td>
+                    <td  style="font-weight: bold" class="show-comma">{{ total_equity }}</td>
+                    </tfoot>
                 {% for account in data['Equity Accounts'] %}
                         <tr>
-                            <td>
+                            <td style="width:50%;">
                                 {{ account[1] }}
                             </td>
-                            <td class="show-comma">
+                            <td style="width:50%;"class="show-comma">
                                 {{ account[2] }}
                             </td>
                         </tr>
