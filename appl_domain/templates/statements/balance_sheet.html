@@ -24,11 +24,22 @@
 
                     <tr>
                         <td><div>Name of asset account</div>
-                            <div style="font-weight: bold">Total Assets</div></td>
+                            <div style="font-weight: bold">Total Assets {{ total_assets }}</div></td>
                         <td >Amount</td>
                     </tr>
 
             </thead>
+                    {% for account in data['Asset Accounts'] %}
+                        <tr>
+                            <td>
+                                {{ account[1] }}
+                            </td>
+                            <td class="show-comma">
+                                {{ account[2] }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
         </table>
             </td>
     <td>
@@ -37,12 +48,22 @@
                 <table>
                     <thead>
                             <tr>
-                                <td><div>Name of asset account</div>
-                                    <div style="font-weight: bold">Total Liability</div></td>
+                                <td><div>Name of liability account</div>
+                                    <div style="font-weight: bold">Total Liabilities {{ total_liabilities }}</div></td>
                                 <td >Amount</td>
                             </tr>
 
                     </thead>
+                    {% for account in data['Liability Accounts'] %}
+                        <tr>
+                            <td>
+                                {{ account[1] }}
+                            </td>
+                            <td class="show-comma">
+                                {{ account[2] }}
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </table>
             </td>
 <td>
@@ -52,12 +73,22 @@
                 <thead>
 
                         <tr>
-                            <td><div>Name of asset account</div>
-                                <div style="font-weight: bold">Total Equity</div></td>
+                            <td><div>Name of equity account</div>
+                                <div style="font-weight: bold">Total Equity {{ total_equity }}</div></td>
                             <td >Amount</td>
                         </tr>
 
                 </thead>
+                {% for account in data['Equity Accounts'] %}
+                        <tr>
+                            <td>
+                                {{ account[1] }}
+                            </td>
+                            <td class="show-comma">
+                                {{ account[2] }}
+                            </td>
+                        </tr>
+                    {% endfor %}
             </table>
         </td>
 
@@ -66,11 +97,11 @@
         <tfoot>
         <tr>
       <td>Total Assets</td>
-      <td>Amount</td>
+      <td class="show-comma">{{ total_assets }}</td>
     </tr>
     <tr>
       <td>Total Liabilities and Shareholder Equity</td>
-      <td>Amount</td>
+      <td class="show-comma">{{ total_liabilities + total_equity }}</td>
     </tr>
   </tfoot>
     </table>
