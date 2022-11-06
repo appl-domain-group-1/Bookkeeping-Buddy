@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for account_type, accounts in data.items() %}
+        <h2>{{ account_type }}</h2>
+        {% for account in accounts %}
+            <h4>{{ account[0] }} - {{ account[1] }}: {{ account[2] }}</h4>
+        {% endfor %}
+    {% endfor %}
+
+{% endblock %}

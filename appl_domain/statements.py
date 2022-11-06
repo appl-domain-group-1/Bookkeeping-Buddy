@@ -6,12 +6,12 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.pagesizes import LETTER
 from reportlab.lib.units import inch
 
-bp = Blueprint('reports', __name__, url_prefix='/reports')
+bp = Blueprint('statements', __name__, url_prefix='/statements')
 
 
 @bp.route('/balance_sheet', methods=('GET', 'POST'))
 @login_required
-def generate_balance_sheet():
+def balance_sheet():
     # canvas = Canvas("balance_sheet.pdf", pagesize=LETTER)
     # canvas.setFont("Times-Roman", 20)
     # canvas.drawString(1 * inch, 10 * inch, "Balance Sheet")
@@ -52,5 +52,5 @@ def generate_balance_sheet():
     for account in equity_accounts:
         balance_sheet_dict["Equity Accounts"].append([account['acct_num'], account['acct_name'], account['balance']])
 
-    return balance_sheet_dict
+    return render_template('statements/balance_sheet.html', data=balance_sheet_dict)
 

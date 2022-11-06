@@ -55,7 +55,7 @@ def create_app(test_config=None):
     import appl_domain.journaling as journaling
     app.register_blueprint(journaling.bp)
 
-    import appl_domain.reports as reports
-    app.register_blueprint(reports.bp)
+    import appl_domain.statements as statements
+    app.register_blueprint(statements.bp)
 
     return app
