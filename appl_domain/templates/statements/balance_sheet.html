@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+  {% block content %}
+      <script>
+        function email_balance_sheet() {
+            let balance_html = encodeURIComponent(document.getElementById('balance_sheet').innerHTML);
+            let test2 = '{{url_for('statements.email_statement', statement='Balance Sheet')}}';
+            window.location.href=test2 + '&&included_message=' + balance_html;
+        }
+      </script>
+
+<br>
+<table>
+        <tbody><tr>
+            <td style="color: white">Start date:</td>
+            <td><input type="text" id="min" name="min" style="width: 250px"></td>
+        </tr>
+        <tr>
+            <td style="color: white">End date:</td>
+            <td><input type="text" id="max" name="max" style="width: 250px"></td>
+        </tr>
+    </tbody></table>
+<br>
+<div class="table-responsive" id="balance_sheet">
+    <table class = "table" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+        <thead><th>Balance Sheet</th></thead>
+            <thead>
+            <tr>
+                <tr><th>Assets</th></tr>
+            <td>
+                <table style="width: 100%">
+                    {% for subcategory in asset_subcategories %}
+                        <tr><td><h6>{{ subcategory['name'] }} {{ subcategory['id_num'] }}</h6></td></tr>
+                        {% for account in asset_accounts %}
+                            {% if account['acct_subcategory'] == subcategory['id_num'] %}
+                                <tr>
+                                    <td style="width:50%;">
+                                        {{ account['acct_name'] }}
+                                    </td>
+                                    <td style="width:50%;" class="show-comma">
+                                        {{ account['balance'] }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    <tfoot>
+                    <td style="font-weight: bold">Total Assets</td>
+                    <td  style="font-weight: bold" class="show-comma">{{ total_assets }}</td>
+                    </tfoot>
+
+        </table>
+            </td>
+    <td>
+            <tr><th>Liability</th></tr>
+            <td>
+                <table style="width: 100%">
+                    {% for subcategory in liability_subcategories %}
+                        <tr><td><h6>{{ subcategory['name'] }} {{ subcategory['id_num'] }}</h6></td></tr>
+                        {% for account in liability_accounts %}
+                            {% if account['acct_subcategory'] == subcategory['id_num'] %}
+                                <tr>
+                                    <td style="width:50%;">
+                                        {{ account['acct_name'] }}
+                                    </td>
+                                    <td style="width:50%;" class="show-comma">
+                                        {{ account['balance'] }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    <tfoot>
+                    <td style="font-weight: bold">Total Liabilities</td>
+                    <td style="font-weight: bold" class="show-comma">{{ total_liabilities }}</td>
+                    </tfoot>
+                </table>
+            </td>
+<td>
+        <tr><th>Shareholder Equity</th></tr>
+    <td>
+            <table style="width: 100%">
+                {% for subcategory in equity_subcategories %}
+                        <tr><td><h6>{{ subcategory['name'] }} {{ subcategory['id_num'] }}</h6></td></tr>
+                        {% for account in equity_accounts %}
+                            {% if account['acct_subcategory'] == subcategory['id_num'] %}
+                                <tr>
+                                    <td style="width:50%;">
+                                        {{ account['acct_name'] }}
+                                    </td>
+                                    <td style="width:50%;" class="show-comma">
+                                        {{ account['balance'] }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                <tfoot>
+                    <td style="font-weight: bold">Total Equity</td>
+                    <td  style="font-weight: bold" class="show-comma">{{ total_equity }}</td>
+                </tfoot>
+            </table>
+        </td>
+
+        </tr>
+            </thead>
+        <tfoot>
+        <tr>
+      <td>Total Assets</td>
+      <td class="show-comma">{{ total_assets }}</td>
+    </tr>
+    <tr>
+      <td>Total Liabilities and Shareholder Equity</td>
+      <td class="show-comma">{{ total_liabilities + total_equity }}</td>
+    </tr>
+  </tfoot>
+    </table>
+</div>
+
+      <div class="d-flex justify-content-center" >
+        <button data-toggle="tooltip" data-placement="top" title="Print a copy of the balance sheet"  type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="alert('To save the balance sheet, select Save as PDF from the Print dialog' ); window.print()">Save/Print Balance Sheet</button>
+        {% if g.user['role'] == 2 %}
+            <button data-toggle="tooltip" data-placement="top" title="Email this balance sheet to someone" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="email_balance_sheet()">Email Balance Sheet</button>
+        {% endif %}
+      </div>
+{% endblock %}
