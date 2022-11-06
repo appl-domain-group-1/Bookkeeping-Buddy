@@ -2,8 +2,9 @@
   {% block content %}
       <script>
         function email_balance_sheet() {
-            let balance_html = document.getElementById('balance_sheet').innerHTML;
-            window.location.href='{{url_for('fin_accts.email', document_name='Balance Sheet')}}';
+            let balance_html = encodeURIComponent(document.getElementById('balance_sheet').innerHTML);
+            let test2 = '{{url_for('statements.email_statement', statement='Balance Sheet')}}';
+            window.location.href=test2 + '&&included_message=' + balance_html;
         }
       </script>
 

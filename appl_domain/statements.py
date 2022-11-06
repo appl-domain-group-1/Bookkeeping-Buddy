@@ -1,4 +1,4 @@
-from flask import Blueprint, g, redirect, render_template, request, url_for, abort, send_file
+from flask import Blueprint, g, redirect, render_template, request, url_for, abort, send_file, flash
 from appl_domain.db import get_db
 from datetime import datetime
 from appl_domain.auth import login_required
@@ -61,3 +61,46 @@ def balance_sheet():
                            total_liabilities=total_liabilities,
                            total_equity=total_equity)
 
+
+@bp.route('/email_statement', methods=('GET', 'POST'))
+@login_required
+def email_statement():
+    """
+    Allow a user to email a specific statement
+    """
+    # Get a handle on the DB
+    db = get_db()
+
+    # Get users' names and email addresses
+    admins = db.execute(
+        "SELECT first_name, last_name, email_address FROM users WHERE role = ?", (2, )
+    ).fetchall()
+    managers = db.execute(
+        "SELECT first_name, last_name, email_address FROM users WHERE role = ?", (1,)
+    ).fetchall()
+    users = db.execute(
+        "SELECT first_name, last_name, email_address FROM users WHERE role = ?", (0,)
+    ).fetchall()
+
+    # Get the parameters from the form
+    statement = request.args.get('statement')
+    included_message = request.args.get('included_message')
+
+    if request.method == 'POST':
+        user_email = request.form['user_email']
+        subject = request.form['subject']
+        message = f"New message from {g.user['first_name']} {g.user['last_name']}:<br><br><br>{request.form['message']}"
+        # Add on the HTML for the statement
+        message = message + '<br><br><br>' + included_message
+        # Send the message
+        send_email(user_email, subject, message)
+
+        # Tell the user that the message was sent
+        flash("Message sent!")
+
+    return render_template('fin_accts/email.html',
+                           included_message=included_message,
+                           statement=statement,
+                           admins=admins,
+                           managers=managers,
+                           users=users)
