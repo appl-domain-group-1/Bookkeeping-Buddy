@@ -45,7 +45,15 @@
 </style>
 
 <div class = acct-email>
-  <h1>{% block title %}Email Users{% endblock %}</h1>
+    <h1>
+        {% block title %}
+            {% if document_name %}
+                Email {{ document_name }}
+            {% else %}
+                Email Users
+            {% endif %}
+        {% endblock %}
+    </h1>
     <br>
     <form method="post">
     <div class="form-group">
@@ -63,9 +71,9 @@
     </div>
     <div class="form-group">
     <label for="message">Message</label>
-    <textarea name="message" placeholder="Write message here..." id="message" class="form-control" rows="4" cols="25"></textarea>
+    <textarea name="message" placeholder="Write message here..." id="message" class="form-control" rows="4" cols="25">{% if included_message %}{{ included_message }}{% endif %}</textarea>
     </div>
-    <input class = "submit" type="submit" value="Send E-mail">
+    <input class = "submit" type="submit" value="Send E-mail{% if document_name %} with {{ document_name }}{% endif %}">
     </form>
 </div>
 {% endblock %}

@@ -5,6 +5,8 @@ from datetime import date, datetime, timedelta
 from appl_domain.auth import login_required
 import json
 
+from appl_domain.statements import balance_sheet
+
 bp = Blueprint('fin_accts', __name__, url_prefix='/fin_accts')
 
 @bp.route('/create_acct', methods=('GET', 'POST'))
@@ -432,6 +434,9 @@ def email():
         "SELECT first_name, last_name, email_address, role FROM users WHERE role = ? OR role = ? OR role = ?", (0, 1, 2)
     ).fetchall()
 
+    included_message = request.args.get('included_message')
+    document_name = request.args.get('document_name')
+
     # Put all entries into a dictionary
     email_info = {}
     for row in db_info:
@@ -448,5 +453,9 @@ def email():
         user_email = request.form['user_email']
         subject = request.form['subject']
         message = f"New message from {g.user['first_name']} {g.user['last_name']}:<br><br><br>{request.form['message']}"
+        if document_name:
+            document_name = document_name.lower().replace(' ', '_')
+            test1 = balance_sheet()
+            message = message + test1
         send_email(user_email, subject, message)
-    return render_template('fin_accts/email.html', email_info=email_info)
+    return render_template('fin_accts/email.html', email_info=email_info, included_message=included_message, document_name=document_name)

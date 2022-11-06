@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
   {% block content %}
+      <script>
+        function email_balance_sheet() {
+            let balance_html = document.getElementById('balance_sheet').innerHTML;
+            window.location.href='{{url_for('fin_accts.email', document_name='Balance Sheet')}}';
+        }
+      </script>
+
 <br>
 <table>
         <tbody><tr>
@@ -12,7 +19,7 @@
         </tr>
     </tbody></table>
 <br>
-<div class="table-responsive">
+<div class="table-responsive" id="balance_sheet">
     <table class = "table" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
         <thead><th>Balance Sheet</th></thead>
             <thead>
@@ -107,4 +114,10 @@
     </table>
 </div>
 
+      <div class="d-flex justify-content-center" >
+        <button data-toggle="tooltip" data-placement="top" title="Save a copy of the balance sheet to your computer"  type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="alert('This should let the user download the file')">Save Balance Sheet</button>
+        <button data-toggle="tooltip" data-placement="top" title="Print a copy of the balance sheet"  type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.print()">Print Balance Sheet</button>
+        {% if g.user['role'] == 2 %}
+            <button data-toggle="tooltip" data-placement="top" title="Email this balance sheet to someone" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="email_balance_sheet()">Email Balance Sheet</button>
+        {% endif %}
 {% endblock %}
