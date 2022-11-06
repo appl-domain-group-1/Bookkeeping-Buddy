@@ -1,4 +1,75 @@
 {% extends 'base.html' %}
+  {% block content %}
+<br>
+<table>
+        <tbody><tr>
+            <td style="color: white">Start date:</td>
+            <td><input type="text" id="min" name="min" style="width: 250px"></td>
+        </tr>
+        <tr>
+            <td style="color: white">End date:</td>
+            <td><input type="text" id="max" name="max" style="width: 250px"></td>
+        </tr>
+    </tbody></table>
+<br>
+<div class="table-responsive">
+    <table class = "table" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+        <thead><th>Balance Sheet</th></thead>
+            <thead>
+            <tr>
+                <tr><th>Assets</th></tr>
+            <td>
+                <table>
+            <thead>
 
-{% block content %}
+                    <tr>
+                        <td><div>Name of asset account</div>
+                            <div style="font-weight: bold">Total Assets</div></td>
+                        <td >Amount</td>
+                    </tr>
+
+            </thead>
+        </table>
+            </td>
+    <td>
+            <tr><th>Liability</th></tr>
+            <td>
+                <table>
+                    <thead>
+                            <tr>
+                                <td><div>Name of asset account</div>
+                                    <div style="font-weight: bold">Total Assets</div></td>
+                                <td >Amount</td>
+                            </tr>
+
+                    </thead>
+                </table>
+            </td>
+<td>
+        <tr><th>Stock Holders Equity</th></tr>
+    <td>
+            <table>
+                <thead>
+
+                        <tr>
+                            <td><div>Name of asset account</div>
+                                <div style="font-weight: bold">Total Assets</div></td>
+                            <td >Amount</td>
+                        </tr>
+
+                </thead>
+            </table>
+        </td>
+
+        </tr>
+            </thead>
+        <tfoot>
+    <tr>
+      <td>Total Liabilities and Shareholder Equity</td>
+      <td>Amount</td>
+    </tr>
+  </tfoot>
+    </table>
+</div>
+
 {% endblock %}
