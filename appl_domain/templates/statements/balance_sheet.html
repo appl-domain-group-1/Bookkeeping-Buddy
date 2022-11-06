@@ -26,76 +26,77 @@
             <tr>
                 <tr><th>Assets</th></tr>
             <td>
-                <table>
-            <thead>
-
-                    <tr>
-                        <td><div>Name of asset account</div>
-                            <div style="font-weight: bold">Total Assets {{ total_assets }}</div></td>
-                        <td >Amount</td>
-                    </tr>
-
-            </thead>
-                    {% for account in data['Asset Accounts'] %}
-                        <tr>
-                            <td>
-                                {{ account[1] }}
-                            </td>
-                            <td class="show-comma">
-                                {{ account[2] }}
-                            </td>
-                        </tr>
+                <table style="width: 100%">
+                    {% for subcategory in asset_subcategories %}
+                        <tr><td><h6>{{ subcategory['name'] }} {{ subcategory['id_num'] }}</h6></td></tr>
+                        {% for account in asset_accounts %}
+                            {% if account['acct_subcategory'] == subcategory['id_num'] %}
+                                <tr>
+                                    <td style="width:50%;">
+                                        {{ account['acct_name'] }}
+                                    </td>
+                                    <td style="width:50%;" class="show-comma">
+                                        {{ account['balance'] }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
+                    <tfoot>
+                    <td style="font-weight: bold">Total Assets</td>
+                    <td  style="font-weight: bold" class="show-comma">{{ total_assets }}</td>
+                    </tfoot>
 
         </table>
             </td>
     <td>
             <tr><th>Liability</th></tr>
             <td>
-                <table>
-                    <thead>
-                            <tr>
-                                <td><div>Name of liability account</div>
-                                    <div style="font-weight: bold">Total Liabilities {{ total_liabilities }}</div></td>
-                                <td >Amount</td>
-                            </tr>
-
-                    </thead>
-                    {% for account in data['Liability Accounts'] %}
-                        <tr>
-                            <td>
-                                {{ account[1] }}
-                            </td>
-                            <td class="show-comma">
-                                {{ account[2] }}
-                            </td>
-                        </tr>
+                <table style="width: 100%">
+                    {% for subcategory in liability_subcategories %}
+                        <tr><td><h6>{{ subcategory['name'] }} {{ subcategory['id_num'] }}</h6></td></tr>
+                        {% for account in liability_accounts %}
+                            {% if account['acct_subcategory'] == subcategory['id_num'] %}
+                                <tr>
+                                    <td style="width:50%;">
+                                        {{ account['acct_name'] }}
+                                    </td>
+                                    <td style="width:50%;" class="show-comma">
+                                        {{ account['balance'] }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
+                    <tfoot>
+                    <td style="font-weight: bold">Total Liabilities</td>
+                    <td style="font-weight: bold" class="show-comma">{{ total_liabilities }}</td>
+                    </tfoot>
                 </table>
             </td>
 <td>
-        <tr><th>Stock Holders Equity</th></tr>
+        <tr><th>Shareholder Equity</th></tr>
     <td>
-            <table>
-                <thead>
-
-                        <tr>
-                            <td><div>Name of equity account</div>
-                                <div style="font-weight: bold">Total Equity {{ total_equity }}</div></td>
-                            <td >Amount</td>
-                        </tr>
-
-                </thead>
-                {% for account in data['Equity Accounts'] %}
-                        <tr>
-                            <td>
-                                {{ account[1] }}
-                            </td>
-                            <td class="show-comma">
-                                {{ account[2] }}
-                            </td>
-                        </tr>
+            <table style="width: 100%">
+                {% for subcategory in equity_subcategories %}
+                        <tr><td><h6>{{ subcategory['name'] }} {{ subcategory['id_num'] }}</h6></td></tr>
+                        {% for account in equity_accounts %}
+                            {% if account['acct_subcategory'] == subcategory['id_num'] %}
+                                <tr>
+                                    <td style="width:50%;">
+                                        {{ account['acct_name'] }}
+                                    </td>
+                                    <td style="width:50%;" class="show-comma">
+                                        {{ account['balance'] }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
+                <tfoot>
+                    <td style="font-weight: bold">Total Equity</td>
+                    <td  style="font-weight: bold" class="show-comma">{{ total_equity }}</td>
+                </tfoot>
             </table>
         </td>
 

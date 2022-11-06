@@ -2,9 +2,7 @@ from flask import Blueprint, g, redirect, render_template, request, url_for, abo
 from appl_domain.db import get_db
 from datetime import datetime
 from appl_domain.auth import login_required
-from reportlab.pdfgen.canvas import Canvas
-from reportlab.lib.pagesizes import LETTER
-from reportlab.lib.units import inch
+from appl_domain.email_tasks import send_email
 
 bp = Blueprint('statements', __name__, url_prefix='/statements')
 
@@ -12,55 +10,53 @@ bp = Blueprint('statements', __name__, url_prefix='/statements')
 @bp.route('/balance_sheet', methods=('GET', 'POST'))
 @login_required
 def balance_sheet():
-    # canvas = Canvas("balance_sheet.pdf", pagesize=LETTER)
-    # canvas.setFont("Times-Roman", 20)
-    # canvas.drawString(1 * inch, 10 * inch, "Balance Sheet")
-    # canvas.setFontSize(14)
-    # canvas.dr
-    # canvas.save()
-
     # Get a handle on the DB
     db = get_db()
 
     # Get all asset account names, numbers and balances
     asset_accounts = db.execute(
-        "SELECT acct_name, acct_num, balance FROM accounts WHERE acct_category = ?", (1,)
+        "SELECT acct_name, acct_num, balance, acct_subcategory FROM accounts WHERE acct_category = ?", (1,)
     ).fetchall()
 
     # Get all liability account names, numbers, and balances
     liability_accounts = db.execute(
-        "SELECT acct_name, acct_num, balance FROM accounts WHERE acct_category = ?", (2,)
+        "SELECT acct_name, acct_num, balance, acct_subcategory FROM accounts WHERE acct_category = ?", (2,)
     ).fetchall()
 
     # Get all equity account names, numbers, and balances
     equity_accounts = db.execute(
-        "SELECT acct_name, acct_num, balance FROM accounts WHERE acct_category = ?", (3,)
+        "SELECT acct_name, acct_num, balance, acct_subcategory FROM accounts WHERE acct_category = ?", (3,)
     ).fetchall()
 
-    # Dictionary to hold the data
-    balance_sheet_dict = {
-        "Asset Accounts": [],
-        "Liability Accounts": [],
-        "Equity Accounts": []
-    }
+    # Get all subcategories
+    asset_subcategories = db.execute(
+        "SELECT * from subcategories WHERE category = ?", (1,)
+    ).fetchall()
+    liability_subcategories = db.execute(
+        "SELECT * from subcategories WHERE category = ?", (2,)
+    ).fetchall()
+    equity_subcategories = db.execute(
+        "SELECT * from subcategories WHERE category = ?", (3,)
+    ).fetchall()
 
     # Walk the data from each of the account types into the dictionary and calculate totals for each category
     total_assets = 0
     total_liabilities = 0
     total_equity = 0
     for account in asset_accounts:
-        balance_sheet_dict["Asset Accounts"].append([account['acct_num'], account['acct_name'], account['balance']])
         total_assets = total_assets + account['balance']
     for account in liability_accounts:
-        balance_sheet_dict["Liability Accounts"].append([account['acct_num'], account['acct_name'], account['balance']])
         total_liabilities = total_liabilities + account['balance']
     for account in equity_accounts:
-        balance_sheet_dict["Equity Accounts"].append([account['acct_num'], account['acct_name'], account['balance']])
         total_equity = total_equity + account['balance']
 
-
     return render_template('statements/balance_sheet.html',
-                           data=balance_sheet_dict,
+                           asset_subcategories=asset_subcategories,
+                           asset_accounts=asset_accounts,
+                           liability_subcategories=liability_subcategories,
+                           liability_accounts=liability_accounts,
+                           equity_subcategories=equity_subcategories,
+                           equity_accounts=equity_accounts,
                            total_assets=total_assets,
                            total_liabilities=total_liabilities,
                            total_equity=total_equity)
