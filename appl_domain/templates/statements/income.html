@@ -22,8 +22,8 @@
     </tbody></table>
 <br>
 <div class="table-responsive" id="income_statement">
-    <table class = "table" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
-        <thead><th>Income Statement</th></thead>
+    <table class = "table table-borderless" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+        <thead><th style="font-size: larger">Income Statement</th></thead>
             <tr>
                 <th>Revenue</th>
                 <td>
@@ -56,8 +56,8 @@
             </tr>
             <tr>
                 <th>Net Income</th>
-                <td><span class="show-comma">{{ total_revenue }}</span> - <span class="show-comma">{{ total_expenses }}</span></td>
-                <td class="show-comma">{{ total_revenue - total_expenses }}</td>
+                <td></td>
+                <td class="show-comma" style="font-weight: bold">{{ total_revenue - total_expenses }}</td>
             </tr>
     </table>
 </div>
