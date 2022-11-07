@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
   {% block content %}
 
+      <script>
+        function email_re_statement() {
+            let re_html = encodeURIComponent(document.getElementById('re_statement').innerHTML);
+            let test2 = '{{url_for('statements.email_statement', statement='Retained Earnings Statement')}}';
+            window.location.href=test2 + '&&included_message=' + re_html;
+        }
+      </script>
 
 <br>
 <table>
@@ -14,37 +21,53 @@
         </tr>
     </tbody></table>
 <br>
-<div class="table-responsive">
+
+<div class="table-responsive" id="re_statement">
     <table class = "table table-borderless" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
         <thead><th style="font-size: larger">Retained Earnings</th></thead>
         <thead>
         <tr>
-            <tr><th>Retained Earnings: Beginning</th></tr>
+            <tr>
+                <th>Retained Earnings: Beginning</th>
+            </tr>
         <td>
             <table>
                 <thead>
-
-                        <tr>
-                            <td><div>Subcategory of account and description</div>
-                            <td >Initial amount from retained earnings account</td>
-                        </tr>
-
+                    <tr>
+                        <td><div><h6>Retained Earnings Accounts</h6></div></td>
+                        <td><h6>Balance</h6></td>
+                    </tr>
                 </thead>
+                {% set temp1 = namespace(total_re = 0) %}
+                {% for account in re_accounts %}
+                    <tr>
+                        <td>{{ account['acct_name'] }} - {{ account['acct_desc'] }}</td>
+                        <td class="show-comma">{{ account['balance'] }}</td>
+                        {% set temp1.total_re = temp1.total_re + account['balance'] %}
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td><h6>Total Retained Earnings</h6></td>
+                    <td class="show-comma"><h6>{{ temp1.total_re }}</h6></td>
+                </tr>
             </table>
         </td>
 <td>
         <tr><th>Net Income</th></tr>
         <td>
             <table>
-                <thead>
-
-                        <tr>
-                            <td><div>Description of account account</div>
-
-                            <td >Amount from Net income in income statement</td>
-                        </tr>
-
-                </thead>
+                <tr>
+                    <td>Total Revenue</td>
+                    <td class="show-comma">{{ total_revenue }}</td>
+                </tr>
+                <tr>
+                    <td>Total Expenses</td>
+                    <td class="show-comma">{{ total_expenses }}</td>
+                </tr>
+                <tr>
+                    <td><h6>Net Income</h6></td>
+                    <td class="show-comma"><h6>{{ total_revenue - total_expenses }}</h6></td>
+                </tr>
             </table>
         </td>
 <td>
@@ -54,23 +77,39 @@
                 <thead>
 
                         <tr>
-                            <td><div>Subcategory and description of account</div>
-                            <td >Amount</td>
+                            <td><div><h6>Dividends Accounts</h6></div>
+                            <td><h6>Amount</h6></td>
                         </tr>
-
                 </thead>
+                    {% set temp2 = namespace(total_div = 0) %}
+                    {% for account in dividends_accounts %}
+                        <tr>
+                            <td>{{ account['acct_name'] }} - {{ account['acct_desc'] }}</td>
+                            <td class="show-comma">{{ account['balance'] }}</td>
+                            {% set temp2.total_div = temp2.total_div + account['balance'] %}
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td><h6>Total Dividends</h6></td>
+                        <td class="show-comma">{{ temp2.total_div }}</td>
+                    </tr>
             </table>
         </td>
-
         </tr>
         </thead>
 <tfoot>
     <tr>
-      <td>Retained Earnings: Ending (RE beginning + net income - dividends)</td>
-      <td>Amount</td>
+        <th>Retained Earnings</th>
+      <th class="show-comma">{{ temp1.total_re + (total_revenue - total_expenses) - temp2.total_div }}</th>
     </tr>
   </tfoot>
     </table>
 </div>
+      <div class="d-flex justify-content-center" >
+        <button data-toggle="tooltip" data-placement="top" title="Save or print a copy of the retained earnings statement"  type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="alert('To save the retained earnings statement, select Save as PDF from the Print dialog' ); window.print()">Save/Print Retained Earnings Statement</button>
+        {% if g.user['role'] == 2 %}
+            <button data-toggle="tooltip" data-placement="top" title="Email this retained earnings statement to someone" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="email_re_statement()">Email Retained Earnings Statement</button>
+        {% endif %}
+      </div>
 
 {% endblock %}
