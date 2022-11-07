@@ -61,10 +61,10 @@ def balance_sheet():
                            total_liabilities=total_liabilities,
                            total_equity=total_equity)
 
+
 @bp.route('/income_statement', methods=('GET', 'POST'))
 @login_required
 def income_statement():
-
     # Get a handle on the db
     db = get_db()
 
@@ -90,6 +90,48 @@ def income_statement():
                            total_expenses=total_expenses)
 
 
+@bp.route('/retained_earnings', methods=('GET', 'POST'))
+@login_required
+def retained_earnings():
+    # Get a handle on the db
+    db = get_db()
+
+    revenue_accounts = db.execute(
+        "SELECT * from accounts WHERE acct_category = 4"
+    ).fetchall()
+
+    expense_accounts = db.execute(
+        "SELECT * FROM accounts WHERE acct_category = 5"
+    ).fetchall()
+
+    total_revenue = 0
+    total_expenses = 0
+
+    for account in revenue_accounts:
+        total_revenue = total_revenue + account['balance']
+    for account in expense_accounts:
+        total_expenses = total_expenses + account['balance']
+
+    re_accounts = db.execute(
+        "SELECT * FROM accounts WHERE acct_category = ? AND acct_subcategory = ?", (3, 6)
+    ).fetchall()
+
+    dividends_accounts = db.execute(
+        "SELECT * from accounts where acct_category = ? AND acct_subcategory = ?", (3, 5)
+    ).fetchall()
+
+    return render_template('statements/retained_earnings.html',
+                           total_revenue=total_revenue,
+                           total_expenses=total_expenses,
+                           re_accounts=re_accounts,
+                           dividends_accounts=dividends_accounts)
+
+
+@bp.route('/trial_balance', methods=('GET', 'POST'))
+@login_required
+def trial_balance():
+    return render_template('statements/trial_balance.html')
+
 @bp.route('/email_statement', methods=('GET', 'POST'))
 @login_required
 def email_statement():
@@ -101,7 +143,7 @@ def email_statement():
 
     # Get users' names and email addresses
     admins = db.execute(
-        "SELECT first_name, last_name, email_address FROM users WHERE role = ?", (2, )
+        "SELECT first_name, last_name, email_address FROM users WHERE role = ?", (2,)
     ).fetchall()
     managers = db.execute(
         "SELECT first_name, last_name, email_address FROM users WHERE role = ?", (1,)
