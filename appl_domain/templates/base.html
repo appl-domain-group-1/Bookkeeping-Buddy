@@ -245,15 +245,15 @@
               <button  data-placement="top" title="Create and view financial account statements" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: white; color: #185DFF">Statements
               <span class="caret"></span></button>
               <ul class="dropdown-menu">
-                <li><a href="{{ url_for('statements.income_statement') }}">Income statement</a></li>
-                <li><a href="{{ url_for('statements.retained_earnings') }}">Retained earnings statement</a></li>
-                <li><a href="{{ url_for('statements.balance_sheet') }}">Balance sheet</a></li>
+                <li><a href="#">Income Statement</a></li>
+                <li><a href="#">Retained Earnings statement</a></li>
+                <li><a href="#">Balance sheet</a></li>
               </ul>
             </div>
  <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="View chart of accounts or create a new account" style = "background-color: white; color: #185DFF"  onclick="window.location.href='{{ url_for('fin_accts.view_accounts')}}'">Accounts</button>
         <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="View transactions or create a new transaction" style = "background-color: white; color: #185DFF" >Transactions</button>
         <button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF" data-toggle="tooltip" data-placement="top" title="Create and view journal entries" onclick="window.location.href='{{ url_for('journaling.journal') }}'">Journaling</button>
-        <button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF" data-toggle="tooltip" data-placement="top" title="Create a trial balance" onclick="window.location.href='{{ url_for('statements.trial_balance') }}'">Trial balance</button>
+        <button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF" data-toggle="tooltip" data-placement="top" title="Create a trial balance">Trial balance</button>
     </form>
   </div>
 </nav>
