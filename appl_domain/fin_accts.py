@@ -5,8 +5,6 @@ from datetime import date, datetime, timedelta
 from appl_domain.auth import login_required
 import json
 
-from appl_domain.statements import balance_sheet
-
 bp = Blueprint('fin_accts', __name__, url_prefix='/fin_accts')
 
 @bp.route('/create_acct', methods=('GET', 'POST'))
@@ -430,25 +428,25 @@ def email():
     db = get_db()
 
     # Get users' names and email addresses
-    admins = db.execute(
-        "SELECT first_name, last_name, email_address FROM users WHERE role = ?", (2, )
+    db_info = db.execute(
+        "SELECT first_name, last_name, email_address, role FROM users WHERE role = ? OR role = ? OR role = ?", (0, 1, 2)
     ).fetchall()
-    managers = db.execute(
-        "SELECT first_name, last_name, email_address FROM users WHERE role = ?", (1,)
-    ).fetchall()
-    users = db.execute(
-        "SELECT first_name, last_name, email_address FROM users WHERE role = ?", (0,)
-    ).fetchall()
+
+    # Put all entries into a dictionary
+    email_info = {}
+    for row in db_info:
+        if row['role'] == 0:
+            title = "Accountant"
+        elif row['role'] == 1:
+            title = "Manager"
+        else:
+            title = "Administrator"
+        name = f"{row['first_name']} {row['last_name']} -- {title}"
+        email_info[name] = row['email_address']
 
     if request.method == 'POST':
         user_email = request.form['user_email']
         subject = request.form['subject']
         message = f"New message from {g.user['first_name']} {g.user['last_name']}:<br><br><br>{request.form['message']}"
         send_email(user_email, subject, message)
-
-        flash("Message sent!")
-
-    return render_template('fin_accts/email.html',
-                           admins=admins,
-                           managers=managers,
-                           users=users)
+    return render_template('fin_accts/email.html', email_info=email_info)
