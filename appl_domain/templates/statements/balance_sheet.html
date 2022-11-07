@@ -21,13 +21,13 @@
     </tbody></table>
 <br>
 <div class="table-responsive" id="balance_sheet">
-    <table class = "table" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
-        <thead><th>Balance Sheet</th></thead>
-            <thead>
+    <table class = "table table-borderless" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+        <thead ><th style="font-size: larger">Balance Sheet</th></thead>
+
             <tr>
                 <tr><th>Assets</th></tr>
             <td>
-                <table style="width: 100%">
+                <table style="width: 100%;">
                     {% for subcategory in asset_subcategories %}
                         <tr><td><h6>{{ subcategory['name'] }} {{ subcategory['id_num'] }}</h6></td></tr>
                         {% for account in asset_accounts %}
@@ -103,7 +103,7 @@
 
         </tr>
             </thead>
-        <tfoot>
+        <tfoot style="font-weight: bold">
         <tr>
       <td>Total Assets</td>
       <td class="show-comma">{{ total_assets }}</td>
