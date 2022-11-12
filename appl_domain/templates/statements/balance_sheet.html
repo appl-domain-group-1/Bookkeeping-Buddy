@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+  {% block content %}
+<br>
+<table>
+        <tbody><tr>
+            <td style="color: white">Start date:</td>
+            <td><input type="text" id="min" name="min" style="width: 250px"></td>
+        </tr>
+        <tr>
+            <td style="color: white">End date:</td>
+            <td><input type="text" id="max" name="max" style="width: 250px"></td>
+        </tr>
+    </tbody></table>
+<br>
+<div class="table-responsive">
+    <table class = "table" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+        <thead><th>Balance Sheet</th></thead>
+            <tr>
+                <tr><th>Assets</th></tr>
+            <td>
+                <table style="width: 100%">
+                    <h3>Subcategory account</h3>
+                    <tfoot>
+                    <td style="font-weight: bold">Total Assets</td>
+                    <td  style="font-weight: bold" class="show-comma">{{ total_assets }}</td>
+                    </tfoot>
+                    {% for account in data['Asset Accounts'] %}
+                        <tr>
+                            <td style="width:50%;">
+                                {{ account[1] }}
+                            </td>
+                            <td style="width:50%;"class="show-comma">
+                                {{ account[2] }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+        </table>
+            </td>
+    <td>
+            <tr><th>Liability</th></tr>
+            <td>
+                <table style="width: 100%">
+                    <h3>Subcategory account</h3>
+                    <tfoot>
+                    <td style="font-weight: bold">Total Liability</td>
+                    <td  style="font-weight: bold" class="show-comma">{{ total_liabilities }}</td>
+                    </tfoot>
+                    {% for account in data['Liability Accounts'] %}
+                        <tr>
+                            <td style="width:50%;">
+                                {{ account[1] }}
+                            </td>
+                            <td style="width:50%;" class="show-comma">
+                                {{ account[2] }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </td>
+<td>
+        <tr><th>Shareholder Equity</th></tr>
+    <td>
+            <table style="width: 100%">
+                <h3>Subcategory account</h3>
+                <tfoot>
+                    <td style="font-weight: bold">Total Equity</td>
+                    <td  style="font-weight: bold" class="show-comma">{{ total_equity }}</td>
+                    </tfoot>
+                {% for account in data['Equity Accounts'] %}
+                        <tr>
+                            <td style="width:50%;">
+                                {{ account[1] }}
+                            </td>
+                            <td style="width:50%;"class="show-comma">
+                                {{ account[2] }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+            </table>
+        </td>
+
+        </tr>
+            </thead>
+        <tfoot>
+        <tr>
+      <td>Total Assets</td>
+      <td class="show-comma">{{ total_assets }}</td>
+    </tr>
+    <tr>
+      <td>Total Liabilities and Shareholder Equity</td>
+      <td class="show-comma">{{ total_liabilities + total_equity }}</td>
+    </tr>
+  </tfoot>
+    </table>
+</div>
+
+{% endblock %}
