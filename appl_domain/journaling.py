@@ -220,13 +220,21 @@ def approve_entry():
 
     # Update all the credits
     for account, value in credits.items():
-        # Get the current balance
-        current_balance = db.execute(
+        # Get the account
+        this_account = db.execute(
             "SELECT * FROM accounts WHERE acct_num = ?", (account,)
-        ).fetchone()['balance']
+        ).fetchone()
+
+        # Get current balance
+        current_balance = this_account['balance']
+        # Get the account type (credit/debit)
+        account_type = this_account['debit']
 
         # Calculate the new balance
-        new_bal = current_balance - value
+        if account_type == 0:
+            new_bal = current_balance + value
+        else:
+            new_bal = current_balance - value
 
         # Update the row in the ledger
         db.execute(
@@ -247,13 +255,21 @@ def approve_entry():
 
     # Update all the debits
     for account, value in debits.items():
-        # Get current balance
-        current_balance = db.execute(
+        # Get the account
+        this_account = db.execute(
             "SELECT * FROM accounts WHERE acct_num = ?", (account,)
-        ).fetchone()['balance']
+        ).fetchone()
+
+        # Get current balance
+        current_balance = this_account['balance']
+        # Get the account type (credit/debit)
+        account_type = this_account['debit']
 
         # Calculate the new balance
-        new_bal = current_balance + value
+        if account_type == 1:
+            new_bal = current_balance + value
+        else:
+            new_bal = current_balance - value
 
         # Update the row
         db.execute(
