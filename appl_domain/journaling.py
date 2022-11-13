@@ -65,6 +65,9 @@ def add_entry():
 
         # Write the change
         db.commit()
+
+        # If the user is not an admin or a manager, email all managers and
+        # let them know a new entry is waiting to be approved
         if g.user['role'] not in (1, 2):
             email_journal_adjust(g.user['username'], g.user["first_name"], g.user["last_name"], datetime.now())
 
@@ -140,6 +143,7 @@ def add_adjusting_entry():
 
 
 @bp.route('/journal', methods=('GET',))
+@bp.route('/', methods=('GET',))
 @login_required
 def journal():
     # Get a handle on the DB
@@ -174,7 +178,6 @@ def journal():
         # Append this new dictionary to the list of dictionaries
         approved_entries2.append(temp_dict)
 
-
     # Get all pending entries
     pending_entries = db.execute(
         "SELECT * FROM journal WHERE status = ?", (0,)
@@ -203,7 +206,6 @@ def journal():
 
         # Append this new dictionary to the list of dictionaries
         pending_entries2.append(temp_dict)
-
 
     # Get all rejected entries
     rejected_entries = db.execute(
@@ -235,7 +237,9 @@ def journal():
         # Append this new dictionary to the list of dictionaries
         rejected_entries2.append(temp_dict)
 
-    return render_template('journaling/journal.html', approved_entries=approved_entries2, pending_entries=pending_entries2, rejected_entries=rejected_entries2)
+    return render_template('journaling/journal.html', approved_entries=approved_entries2,
+                           pending_entries=pending_entries2, rejected_entries=rejected_entries2)
+
 
 @bp.route('/reject_entry')
 @login_required
@@ -254,7 +258,8 @@ def reject_entry():
 
         # Update the row for this ID number
         db.execute(
-            "UPDATE journal SET status = ?, reject_reason = ?, approver = ? WHERE id_num = ?", (-1, reject_reason, rejected_by, entry_id)
+            "UPDATE journal SET status = ?, reject_reason = ?, approver = ? WHERE id_num = ?",
+            (-1, reject_reason, rejected_by, entry_id)
         )
 
         # Write the change to the DB
@@ -361,6 +366,7 @@ def approve_entry():
         db.commit()
 
     return redirect(url_for('journaling.journal'))
+
 
 @bp.route('/get_attachment')
 @login_required
