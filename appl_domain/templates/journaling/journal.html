@@ -299,5 +299,6 @@ $(document).ready(function() {
 <br>
 <div class="d-flex justify-content-center" >
 <button data-toggle="tooltip" data-placement="top" title="Create a new journal entry" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('journaling.add_entry')}}'">Create New Entry</button>
-
+<button data-toggle="tooltip" data-placement="top" title="Adjusting journal entry" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('journaling.adjusting_entry')}}'">Adjusting journal entry</button>
+</div>
 {% endblock %}
