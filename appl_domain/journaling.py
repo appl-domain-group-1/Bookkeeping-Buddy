@@ -1,5 +1,6 @@
 from flask import Blueprint, g, redirect, render_template, request, url_for, abort, send_file
 from appl_domain.db import get_db
+from appl_domain.email_tasks import email_journal_adjust
 from datetime import datetime
 from appl_domain.auth import login_required
 import json
@@ -63,6 +64,8 @@ def add_entry():
 
         # Write the change
         db.commit()
+        if g.user['role'] not in (1, 2):
+            email_journal_adjust(g.user['username'], g.user["first_name"], g.user["last_name"], datetime.now())
 
     return render_template('journaling/add_entry.html', accounts=accounts)
 
