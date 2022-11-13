@@ -130,7 +130,26 @@ def retained_earnings():
 @bp.route('/trial_balance', methods=('GET', 'POST'))
 @login_required
 def trial_balance():
-    return render_template('statements/trial_balance.html')
+    # Get a handle on the DB
+    db = get_db()
+
+    # Get all accounts
+    accounts = db.execute(
+        "SELECT * FROM accounts"
+    ).fetchall()
+
+    # Get all categories
+    categories = db.execute(
+        "SELECT * FROM acct_categories"
+    ).fetchall()
+
+    # Get all subcategories
+    subcategories = db.execute(
+        "SELECT * FROM subcategories"
+    ).fetchall()
+
+    return render_template('statements/trial_balance.html', accounts=accounts, categories=categories,
+                           subcategories=subcategories)
 
 @bp.route('/email_statement', methods=('GET', 'POST'))
 @login_required
