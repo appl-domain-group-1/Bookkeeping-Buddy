@@ -151,7 +151,7 @@ def journal():
 
     # Get all approved entries
     approved_entries = db.execute(
-        "SELECT * FROM journal WHERE status = ?", (1,)
+        "SELECT * FROM journal WHERE status = ? AND adjusting = ?", (1, 0)
     ).fetchall()
     # Convert each entry to a Python dictionary
     approved_entries2 = []
@@ -180,7 +180,7 @@ def journal():
 
     # Get all pending entries
     pending_entries = db.execute(
-        "SELECT * FROM journal WHERE status = ?", (0,)
+        "SELECT * FROM journal WHERE status = ? AND adjusting = ?", (0, 0)
     ).fetchall()
     # Convert each entry to a Python dictionary
     pending_entries2 = []
@@ -209,7 +209,7 @@ def journal():
 
     # Get all rejected entries
     rejected_entries = db.execute(
-        "SELECT * FROM journal WHERE status = ?", (-1,)
+        "SELECT * FROM journal WHERE status = ? AND adjusting = ?", (-1, 0)
     ).fetchall()
     # Convert each entry to a Python dictionary
     rejected_entries2 = []
@@ -238,7 +238,105 @@ def journal():
         rejected_entries2.append(temp_dict)
 
     return render_template('journaling/journal.html', approved_entries=approved_entries2,
-                           pending_entries=pending_entries2, rejected_entries=rejected_entries2)
+                           pending_entries=pending_entries2, rejected_entries=rejected_entries2, adjusting=0)
+
+
+@bp.route('/adjusting_journal', methods=('GET',))
+@login_required
+def adjusting_journal():
+    # Get a handle on the DB
+    db = get_db()
+
+    # Get all approved entries
+    approved_entries = db.execute(
+        "SELECT * FROM journal WHERE status = ? AND adjusting = ?", (1, 1)
+    ).fetchall()
+    # Convert each entry to a Python dictionary
+    approved_entries2 = []
+    for entry in approved_entries:
+        # Temporary dictionary to hold each key/value
+        temp_dict = {}
+        # Go through each item in the Row object and assign it with the correct key to the temp_dict
+        temp_dict['id_num'] = entry[0]
+        temp_dict['status'] = entry[1]
+        temp_dict['date_submitted'] = entry[2]
+        temp_dict['user'] = entry[3]
+        temp_dict['approver'] = entry[4]
+        if entry[5] is not None:
+            temp_dict['credits'] = json.loads(entry[5])
+        else:
+            temp_dict['credits'] = None
+        if entry[6] is not None:
+            temp_dict['debits'] = json.loads(entry[6])
+        else:
+            temp_dict['debits'] = None
+        temp_dict['attachment_name'] = entry[8]
+        temp_dict['description'] = entry[9]
+
+        # Append this new dictionary to the list of dictionaries
+        approved_entries2.append(temp_dict)
+
+    # Get all pending entries
+    pending_entries = db.execute(
+        "SELECT * FROM journal WHERE status = ? AND adjusting = ?", (0, 1)
+    ).fetchall()
+    # Convert each entry to a Python dictionary
+    pending_entries2 = []
+    for entry in pending_entries:
+        # Temporary dictionary to hold each key/value
+        temp_dict = {}
+        # Go through each item in the Row object and assign it with the correct key to the temp_dict
+        temp_dict['id_num'] = entry[0]
+        temp_dict['status'] = entry[1]
+        temp_dict['date_submitted'] = entry[2]
+        temp_dict['user'] = entry[3]
+        temp_dict['approver'] = entry[4]
+        if entry[5] is not None:
+            temp_dict['credits'] = json.loads(entry[5])
+        else:
+            temp_dict['credits'] = None
+        if entry[6] is not None:
+            temp_dict['debits'] = json.loads(entry[6])
+        else:
+            temp_dict['debits'] = None
+        temp_dict['attachment_name'] = entry[8]
+        temp_dict['description'] = entry[9]
+
+        # Append this new dictionary to the list of dictionaries
+        pending_entries2.append(temp_dict)
+
+    # Get all rejected entries
+    rejected_entries = db.execute(
+        "SELECT * FROM journal WHERE status = ? AND adjusting = ?", (-1, 1)
+    ).fetchall()
+    # Convert each entry to a Python dictionary
+    rejected_entries2 = []
+    for entry in rejected_entries:
+        # Temporary dictionary to hold each key/value
+        temp_dict = {}
+        # Go through each item in the Row object and assign it with the correct key to the temp_dict
+        temp_dict['id_num'] = entry[0]
+        temp_dict['status'] = entry[1]
+        temp_dict['date_submitted'] = entry[2]
+        temp_dict['user'] = entry[3]
+        temp_dict['approver'] = entry[4]
+        if entry[5] is not None:
+            temp_dict['credits'] = json.loads(entry[5])
+        else:
+            temp_dict['credits'] = None
+        if entry[6] is not None:
+            temp_dict['debits'] = json.loads(entry[6])
+        else:
+            temp_dict['debits'] = None
+        temp_dict['attachment_name'] = entry[8]
+        temp_dict['description'] = entry[9]
+        temp_dict['reject_reason'] = entry[10]
+
+        # Append this new dictionary to the list of dictionaries
+        rejected_entries2.append(temp_dict)
+
+    return render_template('journaling/journal.html', approved_entries=approved_entries2,
+                           pending_entries=pending_entries2, rejected_entries=rejected_entries2, adjusting=1)
 
 
 @bp.route('/reject_entry')
@@ -367,6 +465,105 @@ def approve_entry():
 
     return redirect(url_for('journaling.journal'))
 
+@bp.route('/approve_adjusting_entry')
+@login_required
+def approve_adjusting_entry():
+    # Get the parameters from the request
+    entry_id = request.args.get('entry_id')
+    approved_by = g.user['username']
+
+    # Get a handle on the DB
+    db = get_db()
+
+    # Grab the journal entry
+    this_entry = db.execute(
+        "SELECT * from journal WHERE id_num = ?", (entry_id,)
+    ).fetchone()
+
+    # Update the row for this ID number
+    db.execute(
+        "UPDATE journal SET status = ?, approver = ? WHERE id_num = ?", (1, approved_by, entry_id)
+    )
+
+    # Write the change
+    db.commit()
+
+    # Get all of the different transactions for this journal entry
+    credits = json.loads(this_entry['credits'])
+    debits = json.loads(this_entry['debits'])
+
+    # Update all the credits
+    for account, value in credits.items():
+        # Get the account
+        this_account = db.execute(
+            "SELECT * FROM accounts WHERE acct_num = ?", (account,)
+        ).fetchone()
+
+        # Get current balance
+        current_balance = this_account['balance']
+        # Get the account type (credit/debit)
+        account_type = this_account['debit']
+
+        # Calculate the new balance
+        if account_type == 0:
+            new_bal = current_balance + value
+        else:
+            new_bal = current_balance - value
+
+        # Update the row in the ledger
+        db.execute(
+            f"INSERT into ledger_{account} (date, description, credit, post_reference, balance) VALUES (?, ?, ?, ?, ?)",
+            (this_entry['date_submitted'], this_entry['description'], value, this_entry['id_num'], new_bal)
+        )
+
+        # Write the change
+        db.commit()
+
+        # Update the balance in the account table
+        db.execute(
+            "UPDATE accounts SET balance = ? WHERE acct_num = ?", (new_bal, account)
+        )
+
+        # Write the change
+        db.commit()
+
+    # Update all the debits
+    for account, value in debits.items():
+        # Get the account
+        this_account = db.execute(
+            "SELECT * FROM accounts WHERE acct_num = ?", (account,)
+        ).fetchone()
+
+        # Get current balance
+        current_balance = this_account['balance']
+        # Get the account type (credit/debit)
+        account_type = this_account['debit']
+
+        # Calculate the new balance
+        if account_type == 1:
+            new_bal = current_balance + value
+        else:
+            new_bal = current_balance - value
+
+        # Update the row
+        db.execute(
+            f"INSERT INTO ledger_{account} (date, description, debit, post_reference, balance) VALUES (?, ?, ?, ?, ?)",
+            (this_entry['date_submitted'], this_entry['description'], value, this_entry['id_num'], new_bal)
+        )
+
+        # Write the change
+        db.commit()
+
+        # Update the balance in the account table
+        db.execute(
+            "UPDATE accounts SET balance = ? WHERE acct_num = ?", (new_bal, account)
+        )
+
+        # Write the change
+        db.commit()
+
+    return redirect(url_for('journaling.adjusting_journal'))
+
 
 @bp.route('/get_attachment')
 @login_required
@@ -393,10 +590,3 @@ def get_attachment():
 
     # Send the file to the user
     return send_file(temp_file, download_name=file_name)
-
-
-@bp.route('/adjusting_entry_journal', methods=('GET', 'POST'))
-@login_required
-def adjusting_entry():
-    return render_template('journaling/adjusting_entry.html')
-
