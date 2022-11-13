@@ -58,8 +58,9 @@ def add_entry():
 
         db.execute(
             "INSERT INTO journal (status, date_submitted, user, credits, debits, attachment_data, attachment_name, "
-            "description) VALUES (?, ? ,? ,? ,?, ?, ?, ?)",
-            (0, datetime.now(), g.user['username'], entry_credits, entry_debits, attachment_data, attachment_name, description)
+            "description, adjusting, adjusting_type) VALUES (?, ? ,? ,? ,?, ?, ?, ?, 0, NULL)",
+            (0, datetime.now(), g.user['username'], entry_credits, entry_debits, attachment_data, attachment_name,
+             description)
         )
 
         # Write the change
@@ -67,7 +68,75 @@ def add_entry():
         if g.user['role'] not in (1, 2):
             email_journal_adjust(g.user['username'], g.user["first_name"], g.user["last_name"], datetime.now())
 
-    return render_template('journaling/add_entry.html', accounts=accounts)
+    return render_template('journaling/add_entry.html', accounts=accounts, adjusting=0)
+
+
+@bp.route('/add_adjusting_entry', methods=('GET', 'POST'))
+@login_required
+def add_adjusting_entry():
+    """
+    Allows a user, manager, or admin to create a new journal entry
+    """
+
+    # Get a handle on the DB
+    db = get_db()
+
+    # Get a list of all accounts so we know which ones are available to credit/debit
+    accounts = db.execute(
+        "SELECT * FROM accounts"
+    ).fetchall()
+
+    if request.method == 'POST':
+        # Empty dictionary to hold all the accounts that were credited and the value by which they were credited
+        entry_credits = {}
+        # Loop through 'credit_1_value' through 'credit_5_value' and add the entries which are > 0 to the dictionary
+        for number in range(1, 6):
+            value = request.form[f'credit_{number}_value'].replace(',', '').replace('.', '').replace('$', '')
+            if (len(value) > 0) and (int(value) > 0):
+                entry_credits[request.form[f'credit_{number}_account']] = int(value)
+        # Dump the dictionary to a JSON object to be stored in the DB
+        entry_credits = json.dumps(entry_credits)
+
+        # Empty dictionary to hold all the accounts that were debited and the value by which they were debited
+        entry_debits = {}
+        # Loop through 'debit_1_value' through 'debit_5_value' and add the entries which are > 0 to the dictionary
+        for number in range(1, 6):
+            value = request.form[f'debit_{number}_value'].replace(',', '').replace('.', '').replace('$', '')
+            if (len(value) > 0) and (int(value) > 0):
+                entry_debits[request.form[f'debit_{number}_account']] = int(value)
+        # Dump the dictionary to a JSON object to be stored in the DB
+        entry_debits = json.dumps(entry_debits)
+
+        # Get any attachments that the user uploaded
+        if request.files['attachment'].filename:
+            attachment_data = request.files['attachment'].read()
+            attachment_name = request.files['attachment'].filename
+        else:
+            attachment_data = None
+            attachment_name = None
+
+        # Get entry's description
+        description = request.form['description']
+
+        # Get the type of adjusting journal entry this is
+        adjusting_type = request.form['adjusting_type']
+
+        db.execute(
+            "INSERT INTO journal (status, date_submitted, user, credits, debits, attachment_data, attachment_name, "
+            "description, adjusting, adjusting_type) VALUES (?, ? ,? ,? ,?, ?, ?, ?, 1, ?)",
+            (0, datetime.now(), g.user['username'], entry_credits, entry_debits, attachment_data, attachment_name,
+             description, adjusting_type)
+        )
+
+        # Write the change
+        db.commit()
+
+        # If the user is not an admin or a manager, email all managers and
+        # let them know a new entry is waiting to be approved
+        if g.user['role'] not in (1, 2):
+            email_journal_adjust(g.user['username'], g.user["first_name"], g.user["last_name"], datetime.now())
+
+    return render_template('journaling/add_entry.html', accounts=accounts, adjusting=1)
 
 
 @bp.route('/journal', methods=('GET',))
@@ -320,13 +389,8 @@ def get_attachment():
     return send_file(temp_file, download_name=file_name)
 
 
-@bp.route('/adjusting_entry', methods=('GET', 'POST'))
+@bp.route('/adjusting_entry_journal', methods=('GET', 'POST'))
 @login_required
 def adjusting_entry():
     return render_template('journaling/adjusting_entry.html')
 
-
-@bp.route('/create_adjusting_entry', methods=('GET', 'POST'))
-@login_required
-def create_adjusting_entry():
-    return render_template('journaling/create_adjusting_entry.html')
