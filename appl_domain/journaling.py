@@ -257,21 +257,22 @@ def adjusting_journal():
         # Temporary dictionary to hold each key/value
         temp_dict = {}
         # Go through each item in the Row object and assign it with the correct key to the temp_dict
-        temp_dict['id_num'] = entry[0]
-        temp_dict['status'] = entry[1]
-        temp_dict['date_submitted'] = entry[2]
-        temp_dict['user'] = entry[3]
-        temp_dict['approver'] = entry[4]
-        if entry[5] is not None:
-            temp_dict['credits'] = json.loads(entry[5])
+        temp_dict['id_num'] = entry['id_num']
+        temp_dict['status'] = entry['status']
+        temp_dict['date_submitted'] = entry['date_submitted']
+        temp_dict['user'] = entry['user']
+        temp_dict['approver'] = entry['approver']
+        if entry['credits'] is not None:
+            temp_dict['credits'] = json.loads(entry['credits'])
         else:
             temp_dict['credits'] = None
-        if entry[6] is not None:
-            temp_dict['debits'] = json.loads(entry[6])
+        if entry['debits'] is not None:
+            temp_dict['debits'] = json.loads(entry['debits'])
         else:
             temp_dict['debits'] = None
-        temp_dict['attachment_name'] = entry[8]
-        temp_dict['description'] = entry[9]
+        temp_dict['attachment_name'] = entry['attachment_name']
+        temp_dict['description'] = entry['description']
+        temp_dict['adjusting_type'] = entry['adjusting_type']
 
         # Append this new dictionary to the list of dictionaries
         approved_entries2.append(temp_dict)
@@ -286,21 +287,22 @@ def adjusting_journal():
         # Temporary dictionary to hold each key/value
         temp_dict = {}
         # Go through each item in the Row object and assign it with the correct key to the temp_dict
-        temp_dict['id_num'] = entry[0]
-        temp_dict['status'] = entry[1]
-        temp_dict['date_submitted'] = entry[2]
-        temp_dict['user'] = entry[3]
-        temp_dict['approver'] = entry[4]
-        if entry[5] is not None:
-            temp_dict['credits'] = json.loads(entry[5])
+        temp_dict['id_num'] = entry['id_num']
+        temp_dict['status'] = entry['status']
+        temp_dict['date_submitted'] = entry['date_submitted']
+        temp_dict['user'] = entry['user']
+        temp_dict['approver'] = entry['approver']
+        if entry['credits'] is not None:
+            temp_dict['credits'] = json.loads(entry['credits'])
         else:
             temp_dict['credits'] = None
-        if entry[6] is not None:
-            temp_dict['debits'] = json.loads(entry[6])
+        if entry['debits'] is not None:
+            temp_dict['debits'] = json.loads(entry['debits'])
         else:
             temp_dict['debits'] = None
         temp_dict['attachment_name'] = entry[8]
         temp_dict['description'] = entry[9]
+        temp_dict['adjusting_type'] = entry['adjusting_type']
 
         # Append this new dictionary to the list of dictionaries
         pending_entries2.append(temp_dict)
@@ -315,22 +317,23 @@ def adjusting_journal():
         # Temporary dictionary to hold each key/value
         temp_dict = {}
         # Go through each item in the Row object and assign it with the correct key to the temp_dict
-        temp_dict['id_num'] = entry[0]
-        temp_dict['status'] = entry[1]
-        temp_dict['date_submitted'] = entry[2]
-        temp_dict['user'] = entry[3]
-        temp_dict['approver'] = entry[4]
-        if entry[5] is not None:
-            temp_dict['credits'] = json.loads(entry[5])
+        temp_dict['id_num'] = entry['id_num']
+        temp_dict['status'] = entry['status']
+        temp_dict['date_submitted'] = entry['date_submitted']
+        temp_dict['user'] = entry['user']
+        temp_dict['approver'] = entry['approver']
+        if entry['credits'] is not None:
+            temp_dict['credits'] = json.loads(entry['credits'])
         else:
             temp_dict['credits'] = None
         if entry[6] is not None:
-            temp_dict['debits'] = json.loads(entry[6])
+            temp_dict['debits'] = json.loads(entry['debits'])
         else:
             temp_dict['debits'] = None
-        temp_dict['attachment_name'] = entry[8]
-        temp_dict['description'] = entry[9]
-        temp_dict['reject_reason'] = entry[10]
+        temp_dict['attachment_name'] = entry['attachment_name']
+        temp_dict['description'] = entry['description']
+        temp_dict['reject_reason'] = entry['reject_reason']
+        temp_dict['adjusting_type'] = entry['adjusting_type']
 
         # Append this new dictionary to the list of dictionaries
         rejected_entries2.append(temp_dict)
