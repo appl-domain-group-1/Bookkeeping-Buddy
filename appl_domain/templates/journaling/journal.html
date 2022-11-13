@@ -1,80 +1,93 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    {% if adjusting %}
+        View Adjusting Entries
+    {% else %}
+        View Journal Entries
+    {% endif %}
+{% endblock %}
+
 {% block content %}
-<style>
-    .dataTables_filter, .dataTables_info, .dataTables_length, .dataTables_paginate { display: none; }
-</style>
-<script>
-    $(document).ready(function(){
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#table2 tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-});
-    var minDate, maxDate;
-
-// Custom filtering function which will search data in column four between two values
-$.fn.dataTable.ext.search.push(
-    function( settings, data, dataIndex ) {
-        var min = minDate.val();
-        var max = maxDate.val();
-        var date = new Date( data[1] );
-
-        if (
-            ( min === null && max === null ) ||
-            ( min === null && date <= max ) ||
-            ( min <= date   && max === null ) ||
-            ( min <= date   && date <= max )
-        ) {
-            return true;
+    <style>
+        .dataTables_filter, .dataTables_info, .dataTables_length, .dataTables_paginate {
+            display: none;
         }
-        return false;
-    }
-);
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#table2 tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+        var minDate, maxDate;
 
-$(document).ready(function() {
-    // Create date inputs
-    minDate = new DateTime($('#min'), {
-        format: 'dddd, MMMM DD HH:mm:ss'
-    });
-    maxDate = new DateTime($('#max'), {
-        format: 'dddd, MMMM DD HH:mm:ss'
-    });
+        // Custom filtering function which will search data in column four between two values
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var min = minDate.val();
+                var max = maxDate.val();
+                var date = new Date(data[1]);
 
-    // DataTables initialisation
-    var table = $('#myTable').DataTable();
-    var table1 = $('#myTable1').DataTable();
-    var table2 = $('#myTable2').DataTable();
+                if (
+                    (min === null && max === null) ||
+                    (min === null && date <= max) ||
+                    (min <= date && max === null) ||
+                    (min <= date && date <= max)
+                ) {
+                    return true;
+                }
+                return false;
+            }
+        );
 
-    // Refilter the table
-    $('#min, #max').on('change', function () {
-        table.draw();
-        table1.draw(false);
-        table2.draw(false);
-    });
-});
+        $(document).ready(function () {
+            // Create date inputs
+            minDate = new DateTime($('#min'), {
+                format: 'dddd, MMMM DD HH:mm:ss'
+            });
+            maxDate = new DateTime($('#max'), {
+                format: 'dddd, MMMM DD HH:mm:ss'
+            });
 
-    function get_reject_reason(id) {
-        let reject_reason = prompt("Enter reason this entry should be rejected:");
-        if (reject_reason != null || reject_reason !== ""){
-            window.location.href='/journaling/reject_entry?entry_id=' + id + '&reject_reason=' + reject_reason;
+            // DataTables initialisation
+            var table = $('#myTable').DataTable();
+            var table1 = $('#myTable1').DataTable();
+            var table2 = $('#myTable2').DataTable();
+
+            // Refilter the table
+            $('#min, #max').on('change', function () {
+                table.draw();
+                table1.draw(false);
+                table2.draw(false);
+            });
+        });
+
+        function get_reject_reason(id) {
+            let reject_reason = prompt("Enter reason this entry should be rejected:");
+            if (reject_reason != null || reject_reason !== "") {
+                window.location.href = '/journaling/reject_entry?entry_id=' + id + '&reject_reason=' + reject_reason;
+            }
         }
-    }
-</script>
-<button class="btn btn-secondary dropdown-toggle bg-transparent" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white; font-size: xx-large; font-weight: bold">
-       Choose a Journal Entry
-  </button>
-<div id = "dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="#myTable">Approved Entries</a>
-    <a class="dropdown-item" href="#myTable1">Pending Entries</a>
-      <a class="dropdown-item" href="#myTable2">Rejected Entries</a>
-  </div>
-<br>
-<br>
-<table>
-        <tbody><tr>
+    </script>
+    <button class="btn btn-secondary dropdown-toggle bg-transparent" type="button" id="dropdownMenuButton"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+            style="color: white; font-size: xx-large; font-weight: bold">
+        Choose an Entry Status
+    </button>
+        <div id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#myTable">Approved Entries</a>
+            <a class="dropdown-item" href="#myTable1">Pending Entries</a>
+            <a class="dropdown-item" href="#myTable2">Rejected Entries</a>
+        </div>
+    <br>
+    <br>
+    <table>
+        <tbody>
+        <tr>
             <td style="color: white">Start date:</td>
             <td><input type="text" id="min" name="min" style="width: 250px"></td>
         </tr>
@@ -82,14 +95,16 @@ $(document).ready(function() {
             <td style="color: white">End date:</td>
             <td><input type="text" id="max" name="max" style="width: 250px"></td>
         </tr>
-    </tbody></table>
-<br>
-<input class="form-control" id="myInput" type="text" placeholder="Search by account number or account name">
-<br>
-   <h2 style="color: white" class = "approved entry">Approved Entries</h2>
-<div  class="table-responsive">
-    <table class = "table table-sm approved entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
-        <thead>
+        </tbody>
+    </table>
+    <br>
+    <input class="form-control" id="myInput" type="text" placeholder="Search by account number or account name">
+    <br>
+    <h2 style="color: white" class="approved entry">Approved Entries</h2>
+    <div class="table-responsive">
+        <table class="table table-sm approved entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19"
+               id="myTable">
+            <thead>
             <tr>
                 <th>Entry ID</th>
                 <th>Date Submitted</th>
@@ -100,63 +115,68 @@ $(document).ready(function() {
                 <th>Accounts Credited</th>
                 <th>Attachment</th>
             </tr>
-        </thead>
-        <tbody id ="table2">
+            </thead>
+            <tbody id="table2">
             {% for entry in approved_entries %}
                 <tr id="entry_{{ entry['id_num'] }}">
-                    <td>{{entry['id_num']}}</td>
-                    <td>{{entry['date_submitted']}}</td>
-                    <td>{{entry['user']}}</td>
-                    <td>{{entry['approver']}}</td>
-                    <td>{{entry['description']}}</td>
+                    <td>{{ entry['id_num'] }}</td>
+                    <td>{{ entry['date_submitted'] }}</td>
+                    <td>{{ entry['user'] }}</td>
+                    <td>{{ entry['approver'] }}</td>
+                    <td>{{ entry['description'] }}</td>
                     <td>
                         <table>
                             <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th>Value</th>
+                            </tr>
+                            {% for debit in entry['debits'] %}
                                 <tr>
-                                    <th>Account</th>
-                                    <th>Value</th>
+                                    <td>
+                                        <a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a>
+                                    </td>
+                                    <td class="show-comma">{{ entry['debits'][debit] }}</td>
                                 </tr>
-                                    {% for debit in entry['debits'] %}
-                                    <tr>
-                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a></td>
-                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
-                                    </tr>
-                                {% endfor %}
+                            {% endfor %}
                             </thead>
                         </table>
                     </td>
                     <td>
                         <table>
                             <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th>Value</th>
+                            </tr>
+                            {% for credit in entry['credits'] %}
                                 <tr>
-                                    <th>Account</th>
-                                    <th>Value</th>
+                                    <td>
+                                        <a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a>
+                                    </td>
+                                    <td class="show-comma">{{ entry['credits'][credit] }}</td>
                                 </tr>
-                                    {% for credit in entry['credits'] %}
-                                    <tr>
-                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a></td>
-                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
-                                    </tr>
-                                {% endfor %}
+                            {% endfor %}
                             </thead>
                         </table>
                     </td>
                     <td>
                         {% if entry['attachment_name'] != None %}
-                            <a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a>
+                            <a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{ entry['attachment_name'] }}</a>
                         {% else %}
-                            {{entry['attachment_name']}}
+                            {{ entry['attachment_name'] }}
                         {% endif %}
                     </td>
                 </tr>
             {% endfor %}
-        </tbody>
-    </table>
-</div>
-    <h2  class = "pending entry" style="color: white">Pending Entries</h2>
-<div  class="table-responsive" >
-    <table class = "table table-sm  pending entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable1">
-        <thead>
+            </tbody>
+        </table>
+    </div>
+    <h2 class="pending entry" style="color: white">Pending Entries</h2>
+    <div class="table-responsive">
+        <table class="table table-sm  pending entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19"
+               id="myTable1">
+            <thead>
             <tr>
                 <th>Entry ID</th>
                 <th>Date Submitted</th>
@@ -169,68 +189,85 @@ $(document).ready(function() {
                     <th>Entry Actions</th>
                 {% endif %}
             </tr>
-        </thead>
-        <tbody id ="table2">
+            </thead>
+            <tbody id="table2">
             {% for entry in pending_entries %}
                 <tr id="entry_{{ entry['id_num'] }}">
-                    <td>{{entry['id_num']}}</td>
-                    <td>{{entry['date_submitted']}}</td>
-                    <td>{{entry['user']}}</td>
-                    <td>{{entry['description']}}</td>
+                    <td>{{ entry['id_num'] }}</td>
+                    <td>{{ entry['date_submitted'] }}</td>
+                    <td>{{ entry['user'] }}</td>
+                    <td>{{ entry['description'] }}</td>
                     <td>
                         <table>
                             <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th>Value</th>
+                            </tr>
+                            {% for debit in entry['debits'] %}
                                 <tr>
-                                    <th>Account</th>
-                                    <th>Value</th>
+                                    <td>
+                                        <a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a>
+                                    </td>
+                                    <td class="show-comma">{{ entry['debits'][debit] }}</td>
                                 </tr>
-                                    {% for debit in entry['debits'] %}
-                                    <tr>
-                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a></td>
-                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
-                                    </tr>
-                                {% endfor %}
+                            {% endfor %}
                             </thead>
                         </table>
                     </td>
                     <td>
                         <table>
                             <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th>Value</th>
+                            </tr>
+                            {% for credit in entry['credits'] %}
                                 <tr>
-                                    <th>Account</th>
-                                    <th>Value</th>
+                                    <td>
+                                        <a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a>
+                                    </td>
+                                    <td class="show-comma">{{ entry['credits'][credit] }}</td>
                                 </tr>
-                                    {% for credit in entry['credits'] %}
-                                    <tr>
-                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a></td>
-                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
-                                    </tr>
-                                {% endfor %}
+                            {% endfor %}
                             </thead>
                         </table>
                     </td>
                     <td>
                         {% if entry['attachment_name'] != None %}
-                            <a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a>
+                            <a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{ entry['attachment_name'] }}</a>
                         {% else %}
-                            {{entry['attachment_name']}}
+                            {{ entry['attachment_name'] }}
                         {% endif %}
                     </td>
                     {% if g.user['role'] == 1 or g.user['role'] == 2 %}
                         <td>
-                            <button data-toggle="tooltip" data-placement="top" title="Approve journal entry" onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Approve</button>
-                            <button data-toggle="tooltip" data-placement="top" title="Reject journal entry" onclick="get_reject_reason({{entry['id_num']}})" style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">Reject</button>
+                            <button data-toggle="tooltip" data-placement="top" title="Approve journal entry"
+                                    {% if adjusting %}
+                                        onclick="window.location.href='{{ url_for('journaling.approve_adjusting_entry', entry_id=entry['id_num']) }}'"
+                                    {% else %}
+                                        onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'"
+                                    {% endif %}
+                                    style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">
+                                Approve
+                            </button>
+                            <button data-toggle="tooltip" data-placement="top" title="Reject journal entry"
+                                    onclick="get_reject_reason({{ entry['id_num'] }})"
+                                    style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">
+                                Reject
+                            </button>
                         </td>
                     {% endif %}
                 </tr>
             {% endfor %}
-        </tbody>
-    </table>
-</div>
-    <h2  class = "rejected entry" style="color: white">Rejected Entries</h2>
-<div  class="table-responsive">
-    <table class = "table table-sm rejected entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable2">
-        <thead>
+            </tbody>
+        </table>
+    </div>
+    <h2 class="rejected entry" style="color: white">Rejected Entries</h2>
+    <div class="table-responsive">
+        <table class="table table-sm rejected entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19"
+               id="myTable2">
+            <thead>
             <tr>
                 <th>Entry ID</th>
                 <th>Date Submitted</th>
@@ -242,63 +279,77 @@ $(document).ready(function() {
                 <th>Accounts Credited</th>
                 <th>Attachment</th>
             </tr>
-        </thead>
-        <tbody id ="table2">
+            </thead>
+            <tbody id="table2">
             {% for entry in rejected_entries %}
                 <tr id="entry_{{ entry['id_num'] }}">
-                    <td>{{entry['id_num']}}</td>
-                    <td>{{entry['date_submitted']}}</td>
-                    <td>{{entry['user']}}</td>
-                    <td>{{entry['approver']}}</td>
-                    <td>{{entry['reject_reason']}}</td>
-                    <td>{{entry['description']}}</td>
+                    <td>{{ entry['id_num'] }}</td>
+                    <td>{{ entry['date_submitted'] }}</td>
+                    <td>{{ entry['user'] }}</td>
+                    <td>{{ entry['approver'] }}</td>
+                    <td>{{ entry['reject_reason'] }}</td>
+                    <td>{{ entry['description'] }}</td>
                     <td>
                         <table>
                             <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th>Value</th>
+                            </tr>
+                            {% for debit in entry['debits'] %}
                                 <tr>
-                                    <th>Account</th>
-                                    <th>Value</th>
+                                    <td>
+                                        <a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a>
+                                    </td>
+                                    <td class="show-comma">{{ entry['debits'][debit] }}</td>
                                 </tr>
-                                    {% for debit in entry['debits'] %}
-                                    <tr>
-                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a></td>
-                                        <td class="show-comma">{{ entry['debits'][debit] }}</td>
-                                    </tr>
-                                {% endfor %}
+                            {% endfor %}
                             </thead>
                         </table>
                     </td>
                     <td>
                         <table>
                             <thead>
+                            <tr>
+                                <th>Account</th>
+                                <th>Value</th>
+                            </tr>
+                            {% for credit in entry['credits'] %}
                                 <tr>
-                                    <th>Account</th>
-                                    <th>Value</th>
+                                    <td>
+                                        <a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a>
+                                    </td>
+                                    <td class="show-comma">{{ entry['credits'][credit] }}</td>
                                 </tr>
-                                    {% for credit in entry['credits'] %}
-                                    <tr>
-                                        <td><a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a></td>
-                                        <td class="show-comma">{{ entry['credits'][credit] }}</td>
-                                    </tr>
-                                {% endfor %}
+                            {% endfor %}
                             </thead>
                         </table>
                     </td>
                     <td>
                         {% if entry['attachment_name'] != None %}
-                            <a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{entry['attachment_name']}}</a>
+                            <a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{ entry['attachment_name'] }}</a>
                         {% else %}
-                            {{entry['attachment_name']}}
+                            {{ entry['attachment_name'] }}
                         {% endif %}
                     </td>
                 </tr>
             {% endfor %}
-        </tbody>
-    </table>
-</div>
-<br>
-<div class="d-flex justify-content-center" >
-<button data-toggle="tooltip" data-placement="top" title="Create a new journal entry" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('journaling.add_entry')}}'">Create New Entry</button>
-<button data-toggle="tooltip" data-placement="top" title="Adjusting journal entry" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('journaling.adjusting_entry')}}'">Adjusting journal entry</button>
-</div>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="d-flex justify-content-center">
+        <button data-toggle="tooltip" data-placement="top" title="Create a new journal entry" type="button"
+                style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+                onclick="window.location.href='{% if adjusting %}{{ url_for('journaling.add_adjusting_entry') }}{% else %}{{ url_for('journaling.add_entry') }}{% endif %}'">
+            Create New {% if adjusting %}Adjusting{% endif %} Journal Entry
+        </button>
+        {% if not adjusting %}
+            <button data-toggle="tooltip" data-placement="top" title="Adjusting journal entry" type="button"
+                    style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+                    onclick="window.location.href='{{ url_for('journaling.adjusting_journal') }}'">View Adjusting
+                Journal Entries
+            </button>
+        {% endif %}
+    </div>
 {% endblock %}
