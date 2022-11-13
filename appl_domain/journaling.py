@@ -318,3 +318,15 @@ def get_attachment():
 
     # Send the file to the user
     return send_file(temp_file, download_name=file_name)
+
+
+@bp.route('/adjusting_entry', methods=('GET', 'POST'))
+@login_required
+def adjusting_entry():
+    return render_template('journaling/adjusting_entry.html')
+
+
+@bp.route('/create_adjusting_entry', methods=('GET', 'POST'))
+@login_required
+def create_adjusting_entry():
+    return render_template('journaling/create_adjusting_entry.html')
