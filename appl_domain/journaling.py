@@ -468,6 +468,7 @@ def approve_entry():
 
     return redirect(url_for('journaling.journal'))
 
+
 @bp.route('/approve_adjusting_entry')
 @login_required
 def approve_adjusting_entry():

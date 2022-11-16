@@ -74,11 +74,11 @@
             style="color: white; font-size: xx-large; font-weight: bold">
         Choose an Entry Status
     </button>
-        <div id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#myTable">Approved Entries</a>
-            <a class="dropdown-item" href="#myTable1">Pending Entries</a>
-            <a class="dropdown-item" href="#myTable2">Rejected Entries</a>
-        </div>
+    <div id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#myTable">Approved Entries</a>
+        <a class="dropdown-item" href="#myTable1">Pending Entries</a>
+        <a class="dropdown-item" href="#myTable2">Rejected Entries</a>
+    </div>
     <br>
     <br>
     <table>
@@ -96,6 +96,8 @@
     <br>
     <input class="form-control" id="myInput" type="text" placeholder="Search by account number or account name">
     <br>
+
+    {#  Approved Entries table  #}
     <h2 style="color: white" class="approved entry">Approved Entries</h2>
     <div class="table-responsive">
         <table class="table table-sm approved entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19"
@@ -168,6 +170,8 @@
             </tbody>
         </table>
     </div>
+
+    {#  Pending Entries table  #}
     <h2 class="pending entry" style="color: white">Pending Entries</h2>
     <div class="table-responsive">
         <table class="table table-sm  pending entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19"
@@ -255,6 +259,8 @@
             </tbody>
         </table>
     </div>
+
+    {#  Rejected Entries table  #}
     <h2 class="rejected entry" style="color: white">Rejected Entries</h2>
     <div class="table-responsive">
         <table class="table table-sm rejected entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19"
@@ -330,6 +336,8 @@
         </table>
     </div>
     <br>
+
+    {#  Bottom buttons  #}
     <div class="d-flex justify-content-center">
         <button data-toggle="tooltip" data-placement="top" title="Create a new journal entry" type="button"
                 style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
