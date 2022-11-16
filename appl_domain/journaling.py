@@ -1,10 +1,12 @@
+import json
+from datetime import datetime
+from io import BytesIO
+
 from flask import Blueprint, g, redirect, render_template, request, url_for, abort, send_file
+
+from appl_domain.auth import login_required
 from appl_domain.db import get_db
 from appl_domain.email_tasks import email_journal_adjust
-from datetime import datetime
-from appl_domain.auth import login_required
-import json
-from io import BytesIO
 
 bp = Blueprint('journaling', __name__, url_prefix='/journaling')
 
