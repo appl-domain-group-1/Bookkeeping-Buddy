@@ -117,6 +117,7 @@
             </thead>
             <tbody id="table2">
             {% for entry in approved_entries %}
+                {# Row to display the regular journal entry #}
                 <tr id="entry_{{ entry['id_num'] }}">
                     <td>{{ entry['id_num'] }}</td>
                     <td>{{ entry['date_submitted'] }}</td>
@@ -174,8 +175,11 @@
                         </button>
                     </td>
                 </tr>
+                {# Row to display all the associated adjusting entries #}
                 <tr>
+                    {# Empty cell to space adjusting entries over #}
                     <td></td>
+                    {# Show adjusting entries in the rest of the row #}
                     <td colspan="8">
                         <table>
                         <tr>
