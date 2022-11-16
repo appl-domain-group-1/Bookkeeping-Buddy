@@ -68,6 +68,22 @@
                 window.location.href = '/journaling/reject_entry?entry_id=' + id + '&reject_reason=' + reject_reason;
             }
         }
+
+        function toggle_display(id) {
+            let collapser_name = "collapser_" + id;
+            let adjusting_entries_name = "adjusting_entries_" + id;
+
+            let collapser = document.getElementById(collapser_name)
+            let adjusting_entries_table = document.getElementById(adjusting_entries_name)
+
+            if (adjusting_entries_table.style.display === 'none') {
+                adjusting_entries_table.style.display = 'table-cell';
+                collapser.innerText = "Hide Associated Adjusting Entries";
+            } else {
+                adjusting_entries_table.style.display = 'none';
+                collapser.innerText = "Show Associated Adjusting Entries";
+            }
+        }
     </script>
     <button class="btn btn-secondary dropdown-toggle bg-transparent" type="button" id="dropdownMenuButton"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
@@ -178,9 +194,9 @@
                 {# Row to display all the associated adjusting entries #}
                 <tr>
                     {# Empty cell to space adjusting entries over #}
-                    <td></td>
+                    <td id="collapser_{{ entry['id_num'] }}" style="vertical-align: top" onclick="toggle_display({{ entry['id_num'] }})">Show Associated Adjusting Entries</td>
                     {# Show adjusting entries in the rest of the row #}
-                    <td colspan="8">
+                    <td id="adjusting_entries_{{ entry['id_num'] }}" colspan="8" style="display: none">
                         <table style="background-color: lightgreen">
                         <tr>
                             <th colspan="8">
