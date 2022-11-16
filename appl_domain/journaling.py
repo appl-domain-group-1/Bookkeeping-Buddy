@@ -33,6 +33,7 @@ def rows_to_dict(rows):
         temp_dict['attachment_name'] = entry['attachment_name']
         temp_dict['description'] = entry['description']
         temp_dict['reject_reason'] = entry['reject_reason']
+        temp_dict['adjusting'] = entry['adjusting']
         temp_dict['associated_journal_entry_id'] = entry['associated_journal_entry_id']
 
         # Append this new dictionary to the list of dictionaries

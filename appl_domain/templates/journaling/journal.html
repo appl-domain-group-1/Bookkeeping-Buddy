@@ -181,7 +181,7 @@
                     <td></td>
                     {# Show adjusting entries in the rest of the row #}
                     <td colspan="8">
-                        <table>
+                        <table style="background-color: lightgreen">
                         <tr>
                             <th colspan="8">
                                 Associated Adjusting Journal Entries
@@ -280,7 +280,7 @@
             </thead>
             <tbody id="table2">
             {% for entry in pending_entries %}
-                <tr id="entry_{{ entry['id_num'] }}">
+                <tr id="entry_{{ entry['id_num'] }}" {% if entry['adjusting'] == 1 %}style="background-color: lightgreen"{% endif %}>
                     <td>{{ entry['id_num'] }}</td>
                     <td>{{ entry['date_submitted'] }}</td>
                     <td>{{ entry['user'] }}</td>
