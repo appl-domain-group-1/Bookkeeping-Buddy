@@ -132,8 +132,6 @@ CREATE TABLE journal (
     reject_reason TEXT,
     /* Indicates whether this entry is an adjusting entry (1) or not (0) */
     adjusting INTEGER NOT NULL,
-    /* Type of adjustment for adjusting journal entries. 0 = accrued revenues,
-       1 = accrued expenses, 2 = deferred revenues, 3 = prepaid expenses,
-       4 = depreciation expenses */
-    adjusting_type INTEGER
+    /* If this is an adjusting entry, record which regular entry it belongs to */
+    associated_journal_entry_id INTEGER REFERENCES journal(id_num)
 )
