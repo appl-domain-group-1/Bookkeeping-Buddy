@@ -1,11 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    {% if adjusting %}
-        View Adjusting Entries
-    {% else %}
-        View Journal Entries
-    {% endif %}
+    View Journal Entries
 {% endblock %}
 
 {% block content %}
@@ -111,9 +107,6 @@
                 <th>Submitted By</th>
                 <th>Approved By</th>
                 <th>Description</th>
-                {% if adjusting %}
-                    <th>Adjusting Type</th>
-                {% endif %}
                 <th>Accounts Debited</th>
                 <th>Accounts Credited</th>
                 <th>Attachment</th>
@@ -127,21 +120,6 @@
                     <td>{{ entry['user'] }}</td>
                     <td>{{ entry['approver'] }}</td>
                     <td>{{ entry['description'] }}</td>
-                    {% if adjusting %}
-                        {% if entry['adjusting_type'] == 0 %}
-                            <td>Accrued Revenues</td>
-                        {% elif entry['adjusting_type'] == 1 %}
-                            <td>Accrued Expenses</td>
-                        {% elif entry['adjusting_type'] == 2 %}
-                            <td>Deferred Revenues</td>
-                        {% elif entry['adjusting_type'] == 3 %}
-                            <td>Prepaid Expenses</td>
-                        {% elif entry['adjusting_type'] == 4 %}
-                            <td>Depreciation Expenses</td>
-                        {% else %}
-                            <td>ERROR - CONTACT ADMINISTRATOR</td>
-                        {% endif %}
-                    {% endif %}
                     <td>
                         <table>
                             <thead>
@@ -200,9 +178,6 @@
                 <th>Date Submitted</th>
                 <th>Submitted By</th>
                 <th>Description</th>
-                {% if adjusting %}
-                    <th>Adjusting Type</th>
-                {% endif %}
                 <th>Accounts Debited</th>
                 <th>Accounts Credited</th>
                 <th>Attachment</th>
@@ -218,21 +193,6 @@
                     <td>{{ entry['date_submitted'] }}</td>
                     <td>{{ entry['user'] }}</td>
                     <td>{{ entry['description'] }}</td>
-                    {% if adjusting %}
-                        {% if entry['adjusting_type'] == 0 %}
-                            <td>Accrued Revenues</td>
-                        {% elif entry['adjusting_type'] == 1 %}
-                            <td>Accrued Expenses</td>
-                        {% elif entry['adjusting_type'] == 2 %}
-                            <td>Deferred Revenues</td>
-                        {% elif entry['adjusting_type'] == 3 %}
-                            <td>Prepaid Expenses</td>
-                        {% elif entry['adjusting_type'] == 4 %}
-                            <td>Depreciation Expenses</td>
-                        {% else %}
-                            <td>ERROR - CONTACT ADMINISTRATOR</td>
-                        {% endif %}
-                    {% endif %}
                     <td>
                         <table>
                             <thead>
@@ -279,11 +239,7 @@
                     {% if g.user['role'] == 1 or g.user['role'] == 2 %}
                         <td>
                             <button data-toggle="tooltip" data-placement="top" title="Approve journal entry"
-                                    {% if adjusting %}
-                                        onclick="window.location.href='{{ url_for('journaling.approve_adjusting_entry', entry_id=entry['id_num']) }}'"
-                                    {% else %}
-                                        onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'"
-                                    {% endif %}
+                                    onclick="window.location.href='{{ url_for('journaling.approve_entry', entry_id=entry['id_num']) }}'"
                                     style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">
                                 Approve
                             </button>
@@ -311,9 +267,6 @@
                 <th>Rejected By</th>
                 <th>Rejection Reason</th>
                 <th>Description</th>
-                {% if adjusting %}
-                    <th>Adjusting Type</th>
-                {% endif %}
                 <th>Accounts Debited</th>
                 <th>Accounts Credited</th>
                 <th>Attachment</th>
@@ -328,21 +281,6 @@
                     <td>{{ entry['approver'] }}</td>
                     <td>{{ entry['reject_reason'] }}</td>
                     <td>{{ entry['description'] }}</td>
-                    {% if adjusting %}
-                        {% if entry['adjusting_type'] == 0 %}
-                            <td>Accrued Revenues</td>
-                        {% elif entry['adjusting_type'] == 1 %}
-                            <td>Accrued Expenses</td>
-                        {% elif entry['adjusting_type'] == 2 %}
-                            <td>Deferred Revenues</td>
-                        {% elif entry['adjusting_type'] == 3 %}
-                            <td>Prepaid Expenses</td>
-                        {% elif entry['adjusting_type'] == 4 %}
-                            <td>Depreciation Expenses</td>
-                        {% else %}
-                            <td>ERROR - CONTACT ADMINISTRATOR</td>
-                        {% endif %}
-                    {% endif %}
                     <td>
                         <table>
                             <thead>
@@ -395,15 +333,8 @@
     <div class="d-flex justify-content-center">
         <button data-toggle="tooltip" data-placement="top" title="Create a new journal entry" type="button"
                 style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
-                onclick="window.location.href='{% if adjusting %}{{ url_for('journaling.add_adjusting_entry') }}{% else %}{{ url_for('journaling.add_entry') }}{% endif %}'">
-            Create New {% if adjusting %}Adjusting{% endif %} Journal Entry
+                onclick="window.location.href='{{ url_for('journaling.add_entry') }}'">
+            Create New Journal Entry
         </button>
-        {% if not adjusting %}
-            <button data-toggle="tooltip" data-placement="top" title="Adjusting journal entry" type="button"
-                    style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
-                    onclick="window.location.href='{{ url_for('journaling.adjusting_journal') }}'">View Adjusting
-                Journal Entries
-            </button>
-        {% endif %}
     </div>
 {% endblock %}

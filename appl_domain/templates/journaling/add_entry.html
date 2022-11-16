@@ -58,25 +58,6 @@
             {% endfor %}
         </table>
 
-        {% if adjusting %}
-            <table class="table table-sm">
-                <thead style="color: #185DFF; background-color: #CFCFCF">
-                <th><label for="adjusting_type" style="color: #185DFF">Adjusting entry type</label></th>
-                </thead>
-                <tr>
-                    <td>
-                        <select name="adjusting_type">
-                            <option value="0">Accrued Revenues</option>
-                            <option value="1">Accrued Expenses</option>
-                            <option value="2">Deferred Revenues</option>
-                            <option value="3">Prepaid Expenses</option>
-                            <option value="4">Depreciation Expenses</option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-        {% endif %}
-
         <table class="table table-sm">
             <thead style="color: #185DFF; background-color: #CFCFCF">
             <th><label for="description" style="color: #185DFF">Entry description</label></th>
