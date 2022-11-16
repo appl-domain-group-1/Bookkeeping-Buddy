@@ -112,6 +112,7 @@
                 <th>Accounts Debited</th>
                 <th>Accounts Credited</th>
                 <th>Attachment</th>
+                <th>Adjustment Actions</th>
             </tr>
             </thead>
             <tbody id="table2">
@@ -164,6 +165,13 @@
                         {% else %}
                             {{ entry['attachment_name'] }}
                         {% endif %}
+                    </td>
+                    <td>
+                        <button data-toggle="tooltip" data-placement="top" title="Add a new adjusting journal entry"
+                                onclick="window.location.href='{{ url_for('journaling.create_adjusting_entry', entry_id=entry['id_num']) }}'"
+                                style="background-color: #185DFF; border-radius: 4px; color: #CFCFCF; border: none; padding: 5px 8px">
+                            Add Adjustment
+                        </button>
                     </td>
                 </tr>
             {% endfor %}
