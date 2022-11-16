@@ -193,6 +193,60 @@
                             <th>Accounts Credited</th>
                             <th>Attachment</th>
                         </tr>
+                        {% for adjusting_entry in adjusting_entries %}
+                            {% if adjusting_entry['associated_journal_entry_id'] == entry['id_num'] %}
+                                <tr>
+                                    <td>{{ adjusting_entry['id_num'] }}</td>
+                                    <td>{{ adjusting_entry['date_submitted'] }}</td>
+                                    <td>{{ adjusting_entry['user'] }}</td>
+                                    <td>{{ adjusting_entry['approver'] }}</td>
+                                    <td>{{ adjusting_entry['description'] }}</td>
+                                    <td>
+                                        <table>
+                                            <thead>
+                                            <tr>
+                                                <th>Account</th>
+                                                <th>Value</th>
+                                            </tr>
+                                            {% for debit in adjusting_entry['debits'] %}
+                                                <tr>
+                                                    <td>
+                                                        <a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a>
+                                                    </td>
+                                                    <td class="show-comma">{{ adjusting_entry['debits'][debit] }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </thead>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table>
+                                            <thead>
+                                            <tr>
+                                                <th>Account</th>
+                                                <th>Value</th>
+                                            </tr>
+                                            {% for credit in adjusting_entry['credits'] %}
+                                                <tr>
+                                                    <td>
+                                                        <a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a>
+                                                    </td>
+                                                    <td class="show-comma">{{ adjusting_entry['credits'][credit] }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </thead>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        {% if adjusting_entry['attachment_name'] != None %}
+                                            <a href="{{ url_for('journaling.get_attachment', entry_id=entry['id_num']) }}">{{ adjusting_entry['attachment_name'] }}</a>
+                                        {% else %}
+                                            {{ adjusting_entry['attachment_name'] }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
                     </table>
                     </td>
                 </tr>

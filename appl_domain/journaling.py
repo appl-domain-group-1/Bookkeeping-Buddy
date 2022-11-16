@@ -153,7 +153,7 @@ def journal():
 
     # Get all approved entries
     approved_entries = db.execute(
-        "SELECT * FROM journal WHERE status = ?", (1,)
+        "SELECT * FROM journal WHERE status = ? AND adjusting = ?", (1, 0)
     ).fetchall()
     # Convert each entry to a Python dictionary
     approved_entries2 = []
@@ -236,11 +236,16 @@ def journal():
         temp_dict['description'] = entry[9]
         temp_dict['reject_reason'] = entry[10]
 
-        # Append this new dictionary to the list of dictionaries
-        rejected_entries2.append(temp_dict)
+    # Get all adjusting entries
+    adjusting_entries = db.execute(
+        "SELECT * FROM journal WHERE status = ? AND adjusting = ?", (1, 1)
+    ).fetchall()
+    # Convert each entry to a Python dictionary
+    adjusting_entries = rows_to_dict(adjusting_entries)
 
-    return render_template('journaling/journal.html', approved_entries=approved_entries2,
-                           pending_entries=pending_entries2, rejected_entries=rejected_entries2)
+    return render_template('journaling/journal.html', approved_entries=approved_entries,
+                           pending_entries=pending_entries, rejected_entries=rejected_entries,
+                           adjusting_entries=adjusting_entries)
 
 
 @bp.route('/adjusting_journal', methods=('GET',))
