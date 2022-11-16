@@ -11,6 +11,36 @@ from appl_domain.email_tasks import email_journal_adjust
 bp = Blueprint('journaling', __name__, url_prefix='/journaling')
 
 
+def rows_to_dict(rows):
+    temp_list = []
+    for entry in rows:
+        # Temporary dictionary to hold each key/value
+        temp_dict = {}
+        # Go through each item in the Row object and assign it with the correct key to the temp_dict
+        temp_dict['id_num'] = entry['id_num']
+        temp_dict['status'] = entry['status']
+        temp_dict['date_submitted'] = entry['date_submitted']
+        temp_dict['user'] = entry['user']
+        temp_dict['approver'] = entry['approver']
+        if entry['credits'] is not None:
+            temp_dict['credits'] = json.loads(entry['credits'])
+        else:
+            temp_dict['credits'] = None
+        if entry['debits'] is not None:
+            temp_dict['debits'] = json.loads(entry['debits'])
+        else:
+            temp_dict['debits'] = None
+        temp_dict['attachment_name'] = entry['attachment_name']
+        temp_dict['description'] = entry['description']
+        temp_dict['reject_reason'] = entry['reject_reason']
+        temp_dict['associated_journal_entry_id'] = entry['associated_journal_entry_id']
+
+        # Append this new dictionary to the list of dictionaries
+        temp_list.append(temp_dict)
+
+    return temp_list
+
+
 @bp.route('/add_entry', methods=('GET', 'POST'))
 @login_required
 def add_entry():
@@ -156,85 +186,21 @@ def journal():
         "SELECT * FROM journal WHERE status = ? AND adjusting = ?", (1, 0)
     ).fetchall()
     # Convert each entry to a Python dictionary
-    approved_entries2 = []
-    for entry in approved_entries:
-        # Temporary dictionary to hold each key/value
-        temp_dict = {}
-        # Go through each item in the Row object and assign it with the correct key to the temp_dict
-        temp_dict['id_num'] = entry[0]
-        temp_dict['status'] = entry[1]
-        temp_dict['date_submitted'] = entry[2]
-        temp_dict['user'] = entry[3]
-        temp_dict['approver'] = entry[4]
-        if entry[5] is not None:
-            temp_dict['credits'] = json.loads(entry[5])
-        else:
-            temp_dict['credits'] = None
-        if entry[6] is not None:
-            temp_dict['debits'] = json.loads(entry[6])
-        else:
-            temp_dict['debits'] = None
-        temp_dict['attachment_name'] = entry[8]
-        temp_dict['description'] = entry[9]
-
-        # Append this new dictionary to the list of dictionaries
-        approved_entries2.append(temp_dict)
+    approved_entries = rows_to_dict(approved_entries)
 
     # Get all pending entries
     pending_entries = db.execute(
         "SELECT * FROM journal WHERE status = ?", (0,)
     ).fetchall()
     # Convert each entry to a Python dictionary
-    pending_entries2 = []
-    for entry in pending_entries:
-        # Temporary dictionary to hold each key/value
-        temp_dict = {}
-        # Go through each item in the Row object and assign it with the correct key to the temp_dict
-        temp_dict['id_num'] = entry[0]
-        temp_dict['status'] = entry[1]
-        temp_dict['date_submitted'] = entry[2]
-        temp_dict['user'] = entry[3]
-        temp_dict['approver'] = entry[4]
-        if entry[5] is not None:
-            temp_dict['credits'] = json.loads(entry[5])
-        else:
-            temp_dict['credits'] = None
-        if entry[6] is not None:
-            temp_dict['debits'] = json.loads(entry[6])
-        else:
-            temp_dict['debits'] = None
-        temp_dict['attachment_name'] = entry[8]
-        temp_dict['description'] = entry[9]
-
-        # Append this new dictionary to the list of dictionaries
-        pending_entries2.append(temp_dict)
+    pending_entries = rows_to_dict(pending_entries)
 
     # Get all rejected entries
     rejected_entries = db.execute(
         "SELECT * FROM journal WHERE status = ?", (-1,)
     ).fetchall()
     # Convert each entry to a Python dictionary
-    rejected_entries2 = []
-    for entry in rejected_entries:
-        # Temporary dictionary to hold each key/value
-        temp_dict = {}
-        # Go through each item in the Row object and assign it with the correct key to the temp_dict
-        temp_dict['id_num'] = entry[0]
-        temp_dict['status'] = entry[1]
-        temp_dict['date_submitted'] = entry[2]
-        temp_dict['user'] = entry[3]
-        temp_dict['approver'] = entry[4]
-        if entry[5] is not None:
-            temp_dict['credits'] = json.loads(entry[5])
-        else:
-            temp_dict['credits'] = None
-        if entry[6] is not None:
-            temp_dict['debits'] = json.loads(entry[6])
-        else:
-            temp_dict['debits'] = None
-        temp_dict['attachment_name'] = entry[8]
-        temp_dict['description'] = entry[9]
-        temp_dict['reject_reason'] = entry[10]
+    rejected_entries = rows_to_dict(rejected_entries)
 
     # Get all adjusting entries
     adjusting_entries = db.execute(
