@@ -596,3 +596,85 @@ def get_attachment():
 
     # Send the file to the user
     return send_file(temp_file, download_name=file_name)
+
+
+@bp.route('/create_adjusting_entry', methods=('GET', 'POST'))
+@login_required
+def create_adjusting_entry():
+    # Get the ID of the specific journal entry from the request
+    entry_id = request.args.get('entry_id')
+
+    # Get a handle on the DB
+    db = get_db()
+
+    # Get the specific journal entry
+    this_entry = db.execute(
+        "SELECT * FROM journal WHERE id_num = ?", (entry_id,)
+    ).fetchone()
+
+    # Convert journal entry to a Python dictionary for display on the page
+    clean_entry = {
+        'id_num': this_entry['id_num'],
+        'status': this_entry['status'],
+        'date_submitted': this_entry['date_submitted'],
+        'user': this_entry['user'],
+        'approver': this_entry['approver'],
+        'credits': json.loads(this_entry['credits']),
+        'debits': json.loads(this_entry['debits']),
+        'attachment_name': this_entry['attachment_name'],
+        'description': this_entry['description'],
+    }
+
+    # Get a list of all accounts so we know which ones are available to credit/debit
+    accounts = db.execute(
+        "SELECT * FROM accounts"
+    ).fetchall()
+
+    if request.method == 'POST':
+        # Get the account to be credited and the amount
+        credit_account = request.form['credit_account']
+        credit_value = request.form['credit_value'].replace(',', '').replace('.', '').replace('$', '')
+        # Add it to a dictionary
+        entry_credits = {credit_account: int(credit_value)}
+        # Convert it to JSON
+        entry_credits = json.dumps(entry_credits)
+
+        # Get the account to be debited and the amount
+        debit_account = request.form['debit_account']
+        debit_value = request.form['debit_value'].replace(',', '').replace('.', '').replace('$', '')
+        # Add it to a dictionary
+        entry_debits = {debit_account: int(debit_value)}
+        # Convert it to JSON
+        entry_debits = json.dumps(entry_debits)
+
+        # Get any attachments that the user uploaded
+        if request.files['attachment'].filename:
+            attachment_data = request.files['attachment'].read()
+            attachment_name = request.files['attachment'].filename
+        else:
+            attachment_data = None
+            attachment_name = None
+
+        # Get entry's description
+        description = request.form['description']
+
+        # Get the type of adjusting journal entry this is
+        associated_journal_entry_id = entry_id
+
+        db.execute(
+            "INSERT INTO journal (status, date_submitted, user, credits, debits, attachment_data, attachment_name, "
+            "description, adjusting, associated_journal_entry_id) VALUES (?, ? ,? ,? ,?, ?, ?, ?, 1, ?)",
+            (0, datetime.now(), g.user['username'], entry_credits, entry_debits, attachment_data, attachment_name,
+             description, associated_journal_entry_id)
+        )
+
+        # Write the change
+        db.commit()
+
+        # If the user is not an admin or a manager, email all managers and
+        # let them know a new entry is waiting to be approved
+        if g.user['role'] not in (1, 2):
+            email_journal_adjust(g.user['username'], g.user["first_name"], g.user["last_name"], datetime.now())
+
+    return render_template('journaling/create_adjusting_entry.html', entry_id=entry_id, clean_entry=clean_entry,
+                           accounts=accounts)
