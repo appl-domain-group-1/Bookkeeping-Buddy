@@ -91,7 +91,7 @@ def add_entry():
 
         db.execute(
             "INSERT INTO journal (status, date_submitted, user, credits, debits, attachment_data, attachment_name, "
-            "description, adjusting, adjusting_type) VALUES (?, ? ,? ,? ,?, ?, ?, ?, 0, NULL)",
+            "description, adjusting) VALUES (?, ? ,? ,? ,?, ?, ?, ?, 0)",
             (0, datetime.now(), g.user['username'], entry_credits, entry_debits, attachment_data, attachment_name,
              description)
         )
@@ -246,7 +246,6 @@ def adjusting_journal():
             temp_dict['debits'] = None
         temp_dict['attachment_name'] = entry['attachment_name']
         temp_dict['description'] = entry['description']
-        temp_dict['adjusting_type'] = entry['adjusting_type']
 
         # Append this new dictionary to the list of dictionaries
         approved_entries2.append(temp_dict)
@@ -276,7 +275,6 @@ def adjusting_journal():
             temp_dict['debits'] = None
         temp_dict['attachment_name'] = entry[8]
         temp_dict['description'] = entry[9]
-        temp_dict['adjusting_type'] = entry['adjusting_type']
 
         # Append this new dictionary to the list of dictionaries
         pending_entries2.append(temp_dict)
@@ -307,7 +305,6 @@ def adjusting_journal():
         temp_dict['attachment_name'] = entry['attachment_name']
         temp_dict['description'] = entry['description']
         temp_dict['reject_reason'] = entry['reject_reason']
-        temp_dict['adjusting_type'] = entry['adjusting_type']
 
         # Append this new dictionary to the list of dictionaries
         rejected_entries2.append(temp_dict)
