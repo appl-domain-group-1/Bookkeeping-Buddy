@@ -83,6 +83,67 @@ def income_statement():
     for account in expense_accounts:
         total_expenses = total_expenses + account['balance']
 
+    if request.method == 'POST':
+        # Reset the totals
+        total_revenue = 0
+        total_expenses = 0
+
+        # Create new lists to hold new representations of the accounts
+        revenue_accounts2 = []
+        expense_accounts2 = []
+
+        # Get the end date that the user wants to focus on
+        start_date = request.form.get('start_date')
+        end_date = request.form.get('end_date')
+
+        # Get all the ledger entries for expense accounts
+        for account in revenue_accounts:
+            # Get the account number
+            account_num = account['acct_num']
+
+            # Get the last transaction in the ledger between the user's dates
+            query = f"SELECT MAX(date) as date, balance from ledger_{account_num} WHERE date(date) BETWEEN date('{start_date}') AND date('{end_date}')"
+            last_entry = db.execute(query).fetchone()
+
+            # Update total_revenue with this dollar amount
+            if last_entry and last_entry['balance']:
+                total_revenue = total_revenue + last_entry['balance']
+
+            # Update the new list with accounts that have transactions within that date window
+            if last_entry and last_entry['date']:
+                expense_accounts2.append({
+                    'acct_name': account['acct_name'],
+                    'balance': last_entry['balance']
+                })
+
+        # Get all the ledger entries for expense accounts
+        for account in expense_accounts:
+            # Get the account number
+            account_num = account['acct_num']
+
+            # Get the last transaction in the ledger between the user's dates
+            query = f"SELECT MAX(date) as date, balance from ledger_{account_num} WHERE date(date) BETWEEN date('{start_date}') AND date('{end_date}')"
+            last_entry = db.execute(query).fetchone()
+
+            # Update total_revenue with this dollar amount
+            if last_entry and last_entry['balance']:
+                total_expenses = total_expenses + last_entry['balance']
+
+            # Update the new list with accounts that have transactions within that date window
+            if last_entry and last_entry['date']:
+                expense_accounts2.append({
+                    'acct_name': account['acct_name'],
+                    'balance': last_entry['balance']
+                })
+
+        return render_template('statements/income.html',
+                               revenue_accounts=revenue_accounts2,
+                               expense_accounts=expense_accounts2,
+                               total_revenue=total_revenue,
+                               total_expenses=total_expenses,
+                               start_date=start_date,
+                               end_date=end_date)
+
     return render_template('statements/income.html',
                            revenue_accounts=revenue_accounts,
                            expense_accounts=expense_accounts,
@@ -150,6 +211,7 @@ def trial_balance():
 
     return render_template('statements/trial_balance.html', accounts=accounts, categories=categories,
                            subcategories=subcategories)
+
 
 @bp.route('/email_statement', methods=('GET', 'POST'))
 @login_required
