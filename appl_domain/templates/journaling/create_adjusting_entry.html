@@ -7,8 +7,8 @@
     event.preventDefault();
 
     // Get references to all the credit and debit fields
-    let debit_field = document.getElementById("debit_value")
-    let credit_field = document.getElementById("credit_value")
+    let debit_field = document.getElementById("debit_value").value
+    let credit_field = document.getElementById("credit_value").value
 
     // Check to make sure they match
     if (debit_field !== credit_field) {
@@ -17,7 +17,7 @@
     }
     else {
         document.getElementById("error_message").style.display = "none"
-        document.getElementById("journal").submit();
+        document.getElementById("new_adjusting_entry").submit();
     }
 }
 </script>
