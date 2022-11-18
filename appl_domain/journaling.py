@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from io import BytesIO
 
-from flask import Blueprint, g, redirect, render_template, request, url_for, abort, send_file
+from flask import Blueprint, g, redirect, render_template, request, url_for, abort, send_file, flash
 
 from appl_domain.auth import login_required
 from appl_domain.db import get_db
@@ -103,6 +103,9 @@ def add_entry():
         # let them know a new entry is waiting to be approved
         if g.user['role'] not in (1, 2):
             email_journal_adjust(g.user['username'], g.user["first_name"], g.user["last_name"], datetime.now())
+
+        # Let the user know it was successful
+        flash("Entry submitted and awaiting manager approval.")
 
     return render_template('journaling/add_entry.html', accounts=accounts, adjusting=0)
 
@@ -576,6 +579,9 @@ def create_adjusting_entry():
         # let them know a new entry is waiting to be approved
         if g.user['role'] not in (1, 2):
             email_journal_adjust(g.user['username'], g.user["first_name"], g.user["last_name"], datetime.now())
+
+        # Let the user know it was successful
+        flash("Entry submitted and awaiting manager approval.")
 
     return render_template('journaling/create_adjusting_entry.html', entry_id=entry_id, clean_entry=clean_entry,
                            accounts=accounts)
