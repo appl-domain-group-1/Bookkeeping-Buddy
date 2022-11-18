@@ -1,5 +1,26 @@
 {% extends 'base.html' %}
+
 {% block content %}
+<script>
+    function check_equality(event) {
+    // Halt the form submission
+    event.preventDefault();
+
+    // Get references to all the credit and debit fields
+    let debit_field = document.getElementById("debit_value")
+    let credit_field = document.getElementById("credit_value")
+
+    // Check to make sure they match
+    if (debit_field !== credit_field) {
+        document.getElementById("error_message").style.display = "block"
+        return false
+    }
+    else {
+        document.getElementById("error_message").style.display = "none"
+        document.getElementById("journal").submit();
+    }
+}
+</script>
 <br>
     <h2 style="color: black; text-align: center; background: white; padding: 5px">Create a new adjusting entry for journal entry #{{ entry_id }}</h2>
     {#  Table displaying the referenced journal entry  #}
@@ -77,7 +98,11 @@
     </div>
 
     {#  Table to enter new adjusting entry  #}
-    <form class="box" method="post" enctype="multipart/form-data">
+    <form class="box" method="post" enctype="multipart/form-data" id="new_adjusting_entry">
+        <script>
+            let journal_form = document.getElementById("new_adjusting_entry");
+            journal_form.addEventListener("submit", check_equality)
+        </script>
         <div class="table-responsive table-editable" id="trial_balance">
             <table class="table table-sm">
                 <thead>
@@ -137,6 +162,8 @@
                 </tbody>
             </table>
         </div>
+
+        <h2 style="color: red; display: none; font-weight: bold; text-align: center" id="error_message">Error: Total Credits Must Match Total Debits</h2>
 
         <input style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
                data-toggle="tooltip" data-placement="top" title="Save adjusting entry"
