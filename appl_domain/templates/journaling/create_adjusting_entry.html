@@ -1,51 +1,145 @@
 {% extends 'base.html' %}
 {% block content %}
+<br>
+    <h2 style="color: black; text-align: center; background: white; padding: 5px">Create a new adjusting entry for journal entry #{{ entry_id }}</h2>
+    {#  Table displaying the referenced journal entry  #}
+    <div class="table-responsive">
+        <table class="table table-sm approved entry" style="height:110px; width:100%; border-bottom: 1px solid #F89E19"
+               id="myTable">
+            <thead>
+            <th style="font-size: larger" colspan="8">Original Journal Entry</th>
+            </thead>
+            <thead>
+            <tr>
+                <th>Entry ID</th>
+                <th>Date Submitted</th>
+                <th>Submitted By</th>
+                <th>Approved By</th>
+                <th>Description</th>
+                <th>Accounts Debited</th>
+                <th>Accounts Credited</th>
+                <th>Attachment</th>
+            </tr>
+            </thead>
+            <tbody id="original_entry_table">
+            <tr>
+                <td>{{ clean_entry['id_num'] }}</td>
+                <td>{{ clean_entry['date_submitted'] }}</td>
+                <td>{{ clean_entry['user'] }}</td>
+                <td>{{ clean_entry['approver'] }}</td>
+                <td>{{ clean_entry['description'] }}</td>
+                <td>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Value</th>
+                        </tr>
+                        {% for debit in clean_entry['debits'] %}
+                            <tr>
+                                <td>
+                                    <a href="{{ url_for('fin_accts.view_ledger', account_num=debit) }}">#{{ debit }}</a>
+                                </td>
+                                <td class="show-comma">{{ clean_entry['debits'][debit] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </thead>
+                    </table>
+                </td>
+                <td>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Value</th>
+                        </tr>
+                        {% for credit in clean_entry['credits'] %}
+                            <tr>
+                                <td>
+                                    <a href="{{ url_for('fin_accts.view_ledger', account_num=credit) }}">#{{ credit }}</a>
+                                </td>
+                                <td class="show-comma">{{ clean_entry['credits'][credit] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </thead>
+                    </table>
+                </td>
+                <td>
+                    {% if clean_entry['attachment_name'] != None %}
+                        <a href="{{ url_for('journaling.get_attachment', entry_id=clean_entry['id_num']) }}">{{ clean_entry['attachment_name'] }}</a>
+                    {% else %}
+                        {{ clean_entry['attachment_name'] }}
+                    {% endif %}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-<div class="table-responsive table-editable" id="trial_balance">
+    {#  Table to enter new adjusting entry  #}
+    <form class="box" method="post" enctype="multipart/form-data">
+        <div class="table-responsive table-editable" id="trial_balance">
+            <table class="table table-sm">
+                <thead>
+                <th style="font-size: larger" colspan="8">New Adjusting Entry</th>
+                </thead>
+                <thead>
+                <tr>
+                    <th>Account to Debit</th>
+                    <th>Amount</th>
+                    <th>Account to Credit</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                    <th>Attachment</th>
+                </tr>
+                </thead>
 
-<table class = "table table-sm">
-     <thead><th style="font-size: larger">Adjusting entry for [Entry ID]</th></thead>
-    <thead>
-        <tr>
-            <th>
-                Date
-            </th>
-            <th>Entry ID</th>
-            <th>Adjusting Entry Type</th>
-            <th>Entry Description</th>
-            <th>Credits</th>
-            <th>Debits</th>
-            <th>Attachment </th>
-        </tr>
-    </thead>
-    <!--Could possibly prepopulate the fields and the user will be allowed to edit the amounts in the credited and debited fields-->
-    <tbody>
-        <tr>
-            <td>Date timestamp adjusting entry made</td>
-            <td>Entry ID</td>
-            <td>
-                <select>
-                    <option>Accrued revenues</option>
-                    <option>Accrued expenses</option>
-                    <option>Deferred revenues</option>
-                    <option>Prepaid expenses</option>
-                    <option>Depreciation expenses</option>
-                </select>
-            </td>
-            <!--Accounts associated with entry--->
-            <td>
-                <div>Credit account</div>
-                <div>Debit account</div>
-            </td>
-            <td><div class="border border-6" contenteditable="true">Credit</div>
-            <div>-</div></td>
-            <td><div>-</div>
-            <div class="border border-6" style="border: black;" contenteditable="true">Debit</div></td>
-            <td><input style="color: black" class="file" type="file" name="attachment" id="attachment"></td>
-        </tr>
-    </tbody>
-</table>
-</div>
-    <button data-toggle="tooltip" data-placement="top" title="Save adjusted entry"  type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="">Save Entry</button>
+                <tbody>
+                <tr>
+                    {# Debit account dropdown #}
+                    <td>
+                        <select name="debit_account">
+                            {% for account in accounts %}
+                                <option value="{{ account['acct_num'] }}">{{ account['acct_num'] }}
+                                    - {{ account['acct_name'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    {# Debit amount #}
+                    <td style="padding-bottom: 1px">
+                        <input style="border: none" name="debit_value" type="text" datatype="currency"
+                               placeholder="$0" id="debit_value">
+                    </td>
+                    {# Credit account dropdown #}
+                    <td>
+                        <select name="credit_account">
+                            {% for account in accounts %}
+                                <option value="{{ account['acct_num'] }}">{{ account['acct_num'] }}
+                                    - {{ account['acct_name'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    {# Credit ammount #}
+                    <td style="padding-bottom: 1px">
+                        <input style="border: none" name="credit_value" type="text" datatype="currency"
+                               placeholder="$0" id="credit_value">
+                    </td>
+                    {# Description #}
+                    <td>
+                        <textarea class="form-control" name="description" id="description" rows="2"
+                                  style="width: 100%; border-color: #185DFF; border-radius: 4px"></textarea>
+                    </td>
+                    {# Attachment #}
+                    <td>
+                        <input style="color: black" class="file" type="file" name="attachment" id="attachment">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
+        <input style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+               data-toggle="tooltip" data-placement="top" title="Save adjusting entry"
+               class="submit" type="submit" value="Save Adjusting Entry">
+    </form>
 {% endblock %}

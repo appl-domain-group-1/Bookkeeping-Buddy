@@ -1,29 +1,46 @@
 {% extends 'base.html' %}
-  {% block content %}
+{% block content %}
 
-      <script>
+    <script>
         function email_income_statement() {
             let income_html = encodeURIComponent(document.getElementById('income_statement').innerHTML);
             let test2 = '{{url_for('statements.email_statement', statement='Income Statement')}}';
-            window.location.href=test2 + '&&included_message=' + income_html;
+            window.location.href = test2 + '&&included_message=' + income_html;
         }
-      </script>
+    </script>
 
-<br>
-<table>
-        <tbody><tr>
-            <td style="color: white">Start date:</td>
-            <td><input type="text" id="min" name="min" style="width: 250px"></td>
-        </tr>
-        <tr>
-            <td style="color: white">End date:</td>
-            <td><input type="text" id="max" name="max" style="width: 250px"></td>
-        </tr>
-    </tbody></table>
-<br>
-<div class="table-responsive" id="income_statement">
-    <table class = "table table-borderless" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
-        <thead><th style="font-size: larger">Income Statement</th></thead>
+    <br>
+    <form method="post">
+        <table>
+            <tbody>
+            <tr>
+                <td style="color: white">Start date:</td>
+                <td><input type="date" id="start_date" name="start_date" style="width: 250px"></td>
+            </tr>
+            <tr>
+                <td style="color: white">End date:</td>
+                <td><input type="date" id="end_date" name="end_date" style="width: 250px"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+         <td>
+                    <input style="display: block; border-color: #F89E19;  padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+                           data-toggle="tooltip" data-placement="top"
+                           title="View income statement for specified date range"
+                           class="submit" type="submit" value="View by date range">
+         </td>
+    </form>
+    <br>
+    <div class="table-responsive" id="income_statement">
+        <table class="table table-borderless" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+            <thead>
+            {% if start_date %}
+                <th>Income Statement for Date Range {{ start_date }} to {{ end_date }}</th>
+            {% else %}
+                <th style="font-size: larger">Income Statement</th>
+            {% endif %}
+            </thead>
             <tr>
                 <th>Revenue</th>
                 <td>
@@ -59,13 +76,21 @@
                 <td></td>
                 <td class="show-comma" style="font-weight: bold">{{ total_revenue - total_expenses }}</td>
             </tr>
-    </table>
-</div>
-      <div class="d-flex justify-content-center" >
-        <button data-toggle="tooltip" data-placement="top" title="Print a copy of the income statement"  type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="alert('To save the income statement, select Save as PDF from the Print dialog' ); window.print()">Save/Print Income Statement</button>
+        </table>
+    </div>
+    <div class="d-flex justify-content-center">
+        <button data-toggle="tooltip" data-placement="top" title="Print a copy of the income statement" type="button"
+                style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+                onclick="alert('To save the income statement, select Save as PDF from the Print dialog' ); window.print()">
+            Save/Print Income Statement
+        </button>
         {% if g.user['role'] == 2 %}
-            <button data-toggle="tooltip" data-placement="top" title="Email this income statement to someone" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="email_income_statement()">Email Income Statement</button>
+            <button data-toggle="tooltip" data-placement="top" title="Email this income statement to someone"
+                    type="button"
+                    style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+                    onclick="email_income_statement()">Email Income Statement
+            </button>
         {% endif %}
-      </div>
+    </div>
 
 {% endblock %}
