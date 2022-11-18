@@ -31,7 +31,9 @@ def get_updated_ledger_entries(start_date, end_date, list_of_accounts):
             temp_accounts.append(
                 {
                     'acct_name': account['acct_name'],
-                    'balance': last_entry['balance']
+                    'balance': last_entry['balance'],
+                    'acct_subcategory': account['acct_subcategory'],
+                    'debit': account['debit']
                 }
             )
 
@@ -217,6 +219,10 @@ def retained_earnings():
 @bp.route('/trial_balance', methods=('GET', 'POST'))
 @login_required
 def trial_balance():
+    # Placeholders for start_date and end_date. Not used in GET requests
+    start_date = None
+    end_date = None
+
     # Get a handle on the DB
     db = get_db()
 
@@ -235,8 +241,20 @@ def trial_balance():
         "SELECT * FROM subcategories"
     ).fetchall()
 
-    return render_template('statements/trial_balance.html', accounts=accounts, categories=categories,
-                           subcategories=subcategories)
+    if request.method == 'POST':
+        # Get the end date that the user wants to focus on
+        start_date = request.form.get('start_date')
+        end_date = request.form.get('end_date')
+
+        # Get updated information for the report
+        _, accounts = get_updated_ledger_entries(start_date, end_date, accounts)
+
+    return render_template('statements/trial_balance.html',
+                           accounts=accounts,
+                           categories=categories,
+                           subcategories=subcategories,
+                           start_date=start_date,
+                           end_date=end_date)
 
 
 @bp.route('/email_statement', methods=('GET', 'POST'))
