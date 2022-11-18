@@ -3,34 +3,6 @@
 {% block content %}
 <script  type="text/javascript">
 
-{#function errorMessage(){#}
-{#    var arr1 = document.querySelectorAll('.credit');#}
-{#    var totalCredit = 0;#}
-{#    for(var i=0;i<arr1.length;i++){#}
-{#        if(parseFloat(arr1[i].value))#}
-{#            totalCredit += parseFloat(arr1[i].value);#}
-{#    }#}
-{#    var arr2 = document.querySelectorAll('.debit');#}
-{#    var totalDebit = 0;#}
-{#    for(var i=0;i<arr2.length;i++){#}
-{#        if(parseFloat(arr2[i].value))#}
-{#            totalDebit += parseFloat(arr2[i].value);#}
-{#    }#}
-{##}
-{#    if (totalDebit > totalCredit)#}
-{#    {#}
-{#        alert("Total debit amount is greater than credit");#}
-{#        //document.getElementById("entry").addEventListener("click", function(event){#}
-{#        //event.preventDefault()});#}
-{#    }#}
-{#    else if(totalDebit < totalCredit){#}
-{#        alert("Total credit amount is greater than debit");#}
-{#        //document.getElementById("entry").addEventListener("click", function(event){#}
-{#        //event.preventDefault()});#}
-{#    }#}
-{##}
-{#}#}
-
 function check_equality(event) {
     // Halt the form submission
     event.preventDefault();
@@ -144,11 +116,12 @@ function check_equality(event) {
             </tr>
         </table>
         <br>
-        <br>
+
+        <h2 style="color: red; display: none; font-weight: bold; text-align: center" id="error_message">Error: Total Credits Must Match Total Debits</h2>
         <input style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
                type="reset" value="Reset">
         <br>
-        <h2 style="color: red; display: none" id="error_message">Error: Total Credits Must Match Total Debits</h2>
+
         <input id="entry" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px" class="submit" type="submit" value="Add entry">
 
     </form>
