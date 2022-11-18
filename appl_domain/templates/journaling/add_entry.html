@@ -3,33 +3,67 @@
 {% block content %}
 <script  type="text/javascript">
 
-function errorMessage(){
-    var arr1 = document.querySelectorAll('.credit');
-    var totalCredit = 0;
-    for(var i=0;i<arr1.length;i++){
-        if(parseFloat(arr1[i].value))
-            totalCredit += parseFloat(arr1[i].value);
-    }
-    var arr2 = document.querySelectorAll('.debit');
-    var totalDebit = 0;
-    for(var i=0;i<arr2.length;i++){
-        if(parseFloat(arr2[i].value))
-            totalDebit += parseFloat(arr2[i].value);
+{#function errorMessage(){#}
+{#    var arr1 = document.querySelectorAll('.credit');#}
+{#    var totalCredit = 0;#}
+{#    for(var i=0;i<arr1.length;i++){#}
+{#        if(parseFloat(arr1[i].value))#}
+{#            totalCredit += parseFloat(arr1[i].value);#}
+{#    }#}
+{#    var arr2 = document.querySelectorAll('.debit');#}
+{#    var totalDebit = 0;#}
+{#    for(var i=0;i<arr2.length;i++){#}
+{#        if(parseFloat(arr2[i].value))#}
+{#            totalDebit += parseFloat(arr2[i].value);#}
+{#    }#}
+{##}
+{#    if (totalDebit > totalCredit)#}
+{#    {#}
+{#        alert("Total debit amount is greater than credit");#}
+{#        //document.getElementById("entry").addEventListener("click", function(event){#}
+{#        //event.preventDefault()});#}
+{#    }#}
+{#    else if(totalDebit < totalCredit){#}
+{#        alert("Total credit amount is greater than debit");#}
+{#        //document.getElementById("entry").addEventListener("click", function(event){#}
+{#        //event.preventDefault()});#}
+{#    }#}
+{##}
+{#}#}
+
+function check_equality(event) {
+    // Halt the form submission
+    event.preventDefault();
+
+    // Get references to all the credit and debit fields
+    let debit_fields = document.getElementsByClassName("debit_field")
+    let credit_fields = document.getElementsByClassName("credit_field")
+
+    // Placeholders for the totals
+    let total_debits = 0
+    let total_credits = 0
+
+    // Loop over all the debit fields and add the values
+    for (let i = 0; i < debit_fields.length; i++) {
+        total_debits = total_debits + debit_fields[i].value
     }
 
-    if (totalDebit > totalCredit)
-    {
-        let error1 = alert("Total debit amount is greater than credit");
-        //document.getElementById("entry").addEventListener("click", function(event){
-        //event.preventDefault()});
-    }
-    else if(totalDebit < totalCredit){
-        let error2 = alert("Total credit amount is greater than debit");
-        //document.getElementById("entry").addEventListener("click", function(event){
-        //event.preventDefault()});
+    // Loop over all the credit fields and add the values
+    for (let j = 0; j < credit_fields.length; j++) {
+        total_credits = total_credits + credit_fields[j].value
     }
 
+    // Check to make sure they match
+    if (total_credits !== total_debits) {
+        document.getElementById("error_message").style.display = "block"
+        return false
+    }
+    else {
+        document.getElementById("error_message").style.display = "none"
+        document.getElementById("journal").submit();
+    }
 }
+
 </script>
     <style>
         label {
@@ -42,6 +76,10 @@ function errorMessage(){
         <h3 style="color: white">Create a new journal entry</h3>
     {% endif %}
     <form id="journal" class="box" method="post" enctype="multipart/form-data">
+        <script>
+            let journal_form = document.getElementById("journal");
+            journal_form.addEventListener("submit", check_equality)
+        </script>
         <table class="table table-sm">
             <thead style="color: #185DFF; background-color: #CFCFCF">
             <th>Account to credit</th>
@@ -58,7 +96,7 @@ function errorMessage(){
                         </select>
                     </td>
                     <td style="padding-bottom: 1px">
-                        <input class="credit" style="border: none" name="credit_{{ number }}_value" type="text" datatype="currency"
+                        <input class="credit credit_field" style="border: none" name="credit_{{ number }}_value" type="text" datatype="currency"
                                placeholder="$0" id="credit_{{ number }}_value">
                     </td>
                 </tr>
@@ -81,7 +119,7 @@ function errorMessage(){
                         </select>
                     </td>
                     <td style="padding-bottom: 1px">
-                        <input class="debit" style="border: none" name="debit_{{ number }}_value" type="text" datatype="currency"
+                        <input class="debit debit_field" style="border: none" name="debit_{{ number }}_value" type="text" datatype="currency"
                                placeholder="$0" id="debit_{{ number }}_value">
                     </td>
                 </tr>
@@ -110,8 +148,8 @@ function errorMessage(){
         <input style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
                type="reset" value="Reset">
         <br>
-        <input id="entry" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
-              onclick="errorMessage()" class="submit" type="submit" value="Add entry">
+        <h2 style="color: red; display: none" id="error_message">Error: Total Credits Must Match Total Debits</h2>
+        <input id="entry" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px" class="submit" type="submit" value="Add entry">
 
     </form>
 
