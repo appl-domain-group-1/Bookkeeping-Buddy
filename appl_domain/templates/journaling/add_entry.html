@@ -1,6 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<script  type="text/javascript">
+
+function errorMessage(){
+    var arr1 = document.querySelectorAll('.credit');
+    var totalCredit = 0;
+    for(var i=0;i<arr1.length;i++){
+        if(parseFloat(arr1[i].value))
+            totalCredit += parseFloat(arr1[i].value);
+    }
+    var arr2 = document.querySelectorAll('.debit');
+    var totalDebit = 0;
+    for(var i=0;i<arr2.length;i++){
+        if(parseFloat(arr2[i].value))
+            totalDebit += parseFloat(arr2[i].value);
+    }
+
+    if (totalDebit > totalCredit)
+    {
+        let error1 = alert("Total debit amount is greater than credit");
+        //document.getElementById("entry").addEventListener("click", function(event){
+        //event.preventDefault()});
+    }
+    else if(totalDebit < totalCredit){
+        let error2 = alert("Total credit amount is greater than debit");
+        //document.getElementById("entry").addEventListener("click", function(event){
+        //event.preventDefault()});
+    }
+
+}
+</script>
     <style>
         label {
             color: white;
@@ -11,7 +41,7 @@
     {% elif not adjusting %}
         <h3 style="color: white">Create a new journal entry</h3>
     {% endif %}
-    <form class="box" method="post" enctype="multipart/form-data">
+    <form id="journal" class="box" method="post" enctype="multipart/form-data">
         <table class="table table-sm">
             <thead style="color: #185DFF; background-color: #CFCFCF">
             <th>Account to credit</th>
@@ -28,7 +58,7 @@
                         </select>
                     </td>
                     <td style="padding-bottom: 1px">
-                        <input style="border: none" name="credit_{{ number }}_value" type="text" datatype="currency"
+                        <input class="credit" style="border: none" name="credit_{{ number }}_value" type="text" datatype="currency"
                                placeholder="$0" id="credit_{{ number }}_value">
                     </td>
                 </tr>
@@ -51,13 +81,12 @@
                         </select>
                     </td>
                     <td style="padding-bottom: 1px">
-                        <input style="border: none" name="debit_{{ number }}_value" type="text" datatype="currency"
+                        <input class="debit" style="border: none" name="debit_{{ number }}_value" type="text" datatype="currency"
                                placeholder="$0" id="debit_{{ number }}_value">
                     </td>
                 </tr>
             {% endfor %}
         </table>
-
         <table class="table table-sm">
             <thead style="color: #185DFF; background-color: #CFCFCF">
             <th><label for="description" style="color: #185DFF">Entry description</label></th>
@@ -77,11 +106,12 @@
             </tr>
         </table>
         <br>
+        <br>
         <input style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
                type="reset" value="Reset">
         <br>
-        <input style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
-               class="submit" type="submit" value="Add entry">
+        <input id="entry" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+              onclick="errorMessage()" class="submit" type="submit" value="Add entry">
 
     </form>
 
