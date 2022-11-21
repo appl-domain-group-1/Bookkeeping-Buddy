@@ -76,3 +76,27 @@ def send_approval(username):
               f"<br><br>Your Bookkeeping Buddy"
 
     send_email(user["email_address"], subject, message)
+
+
+def email_journal_adjust(username, first_name, last_name, journal_date):
+    # Get a handle on the database
+    db = get_db()
+    # Get a list of all the administrators
+    manager = db.execute(
+        "SELECT * FROM users WHERE role = ?", (1,)
+    ).fetchall()
+
+    # Email subject
+    subject = 'Adjusted Journal Entry'
+
+    # Craft the URL to be sent in the email
+    endpoint = url_for('journaling.journal', username=username)
+    # Loop through each admin and send the email
+    for manager in manager:
+        # Content to be sent in the email
+        message = f"Hello {manager['first_name']} {manager['last_name']},<br><br>{first_name} {last_name} has " \
+                  f"adjusted journal entry at {journal_date} and requests approval.<br><br>" \
+                  f"<a href='{SITE_URL}{endpoint}'>Click here to log in.</a><br><br>" \
+                  f"Regards,<br><br>Your Bookkeeping Buddy"
+
+        send_email(manager["email_address"], subject, message)

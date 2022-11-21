@@ -1,74 +1,128 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<style>
-    label{
-        color: white;
+<script  type="text/javascript">
+
+function check_equality(event) {
+    // Halt the form submission
+    event.preventDefault();
+
+    // Get references to all the credit and debit fields
+    let debit_fields = document.getElementsByClassName("debit_field")
+    let credit_fields = document.getElementsByClassName("credit_field")
+
+    // Placeholders for the totals
+    let total_debits = 0
+    let total_credits = 0
+
+    // Loop over all the debit fields and add the values
+    for (let i = 0; i < debit_fields.length; i++) {
+        total_debits = total_debits + debit_fields[i].value
     }
-</style>
-    <form class="box" method="post" enctype="multipart/form-data">
-        <table class = "table table-sm">
+
+    // Loop over all the credit fields and add the values
+    for (let j = 0; j < credit_fields.length; j++) {
+        total_credits = total_credits + credit_fields[j].value
+    }
+
+    // Check to make sure they match
+    if (total_credits !== total_debits) {
+        document.getElementById("error_message").style.display = "block"
+        return false
+    }
+    else {
+        document.getElementById("error_message").style.display = "none"
+        document.getElementById("journal").submit();
+    }
+}
+
+</script>
+    <style>
+        label {
+            color: white;
+        }
+    </style>
+    {% if adjusting %}
+        <h3 style="color: white">Create a new adjusting journal entry</h3>
+    {% elif not adjusting %}
+        <h3 style="color: white">Create a new journal entry</h3>
+    {% endif %}
+    <form id="journal" class="box" method="post" enctype="multipart/form-data">
+        <script>
+            let journal_form = document.getElementById("journal");
+            journal_form.addEventListener("submit", check_equality)
+        </script>
+        <table class="table table-sm">
             <thead style="color: #185DFF; background-color: #CFCFCF">
-                <th>Account to credit</th>
-                <th>Amount</th>
+            <th>Account to credit</th>
+            <th>Amount</th>
             </thead>
-                {% for number in range(1, 6) %}
-                    <tr>
-                        <td>
-                            <select name="credit_{{ number }}_account">
-                                {% for account in accounts %}
-                                    <option value="{{ account['acct_num'] }}">{{ account['acct_num'] }} - {{ account['acct_name'] }}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td  style="padding-bottom: 1px">
-                            <input style ="border: none" name="credit_{{ number }}_value" type="text" datatype="currency" placeholder="$0" id="credit_{{ number }}_value">
-                        </td>
-                    </tr>
-                {% endfor %}
+            {% for number in range(1, 6) %}
+                <tr>
+                    <td>
+                        <select name="credit_{{ number }}_account">
+                            {% for account in accounts %}
+                                <option value="{{ account['acct_num'] }}">{{ account['acct_num'] }}
+                                    - {{ account['acct_name'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td style="padding-bottom: 1px">
+                        <input class="credit credit_field" style="border: none" name="credit_{{ number }}_value" type="text" datatype="currency"
+                               placeholder="$0" id="credit_{{ number }}_value">
+                    </td>
+                </tr>
+            {% endfor %}
         </table>
 
-                <table class = "table table-sm">
+        <table class="table table-sm">
             <thead style="color: #185DFF; background-color: #CFCFCF">
-                <th>Account to debit</th>
-                <th>Amount</th>
+            <th>Account to debit</th>
+            <th>Amount</th>
             </thead>
-                {% for number in range(1, 6) %}
-                    <tr>
-                        <td>
-                            <select name="debit_{{ number }}_account">
-                                {% for account in accounts %}
-                                    <option value="{{ account['acct_num'] }}">{{ account['acct_num'] }} - {{ account['acct_name'] }}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td style="padding-bottom: 1px">
-                            <input  style ="border: none" name="debit_{{ number }}_value" type="text" datatype="currency" placeholder="$0" id="debit_{{ number }}_value">
-                        </td>
-                    </tr>
-                {% endfor %}
+            {% for number in range(1, 6) %}
+                <tr>
+                    <td>
+                        <select name="debit_{{ number }}_account">
+                            {% for account in accounts %}
+                                <option value="{{ account['acct_num'] }}">{{ account['acct_num'] }}
+                                    - {{ account['acct_name'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td style="padding-bottom: 1px">
+                        <input class="debit debit_field" style="border: none" name="debit_{{ number }}_value" type="text" datatype="currency"
+                               placeholder="$0" id="debit_{{ number }}_value">
+                    </td>
+                </tr>
+            {% endfor %}
         </table>
-        <table class = "table table-sm">
+        <table class="table table-sm">
             <thead style="color: #185DFF; background-color: #CFCFCF">
-                <th><label for="description" style="color: #185DFF">Entry description</label></th>
+            <th><label for="description" style="color: #185DFF">Entry description</label></th>
             </thead>
             <tr>
-                <td><textarea  class="form-control" name="description" id="description" rows = "2" style="width: 100%; border-color: #185DFF; border-radius: 4px"></textarea></td>
+                <td><textarea class="form-control" name="description" id="description" rows="2"
+                              style="width: 100%; border-color: #185DFF; border-radius: 4px"></textarea></td>
             </tr>
         </table>
 
-        <table class = "table table-sm">
+        <table class="table table-sm">
             <thead style="color: #185DFF; background-color: #CFCFCF">
-                <th><label for="attachment" style="color: #185DFF">Upload supporting documentation</label></th>
+            <th><label for="attachment" style="color: #185DFF">Upload supporting documentation</label></th>
             </thead>
             <tr>
                 <td><input style="color: black" class="file" type="file" name="attachment" id="attachment"></td>
             </tr>
         </table>
         <br>
-        <input style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px" type="reset" value="Reset">
+
+        <h2 style="color: red; display: none; font-weight: bold; text-align: center" id="error_message">Error: Total Credits Must Match Total Debits</h2>
+        <input style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+               type="reset" value="Reset">
         <br>
-        <input style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px" class="submit" type="submit" value="Add entry">
+
+        <input id="entry" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px" class="submit" type="submit" value="Add entry">
 
     </form>
 

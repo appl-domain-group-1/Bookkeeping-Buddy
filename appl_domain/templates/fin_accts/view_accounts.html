@@ -1,63 +1,76 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<script>
-$(document).ready(function(){
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-});
-function CurrencyFormatted(amount) {
-	var i = parseFloat(amount);
-	if(isNaN(i)) { i = 0.00; }
-	var minus = '';
-	if(i < 0) { minus = '-'; }
-	i = Math.abs(i);
-	i = parseInt((i + .005) * 100);
-	i = i / 100;
-	s = new String(i);
-	if(s.indexOf('.') < 0) { s += '.00'; }
-	if(s.indexOf('.') == (s.length - 2)) { s += '0'; }
-	s = minus + s;
-	return s;
-}
-$('tr.number').each( function () {
-    // get value of table cell and convert to number...
-    var val = parseFloat($(this).text());
-    // put it back as fixed point value
-    $(this).text(val.toFixed(2));
-});
-</script>
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+        function CurrencyFormatted(amount) {
+            var i = parseFloat(amount);
+            if (isNaN(i)) {
+                i = 0.00;
+            }
+            var minus = '';
+            if (i < 0) {
+                minus = '-';
+            }
+            i = Math.abs(i);
+            i = parseInt((i + .005) * 100);
+            i = i / 100;
+            s = String(i);
+            if (s.indexOf('.') < 0) {
+                s += '.00';
+            }
+            if (s.indexOf('.') == (s.length - 2)) {
+                s += '0';
+            }
+            s = minus + s;
+            return s;
+        }
+
+        $('tr.number').each(function () {
+            // get value of table cell and convert to number...
+            var val = parseFloat($(this).text());
+            // put it back as fixed point value
+            $(this).text(val.toFixed(2));
+        });
+    </script>
     <header style="color: white; font-size: xx-large; font-weight: bold;">
         <div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle bg-transparent" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white; font-size: xx-large; font-weight: bold">
-       {% block title %}
-            View financial accounts
-        {% endblock %}
-  </button>
-  <div id = "dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      {% for category in acct_categories %}
-        <a href="#{{ category['name'] }}" class="dropdown-item">{{ category['name'] }}</a>
-       {% endfor %}
-  </div>
-</div>
+            <button class="btn btn-secondary dropdown-toggle bg-transparent" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    style="color: white; font-size: xx-large; font-weight: bold">
+                {% block title %}
+                    View financial accounts
+                {% endblock %}
+            </button>
+            <div id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {% for category in acct_categories %}
+                    <a href="#{{ category['name'] }}" class="dropdown-item">{{ category['name'] }}</a>
+                {% endfor %}
+            </div>
+        </div>
     </header>
-<br>
-<input class="form-control" id="myInput" type="text" placeholder="Search by account number or account name">
+    <br>
+    <input class="form-control" id="myInput" type="text" placeholder="Search by account number or account name">
 
     {% for category in acct_categories %}
-        <h2 class = "{{category['name']}}" style="color: white">{{ category['name'] }}</h2>
-        <div class = "{{category['name']}}" style="overflow-x:auto; margin-top: -7px">
-        <table id = "{{ category['name'] }}" class = "table table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
-            {% for subcategory in subcategories %}
-                {% if subcategory['category'] == category['number'] %}
-                    <tr>
-                        <td>
-                            <h5>{{ subcategory['name'] }} Accounts</h5>
-                                <table class = "table table-sm sortable">
+        <h2 class="{{ category['name'] }}" style="color: white">{{ category['name'] }}</h2>
+        <div class="{{ category['name'] }}" style="overflow-x:auto; margin-top: -7px">
+            <table id="{{ category['name'] }}" class="table table-sm"
+                   style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+                {% for subcategory in subcategories %}
+                    {% if subcategory['category'] == category['number'] %}
+                        <tr>
+                            <td>
+                                <h5>{{ subcategory['name'] }} Accounts</h5>
+                                <table class="table table-sm sortable">
                                     <thead>
                                     <tr>
                                         <th>Number</th>
@@ -72,13 +85,15 @@ $('tr.number').each( function () {
                                         {% endif %}
                                     </tr>
                                     </thead>
-                                    <tbody id = "myTable">
+                                    <tbody id="myTable">
                                     <tr>
                                         {% for account in accounts %}
                                             {% if (account['acct_category'] == category['number']) and (account['acct_subcategory'] == subcategory['id_num']) %}
                                                 <tr>
                                                     <td style="width:5%;">{{ account['acct_num'] }}</td>
-                                                    <td style="width:15%;"><a href="{{ url_for("fin_accts.view_ledger", account_num=account['acct_num']) }}">{{ account['acct_name'] }}</a></td>
+                                                    <td style="width:15%;"><a
+                                                            href="{{ url_for("fin_accts.view_ledger", account_num=account['acct_num']) }}">{{ account['acct_name'] }}</a>
+                                                    </td>
                                                     <td style="width:20%;">{{ account['acct_desc'] }}</td>
                                                     {% if account['debit'] %}
                                                         <td style="width:5%;">Debit</td>
@@ -86,53 +101,76 @@ $('tr.number').each( function () {
                                                         <td style="width:5%;">Credit</td>
                                                     {% endif %}
 
-                                                    <td class="show-comma" style="width:10%;">{{ account['balance'] }}</td>
+                                                    <td class="show-comma"
+                                                        style="width:10%;">{{ account['balance'] }}</td>
                                                     <td style="width:10%;">{{ statements[account['statement']] }}</td>
-                                                    <td  style="width:25%;">{{ account['comment'] }}</td>
+                                                    <td style="width:25%;">{{ account['comment'] }}</td>
                                                     {% if g.user['role'] == 2 %}
                                                         <td style="width:10%;">
-                                                            <div class="btn-group" role="group" aria-label="Basic example">
-                                                            <button data-toggle="tooltip" data-placement="top" title="Edit financial account" type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for("fin_accts.edit_account", account_num=account['acct_num'] )}}'">Edit</button>
-                                                            <button data-toggle="tooltip" data-placement="top" title="Deactivate or Activate financial account" type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('fin_accts.deactivate_account', account_num=account['acct_num'])}}'">{% if account['active'] == 1 %}Deactivate{% else %}Activate{% endif %}</button>
+                                                            <div class="btn-group" role="group"
+                                                                 aria-label="Basic example">
+                                                                <button data-toggle="tooltip" data-placement="top"
+                                                                        title="Edit financial account" type="button"
+                                                                        style="display: block; margin: auto"
+                                                                        onclick="window.location.href='{{ url_for("fin_accts.edit_account", account_num=account['acct_num'] ) }}'">
+                                                                    Edit
+                                                                </button>
+                                                                <button data-toggle="tooltip" data-placement="top"
+                                                                        title="Deactivate or Activate financial account"
+                                                                        type="button"
+                                                                        style="display: block; margin: auto"
+                                                                        onclick="window.location.href='{{ url_for('fin_accts.deactivate_account', account_num=account['acct_num']) }}'">
+                                                                    {% if account['active'] == 1 %}Deactivate{% else %}
+                                                                        Activate{% endif %}</button>
                                                             </div>
                                                         </td>
-                                                </tr>
+                                                        </tr>
                                                     {% endif %}
                                             {% endif %}
                                         {% endfor %}
                                     </tr>
                                     </tbody>
                                 </table>
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-             </tbody>
-        </table>
-</div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endfor %}
     <br>
-<div class="d-flex justify-content-center" >
-    <button data-toggle="tooltip" data-placement="top" title="View account logs"  type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.view_logs')}}'">View Account Logs</button>
-{% if g.user['role'] == 2 %}
-    <button data-toggle="tooltip" data-placement="top" title="Create a new financial account" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.create_acct')}}'">Create New Account</button>
-    <br>
-    <button data-toggle="tooltip" data-placement="top" title="Email Users" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('fin_accts.email')}}'">Email Users</button>
-    <br>
-{% endif %}
-</div>
-<script>
-$(document).ready(function(){
-  $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-});
-function showOne(id) {
-    $('#' + id).show();
-    $('.hide').not('#' + id).hide();
-}
-</script>
+    <div class="d-flex justify-content-center">
+        <button data-toggle="tooltip" data-placement="top" title="View account logs" type="button"
+                style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+                onclick="window.location.href='{{ url_for('fin_accts.view_logs') }}'">View Account Logs
+        </button>
+        {% if g.user['role'] == 2 %}
+            <button data-toggle="tooltip" data-placement="top" title="Create a new financial account" type="button"
+                    style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+                    onclick="window.location.href='{{ url_for('fin_accts.create_acct') }}'">Create New Account
+            </button>
+            <br>
+            <button data-toggle="tooltip" data-placement="top" title="Email Users" type="button"
+                    style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+                    onclick="window.location.href='{{ url_for('fin_accts.email') }}'">Email Users
+            </button>
+            <br>
+        {% endif %}
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+        function showOne(id) {
+            $('#' + id).show();
+            $('.hide').not('#' + id).hide();
+        }
+    </script>
 {% endblock %}

@@ -129,5 +129,9 @@ CREATE TABLE journal (
     /* Description of this journal entry */
     description TEXT,
     /* Reason that this entry was rejected */
-    reject_reason TEXT
+    reject_reason TEXT,
+    /* Indicates whether this entry is an adjusting entry (1) or not (0) */
+    adjusting INTEGER NOT NULL,
+    /* If this is an adjusting entry, record which regular entry it belongs to */
+    associated_journal_entry_id INTEGER REFERENCES journal(id_num)
 )

@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <script>
+        function email_re_statement() {
+            let re_html = encodeURIComponent(document.getElementById('re_statement').innerHTML);
+            let test2 = '{{url_for('statements.email_statement', statement='Retained Earnings Statement')}}';
+            window.location.href = test2 + '&&included_message=' + re_html;
+        }
+    </script>
+
+    <br>
+    <form method="post">
+        <table>
+            <tbody>
+            <tr>
+                <td style="color: white">Start date:</td>
+                <td><input type="date" id="start_date" name="start_date" style="width: 250px"></td>
+            </tr>
+            <tr>
+                <td style="color: white">End date:</td>
+                <td><input type="date" id="end_date" name="end_date" style="width: 250px"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <input style="display: block; border-color: #F89E19; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+                           data-toggle="tooltip" data-placement="top"
+                           title="View retained earnings statement for specified date range"
+                           class="submit" type="submit" value="View by date range">
+    </form>
+    <br>
+
+    <div class="table-responsive" id="re_statement">
+        <table class="table table-borderless" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+            <thead>
+            {% if start_date %}
+                <th>Retained Earnings Statement for Date Range {{ start_date }} to {{ end_date }}</th>
+            {% else %}
+                <th style="font-size: larger">Retained Earnings Statement</th>
+            {% endif %}
+            </thead>
+            <thead>
+            <tr>
+            <tr>
+                <th>Retained Earnings: Beginning</th>
+            </tr>
+            <td>
+                <table style="width: 100%">
+                    {% set temp1 = namespace(total_re = 0) %}
+                    {% for account in re_accounts %}
+                        <tr>
+                            <td style="width: 50%">{{ account['acct_name'] }} - {{ account['acct_desc'] }}</td>
+                            <td style="width: 50%" class="show-comma">{{ account['balance'] }}</td>
+                            {% set temp1.total_re = temp1.total_re + account['balance'] %}
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td style="width: 50%"><h6>Total Retained Earnings</h6></td>
+                        <td style="width: 50%;font-weight: bold" class="show-comma"><h6>{{ temp1.total_re }}</h6></td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <tr>
+                    <th>Net Income</th>
+                </tr>
+            <td>
+                <table style="width: 100%">
+                    <tr>
+                        <td style="width: 50%">Total Revenue</td>
+                        <td style="width: 50%" class="show-comma">{{ total_revenue }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%">Total Expenses</td>
+                        <td style="width: 50%" class="show-comma">{{ total_expenses }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%"><h6>Net Income</h6></td>
+                        <td style="width: 50%;font-weight: bold" class="show-comma"><h6>{{ total_revenue - total_expenses }}</h6></td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <tr>
+                    <th>Dividends</th>
+                </tr>
+            <td>
+                <table style="width: 100%">
+                    {% set temp2 = namespace(total_div = 0) %}
+                    {% for account in dividends_accounts %}
+                        <tr>
+                            <td style="width: 50%">{{ account['acct_name'] }} - {{ account['acct_desc'] }}</td>
+                            <td style="width: 50%" class="show-comma">{{ account['balance'] }}</td>
+                            {% set temp2.total_div = temp2.total_div + account['balance'] %}
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td><h6>Total Dividends</h6></td>
+                        <td style="font-weight: bold" class="show-comma">{{ temp2.total_div }}</td>
+                    </tr>
+                </table>
+            </td>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>Retained Earnings</th>
+                <th style="font-weight: bold" class="show-comma">{{ temp1.total_re + (total_revenue - total_expenses) - temp2.total_div }}</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="d-flex justify-content-center">
+        <button data-toggle="tooltip" data-placement="top"
+                title="Save or print a copy of the retained earnings statement" type="button"
+                style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+                onclick="alert('To save the retained earnings statement, select Save as PDF from the Print dialog' ); window.print()">
+            Save/Print Retained Earnings Statement
+        </button>
+        {% if g.user['role'] == 2 %}
+            <button data-toggle="tooltip" data-placement="top" title="Email this retained earnings statement to someone"
+                    type="button"
+                    style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
+                    onclick="email_re_statement()">Email Retained Earnings Statement
+            </button>
+        {% endif %}
+    </div>
+
+{% endblock %}

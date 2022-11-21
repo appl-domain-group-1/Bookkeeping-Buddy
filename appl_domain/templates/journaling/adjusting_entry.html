@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+  {% block content %}
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+<button class="btn btn-secondary dropdown-toggle bg-transparent" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white; font-size: xx-large; font-weight: bold">
+       Choose an Adjusting Entry
+  </button>
+<div id = "dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#">Accrued revenues</a>
+    <a class="dropdown-item" href="#">Accrued expenses</a>
+    <a class="dropdown-item" href="#">Deferred revenues</a>
+    <a class="dropdown-item" href="#">Prepaid expenses</a>
+    <a class="dropdown-item" href="#">Depreciation expenses</a>
+  </div>
+<br>
+<br>
+<table>
+        <tbody><tr>
+            <td style="color: white">Start date:</td>
+            <td><input type="text" id="min" name="min" style="width: 250px"></td>
+        </tr>
+        <tr>
+            <td style="color: white">End date:</td>
+            <td><input type="text" id="max" name="max" style="width: 250px"></td>
+        </tr>
+    </tbody></table>
+<br>
+<input class="form-control" id="myInput" type="text" placeholder="Search by account number or account name">
+<br>
+<h2 style="color: white" class = "Accrued revenues">Accrued revenues</h2>
+<div  class="table-responsive">
+    <table class = "table table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+        <thead>
+            <tr>
+                <th>Entry ID</th>
+                <th>Date Adjusted</th>
+                <th>Entry Description</th>
+                <th>Accounts Debited</th>
+                <th>Accounts Credited</th>
+                <th>Credits</th>
+                <th>Debits</th>
+                 <th>Attachment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Entry ID placeholder</td>
+                <td>Date Timestamp</td>
+                <td>Entry description of both credited and debited account placeholder
+                <div>Credited</div><div>Debited</div>
+                </td>
+                <td>Debited Account number</td>
+                <td>Credited Account number</td>
+                <td>Credited Amount</td>
+                <td>Debited Amount</td>
+                <td><input style="color: black" class="file" type="file" name="attachment" id="attachment"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<h2 style="color: white" class = "Accrued expenses">Accrued expenses</h2>
+<div  class="table-responsive">
+    <table class = "table table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+        <thead>
+            <tr>
+                <th>Entry ID</th>
+                <th>Date Adjusted</th>
+                <th>Entry Description</th>
+                <th>Accounts Debited</th>
+                <th>Accounts Credited</th>
+                <th>Credits</th>
+                <th>Debits</th>
+                 <th>Attachment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Entry ID placeholder</td>
+                <td>Date Timestamp</td>
+                <td>Entry description of both credited and debited account placeholder
+                <div>Credited</div><div>Debited</div>
+                </td>
+                <td>Debited Account number</td>
+                <td>Credited Account number</td>
+                <td>Credited Amount</td>
+                <td>Debited Amount</td>
+                <td><input style="color: black" class="file" type="file" name="attachment" id="attachment"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<h2 style="color: white" class = "Deferred expenses">Deferred expenses</h2>
+<div  class="table-responsive">
+    <table class = "table table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+        <thead>
+            <tr>
+                <th>Entry ID</th>
+                <th>Date Adjusted</th>
+                <th>Entry Description</th>
+                <th>Accounts Debited</th>
+                <th>Accounts Credited</th>
+                <th>Credits</th>
+                <th>Debits</th>
+                 <th>Attachment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Entry ID placeholder</td>
+                <td>Date Timestamp</td>
+                <td>Entry description of both credited and debited account placeholder
+                <div>Credited</div><div>Debited</div>
+                </td>
+                <td>Debited Account number</td>
+                <td>Credited Account number</td>
+                <td>Credited Amount</td>
+                <td>Debited Amount</td>
+                <td><input style="color: black" class="file" type="file" name="attachment" id="attachment"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<h2 style="color: white" class = "Prepaid Expenses">Prepaid expenses</h2>
+<div  class="table-responsive">
+    <table class = "table table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+        <thead>
+            <tr>
+                <th>Entry ID</th>
+                <th>Date Adjusted</th>
+                <th>Entry Description</th>
+                <th>Accounts Debited</th>
+                <th>Accounts Credited</th>
+                <th>Credits</th>
+                <th>Debits</th>
+                 <th>Attachment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Entry ID placeholder</td>
+                <td>Date Timestamp</td>
+                <td>Entry description of both credited and debited account placeholder
+                <div>Credited</div><div>Debited</div>
+                </td>
+                <td>Debited Account number</td>
+                <td>Credited Account number</td>
+                <td>Credited Amount</td>
+                <td>Debited Amount</td>
+                <td><input style="color: black" class="file" type="file" name="attachment" id="attachment"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<h2 style="color: white" class = "Depreciated expenses">Depreciated expenses</h2>
+<div  class="table-responsive">
+    <table class = "table table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19" id = "myTable">
+        <thead>
+            <tr>
+                <th>Entry ID</th>
+                <th>Date Adjusted</th>
+                <th>Entry Description</th>
+                <th>Accounts Debited</th>
+                <th>Accounts Credited</th>
+                <th>Credits</th>
+                <th>Debits</th>
+                 <th>Attachment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Entry ID placeholder</td>
+                <td>Date Timestamp</td>
+                <td>Entry description of both credited and debited account placeholder
+                <div>Credited</div><div>Debited</div>
+                </td>
+                <td>Debited Account number</td>
+                <td>Credited Account number</td>
+                <td>Credited Amount</td>
+                <td>Debited Amount</td>
+                <td><input style="color: black" class="file" type="file" name="attachment" id="attachment"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<button data-toggle="tooltip" data-placement="top" title="Create a new adjusting entry" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"  onclick="window.location.href='{{ url_for('journaling.add_adjusting_entry')}}'">Create New Adjusting Entry</button>
+
+{% endblock %}
+
