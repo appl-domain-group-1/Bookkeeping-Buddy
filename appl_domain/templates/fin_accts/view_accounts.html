@@ -111,14 +111,14 @@
                                                                  aria-label="Basic example">
                                                                 <button data-toggle="tooltip" data-placement="top"
                                                                         title="Edit financial account" type="button"
-                                                                        style="display: block; margin: auto"
+                                                                        style="display: block;margin-right: 2px; color: #CFCFCF; background-color: #185DFF; border-radius:4px; padding: 5px 8px; border-color: #185DFF"
                                                                         onclick="window.location.href='{{ url_for("fin_accts.edit_account", account_num=account['acct_num'] ) }}'">
                                                                     Edit
                                                                 </button>
                                                                 <button data-toggle="tooltip" data-placement="top"
                                                                         title="Deactivate or Activate financial account"
                                                                         type="button"
-                                                                        style="display: block; margin: auto"
+                                                                        style="display: block; margin: auto; color: #CFCFCF; background-color: #185DFF; padding: 5px 8px; border-radius:4px; border-color: #185DFF"
                                                                         onclick="window.location.href='{{ url_for('fin_accts.deactivate_account', account_num=account['acct_num']) }}'">
                                                                     {% if account['active'] == 1 %}Deactivate{% else %}
                                                                         Activate{% endif %}</button>
