@@ -2,8 +2,9 @@ import os
 
 import flask
 import base64
-from flask import Flask
-
+from flask import Flask, g
+import appl_domain.dashboard
+from datetime import datetime, timedelta
 
 def create_app(test_config=None):
     # create and configure the app
@@ -37,7 +38,34 @@ def create_app(test_config=None):
 
     @app.route('/')
     def mainpage():
-        return flask.render_template('index.html')
+        # Items for dashboard
+        assets = dashboard.get_assets()
+        liabilities = dashboard.get_liabilities()
+        current_ratio = dashboard.get_current_ratio()
+        working_capital = dashboard.get_working_capital()
+        debt_to_equity = dashboard.get_debt_to_equity()
+        equity_ratio = dashboard.get_equity_ratio()
+
+        # Items for "My Info"
+        my_journal_entries = dashboard.get_journal_entries(g.user['username'])
+        # Get the date the user's password will expire. This is a string.
+        password_refresh_date = g.user['password_refresh_date']
+        # Convert the string to a datetime object
+        password_refresh_date = datetime.fromisoformat(password_refresh_date)
+        # Calculate the date when it will expire
+        password_expires = password_refresh_date + timedelta(days=180)
+        next_suspension = dashboard.get_next_suspension(g.user['username'])
+
+        return flask.render_template('index.html',
+                                     assets=assets,
+                                     liabilities=liabilities,
+                                     current_ratio=current_ratio,
+                                     working_capital=working_capital,
+                                     debt_to_equity=debt_to_equity,
+                                     equity_ratio=equity_ratio,
+                                     my_journal_entries=my_journal_entries,
+                                     password_expires=password_expires,
+                                     next_suspension=next_suspension)
 
     @app.route('/login')
     def login_page():

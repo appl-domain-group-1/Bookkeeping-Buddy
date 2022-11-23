@@ -3,14 +3,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-   {% block title %}BookkeepingBuddy{% endblock %}
+    {% block title %}BookkeepingBuddy{% endblock %}
 </head>
 <body>
 {% block content %}
-<div class = "Welcome-text">
-    <p style="font-weight: bolder; color: white">Easily track income, expenses, and more with accounting software designed for all kinds of businesses.</p>
+    <div class="Welcome-text">
+        <p style="font-weight: bolder; color: white">Easily track income, expenses, and more with accounting software
+            designed for all kinds of businesses.</p>
     </div>
-{%  endblock %}
-</body>
 
-</html>
+    <h2 style="color: red">This stuff should go in the "dashboard" box</h2>
+    <h2 style="color: red">Assets: {{ assets }}</h2>
+    <h2 style="color: red">Liabilities: {{ liabilities }}</h2>
+    <h2 style="color: red">Current ratio: {{ current_ratio }}</h2>
+    <h2 style="color: red">Working capital: {{ working_capital }}</h2>
+    <h2 style="color: red">Debt to equity: {{ debt_to_equity }}</h2>
+    <h2 style="color: red">Equity ratio: {{ equity_ratio }}</h2>
+    <br>
+    <br>
+    <h2 style="color: greenyellow">This stuff should go in the "My Info" box</h2>
+    <h2 style="color: greenyellow">My journal entries awaiting authorization:</h2>
+    <table>
+        {% for entry in my_journal_entries %}
+            <tr>
+                <td><a href="{{ url_for('journaling.journal') }}#entry_{{ entry['id_num'] }}">{{ entry['id_num']}}</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2 style="color: greenyellow">Password expires: {{ password_expires }}</h2>
+    <h2 style="color: greenyellow">Next suspension: {{ next_suspension }}</h2>
+
+
+    </body>
+
+    </html>
+{% endblock %}
+
+
