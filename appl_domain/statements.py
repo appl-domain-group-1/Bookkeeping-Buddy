@@ -1,6 +1,5 @@
 from flask import Blueprint, g, redirect, render_template, request, url_for, abort, send_file, flash
 from appl_domain.db import get_db
-from datetime import datetime
 from appl_domain.auth import login_required
 from appl_domain.email_tasks import send_email
 
