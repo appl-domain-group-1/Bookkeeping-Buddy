@@ -7,22 +7,87 @@
 </head>
 <body>
 {% block content %}
-    <div class="Welcome-text">
-        <p style="font-weight: bolder; color: white">Easily track income, expenses, and more with accounting software
-            designed for all kinds of businesses.</p>
-    </div>
+<style>
+    /* Set height of body and the document to 100% to enable "full page tabs" */
+body, html {
+  height: 40%;
+  margin: 0;
+    flex-direction: column;
+}
 
-    <h2 style="color: red">This stuff should go in the "dashboard" box</h2>
-    <h2 style="color: red">Assets: {{ assets }}</h2>
-    <h2 style="color: red">Liabilities: {{ liabilities }}</h2>
-    <h2 style="color: red">Current ratio: {{ current_ratio }}</h2>
-    <h2 style="color: red">Working capital: {{ working_capital }}</h2>
-    <h2 style="color: red">Debt to equity: {{ debt_to_equity }}</h2>
-    <h2 style="color: red">Equity ratio: {{ equity_ratio }}</h2>
-    <br>
-    <br>
-    <h2 style="color: greenyellow">This stuff should go in the "My Info" box</h2>
-    <h2 style="color: greenyellow">My journal entries awaiting authorization:</h2>
+/* Style tab links */
+.tablink {
+  background-color: white;
+  color: white;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 14%;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+  color: white;
+  display: none;
+  padding: 100px 20px;
+  height: 100%;
+}
+    </style>
+    <script>
+    function openPage(pageName, elmnt, color) {
+  // Hide all elements with class="tabcontent" by default */
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Remove the background color of all tablinks/buttons
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].style.backgroundColor = "";
+  }
+
+  // Show the specific tab content
+  document.getElementById(pageName).style.display = "block";
+
+  // Add the specific color to the button used to open the tab content
+  elmnt.style.backgroundColor = color;
+}
+    </script>
+            <button class="tablink"style="background-color: white; color: #185DFF; display: block" onclick="openPage('Assets', this, 'white')">Assets</button>
+        <button class="tablink" style="background-color: white; color: #185DFF" onclick="openPage('Liabilities', this, 'white')" >Liabilities</button>
+            <button class="tablink" style="background-color: white; color: #185DFF" onclick="openPage('Current_ratio', this, 'white')" >Current ratio</button>
+                <button class="tablink" style="background-color: white; color: #185DFF" onclick="openPage('Working_capital', this,'white')" >Working capital</button>
+            <button class="tablink" style="background-color: white; color: #185DFF" onclick="openPage('Debt_to_equity', this, 'white')" >Debt to equity</button>
+            <button class="tablink" style="background-color: white; color: #185DFF" onclick="openPage('Equity_ratio', this, 'white')" >Equity ratio</button>
+                <button class="tablink" style="background-color: white; color: #185DFF" onclick="openPage('MyInfo', this, 'white')" >My Info</button>
+     <button type="button" data-toggle="tooltip" data-placement="top" title="View chart of accounts or create a new account"></button>
+
+        <div id="Assets" class="tabcontent">
+<h2 style="color: red">Assets: {{ assets }}</h2>
+  </div>
+
+    <div id="Liabilities" class="tabcontent">
+  <h2 style="color: red">Liabilities: {{ liabilities }}</h2>
+</div>
+
+    <div id="Current_ratio" class="tabcontent">
+  <h2 style="color: red">Current_ratio: {{ current_ratio }}</h2>
+</div>
+    <div id="Working_capital" class="tabcontent">
+  <h2 style="color: red">Working_capital: {{ working_capital }}</h2>
+</div>
+    <div id="Debt_to_equity" class="tabcontent">
+  <h2 style="color: red">Debt_to_equity: {{ debt_to_equity }}</h2>
+</div>
+    <div id="Equity_ratio" class="tabcontent">
+  <h2 style="color: red">Equity_ratio: {{ equity_ratio }}</h2>
+</div>
+  <div id="MyInfo" class="tabcontent">
     <table>
         {% for entry in my_journal_entries %}
             <tr>
@@ -30,9 +95,36 @@
             </tr>
         {% endfor %}
     </table>
+      <h2 style="color: greenyellow">My journal entries awaiting authorization:</h2>
     <h2 style="color: greenyellow">Password expires: {{ password_expires }}</h2>
     <h2 style="color: greenyellow">Next suspension: {{ next_suspension }}</h2>
+  </div>
 
+        <div class="Welcome-text">
+        <p style="font-weight: bolder; color: white">Easily track income, expenses, and more with accounting software
+            designed for all kinds of businesses.</p>
+    </div>
+
+{#    <h2 style="color: red">This stuff should go in the "dashboard" box</h2>#}
+{#    <h2 style="color: red">Assets: {{ assets }}</h2>#}
+{#    <h2 style="color: red">Liabilities: {{ liabilities }}</h2>#}
+{#    <h2 style="color: red">Current ratio: {{ current_ratio }}</h2>#}
+{#    <h2 style="color: red">Working capital: {{ working_capital }}</h2>#}
+{#    <h2 style="color: red">Debt to equity: {{ debt_to_equity }}</h2>#}
+{#    <h2 style="color: red">Equity ratio: {{ equity_ratio }}</h2>#}
+{#    <br>#}
+{#    <br>#}
+{#    <h2 style="color: greenyellow">This stuff should go in the "My Info" box</h2>#}
+{#    <h2 style="color: greenyellow">My journal entries awaiting authorization:</h2>#}
+{#    <table>#}
+{#        {% for entry in my_journal_entries %}#}
+{#            <tr>#}
+{#                <td><a href="{{ url_for('journaling.journal') }}#entry_{{ entry['id_num'] }}">{{ entry['id_num']}}</a></td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{#    </table>#}
+{#    <h2 style="color: greenyellow">Password expires: {{ password_expires }}</h2>#}
+{#    <h2 style="color: greenyellow">Next suspension: {{ next_suspension }}</h2>#}
 
     </body>
 
