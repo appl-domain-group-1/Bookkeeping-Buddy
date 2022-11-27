@@ -1,42 +1,112 @@
 {% extends 'base.html' %}
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     {% block title %}BookkeepingBuddy{% endblock %}
-</head>
-<body>
+    </head>
+    <body>
 {% block content %}
-    <div class="Welcome-text">
-        <p style="font-weight: bolder; color: white">Easily track income, expenses, and more with accounting software
-            designed for all kinds of businesses.</p>
+<br>
+<br>
+<div class="container" style="background: white">
+    <div class="row">
+        <div class="col-sm" id="piechart"></div>
+        <div class="col-sm" style="background: white; padding-top: 10px; margin: auto" id = "others">
+            <p id = "temp" >Current ratio:
+                <td> {{ current_ratio }}</td>
+            </p>
+        <p id="workingC">Working capital:
+            <td>{{ working_capital }}</td>
+            </p>
+        <p id="debt" >Debt to equity:
+            <td>{{ debt_to_equity }}</td></p>
+        <p id="equityR">Equity ratio:
+            <td>{{ equity_ratio }}</td></p>
+    </div>
     </div>
 
-    <h2 style="color: red">This stuff should go in the "dashboard" box</h2>
-    <h2 style="color: red">Assets: {{ assets }}</h2>
-    <h2 style="color: red">Liabilities: {{ liabilities }}</h2>
-    <h2 style="color: red">Current ratio: {{ current_ratio }}</h2>
-    <h2 style="color: red">Working capital: {{ working_capital }}</h2>
-    <h2 style="color: red">Debt to equity: {{ debt_to_equity }}</h2>
-    <h2 style="color: red">Equity ratio: {{ equity_ratio }}</h2>
+    </div>
     <br>
     <br>
-    <h2 style="color: greenyellow">This stuff should go in the "My Info" box</h2>
-    <h2 style="color: greenyellow">My journal entries awaiting authorization:</h2>
-    <table>
-        {% for entry in my_journal_entries %}
-            <tr>
-                <td><a href="{{ url_for('journaling.journal') }}#entry_{{ entry['id_num'] }}">{{ entry['id_num']}}</a></td>
-            </tr>
-        {% endfor %}
-    </table>
-    <h2 style="color: greenyellow">Password expires: {{ password_expires }}</h2>
-    <h2 style="color: greenyellow">Next suspension: {{ next_suspension }}</h2>
-
-
+    <div class="card">
+      <div class="card-body">
+        <h3 >My Information</h3>
+        <p style="color: black">My journal entries awaiting authorization:
+        <table>
+            {% for entry in my_journal_entries %}
+                <tr>
+                    <td><a href="{{ url_for('journaling.journal') }}#entry_{{ entry['id_num'] }}">{{ entry['id_num']}}</a></td>
+                </tr>
+            {% endfor %}
+        </table></p>
+        <p style="color: black">Password expires: {{ password_expires }}</p>
+        <p style="color: black">Next suspension: {{ next_suspension }}</p>
+    </div>
+    </div>
+    <br>
+        <h2 id= "asset" style="color: red">{{ assets }}</h2>
+        <h2 id = "liability" type="text" style="color: red">{{ liabilities }}</h2>
     </body>
 
     </html>
+    <script type="text/javascript">
+        // Load google charts
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        var assets = document.getElementById("asset")
+        var liability = document.getElementById("liability")
+        var a = Number(assets)
+        var b = Number(liability)
+
+        // Draw the chart and set the chart values
+        function drawChart() {
+          var data = google.visualization.arrayToDataTable([
+          ['Account', 'Amount'],
+          ['Assets',3010500],
+          ['Liability', 510500],
+        ]);
+
+          // Optional; add a title and set the width and height of the chart
+          var options = {'title':'Assets and Liability','width':450, 'height':400};
+
+          // Display the chart inside the <div> element with id="piechart"
+          var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+          chart.draw(data, options);
+        }
+        $('#temp td').each(function(){
+            var currentRatio = $(this).html();
+            if(currentRatio < 0.6){$(this).css("color", "red");}
+            if(currentRatio >= 0.6 && currentRatio < 1){
+                $(this).css("color", "yellow");}
+            if(currentRatio >= 1){
+                $(this).css("color", "green");}
+        });
+        $('#workingC td').each(function(){
+            var workingCapital = $(this).html();
+            if(workingCapital < 1.2){$(this).css("color", "red");}
+            if(workingCapital >= 1.2 && workingCapital < 2.0){
+                $(this).css("color", "green");}
+            if(workingCapital >= 2.0){
+                $(this).css("color", "yellow");}
+        });
+        $('#debt td').each(function(){
+            var debt = $(this).html();
+            if(debt < 1.0){$(this).css("color", "red");}
+            if(debt >= 2 && debt < 2.5){
+                $(this).css("color", "green");}
+            if(debt >= 2.5){
+                $(this).css("color", "yellow");}
+        });
+        $('#equityR td').each(function(){
+            var equity = $(this).html();
+            if(equity <= 0.5){$(this).css("color", "green");}
+            if(equity > 0.5 && equity <= 1.0){
+                $(this).css("color", "yellow");}
+            if(equity > 1.0){
+                $(this).css("color", "red");}
+        });
+</script>
 {% endblock %}
 
 
