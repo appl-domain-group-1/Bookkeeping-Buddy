@@ -8,28 +8,29 @@
 {% block content %}
     <br>
     <br>
-    <div class="container" style="background: white">
-        <div class="row">
-            <div class="col-sm" id="piechart"></div>
-            <div class="col-sm" style="background: white; padding-top: 10px; margin: auto" id="others">
-                <p id="temp">Current ratio:
-                <td> {{ current_ratio }}</td>
-                </p>
-                <p id="workingC">Working capital:
-                <td>{{ working_capital }}</td>
-                </p>
-                <p id="debt">Debt to equity:
-                <td>{{ debt_to_equity }}</td>
-                </p>
-                <p id="equityR">Equity ratio:
-                <td>{{ equity_ratio }}</td>
-                </p>
-            </div>
+<div class="card">
+    <div class="card-body">
+        <div class ="d-flex justify-content-center">
+            <div id="piechart_div" ></div>
         </div>
 
+</div>
+</div>
+<div class="card">
+<div class="container" >
+    <br>
+    <h3 style="text-align: center">Financial Ratios</h3>
+  <div class="row">
+    <div id="chart2_div"  class="col-sm">
     </div>
-    <br>
-    <br>
+    <div id="Test_chart_div" class="col-sm">
+    </div>
+    <div class="col-sm" id="chart_div" >
+    </div>
+      <div class="col-sm" id="chart3_div"></div>
+  </div>
+</div>
+</div>
     <div class="card">
         <div class="card-body">
             <h3>My Information</h3>
@@ -49,120 +50,106 @@
         </div>
     </div>
     <br>
-    <h2 id="asset" style="color: red">{{ assets }}</h2>
-    <h2 id="liability" type="text" style="color: red">{{ liabilities }}</h2>
     </body>
 
     </html>
     <script type="text/javascript">
         // Load google charts
-        google.charts.load('current', {'packages': ['corechart', 'gauge']});
-        google.charts.setOnLoadCallback(drawPieChart);
-        google.charts.setOnLoadCallback(drawCurrentRatio);
-        google.charts.setOnLoadCallback(drawChart3);
-        google.charts.setOnLoadCallback(drawChart4)
+        // Load Charts and the corechart and guage packages.
+      google.charts.load('current', {'packages':['corechart', 'gauge']});
 
-        var assets = document.getElementById("asset")
-        var liability = document.getElementById("liability")
-        var a = Number(assets)
-        var b = Number(liability)
+      // Draw the pie chart and bar chart when Charts is loaded.
+      google.charts.setOnLoadCallback(drawChart);
 
-        // Draw the chart and set the chart values
-        function drawPieChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Account', 'Amount'],
-                ['Assets', 3010500],
-                ['Liability', 510500],
-            ]);
+      function drawChart() {
 
-            // Optional; add a title and set the width and height of the chart
-            var options = {'title': 'Assets and Liability', 'width': 450, 'height': 400};
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Account');
+        data.addColumn('number', 'Amount');
+        data.addRows([
+          ['Assets', {{ assets }}],
+          ['Liability', {{ liabilities }}],
+        ]);
 
-            // Display the chart inside the <div> element with id="piechart"
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-            chart.draw(data, options);
-        }
+        var piechart_options = {title:'Assets and Liability Distribution',
+                       width:500,
+                       height:300,
+                       };
+        var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+        piechart.draw(data, piechart_options);
 
-        // Draw second chart for current ratio
-        function drawCurrentRatio() {
-            console.log({{ current_ratio }})
-            var data = google.visualization.arrayToDataTable([
-                ['Label', 'Value'],
-                ['Current Ratio', {{ current_ratio }}],
-            ]);
+        // Current Ratio gauge chart.
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Current Ratio', {{ current_ratio }}],
+        ]);
 
-            var options = {
-                max: 10, min: -2,
-                width: 400, height: 120,
+        var options = {
+           max: 10, min: -2,
+                width: 400, height: 200,
                 redFrom: -1, redTo: 0,
                 yellowFrom: 0, yellowTo: 1,
                 greenFrom: 1, greenTo: 10
-            };
+        };
 
-            var chart = new google.visualization.Gauge(document.getElementById('others'));
+        var CurrentRatiochart = new google.visualization.Gauge(document.getElementById('chart_div'));
 
-            chart.draw(data, options)
-        }
+        CurrentRatiochart.draw(data, options);
 
-        function drawChart3() {
-            return 1
-        }
+        // Working capital gauge chart.
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Working Capital', {{ working_capital }}],
+        ]);
 
-        function drawChart4() {
-            return 1
-        }
+        var options = {
+            max: 10, min: -2,
+            width: 400, height: 200,
+            redFrom: -1, redTo: 1,
+            yellowFrom: 2, yellowTo: 9,
+            greenFrom: 1, greenTo: 2
+        };
 
-        /*
-        $('#temp td').each(function () {
-            var currentRatio = $(this).html();
-            if (currentRatio < 0.6) {
-                $(this).css("color", "red");
-            }
-            if (currentRatio >= 0.6 && currentRatio < 1) {
-                $(this).css("color", "yellow");
-            }
-            if (currentRatio >= 1) {
-                $(this).css("color", "green");
-            }
-        });
-        $('#workingC td').each(function () {
-            var workingCapital = $(this).html();
-            if (workingCapital < 1.2) {
-                $(this).css("color", "red");
-            }
-            if (workingCapital >= 1.2 && workingCapital < 2.0) {
-                $(this).css("color", "green");
-            }
-            if (workingCapital >= 2.0) {
-                $(this).css("color", "yellow");
-            }
-        });
-        $('#debt td').each(function () {
-            var debt = $(this).html();
-            if (debt < 1.0) {
-                $(this).css("color", "red");
-            }
-            if (debt >= 2 && debt < 2.5) {
-                $(this).css("color", "green");
-            }
-            if (debt >= 2.5) {
-                $(this).css("color", "yellow");
-            }
-        });
-        $('#equityR td').each(function () {
-            var equity = $(this).html();
-            if (equity <= 0.5) {
-                $(this).css("color", "green");
-            }
-            if (equity > 0.5 && equity <= 1.0) {
-                $(this).css("color", "yellow");
-            }
-            if (equity > 1.0) {
-                $(this).css("color", "red");
-            }
-        });
+        var WorkingCapitalchart = new google.visualization.Gauge(document.getElementById('Test_chart_div'));
 
-         */
+        WorkingCapitalchart.draw(data, options);
+
+        // Debt to Equity gauge chart.
+          var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Debt to Equity', {{ debt_to_equity }}],
+        ]);
+
+        var options = {
+          max: 10, min: -2,
+        width: 400, height: 200,
+        redFrom: -1, redTo: 2,
+        yellowFrom: 2.5, yellowTo: 9,
+        greenFrom: 2, greenTo: 2.5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart2_div'));
+
+        chart.draw(data, options);
+
+        // Equity Ratio gauge chart.
+         var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Equity Ratio', {{ equity_ratio }}]
+        ]);
+
+        var options = {
+          max: 10, min: -2,
+        width: 400, height: 200,
+        redFrom: -1, redTo: 0.5,
+        yellowFrom: 2, yellowTo: 10,
+        greenFrom: 0.5, greenTo: 3
+        };
+
+        var Equitychart = new google.visualization.Gauge(document.getElementById('chart3_div'));
+
+        Equitychart.draw(data, options);
+      }
     </script>
 {% endblock %}
 
