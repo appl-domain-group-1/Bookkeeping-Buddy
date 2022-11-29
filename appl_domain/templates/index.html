@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,36 +6,151 @@
 </head>
 <body>
 {% block content %}
-    <div class="Welcome-text">
-        <p style="font-weight: bolder; color: white">Easily track income, expenses, and more with accounting software
-            designed for all kinds of businesses.</p>
+    <br>
+    <br>
+<div class="card">
+    <div class="card-body">
+        <div class ="d-flex justify-content-center">
+            <div id="piechart_div" ></div>
+        </div>
+
+</div>
+</div>
+<div class="card">
+<div class="container" >
+    <br>
+    <h3 style="text-align: center">Financial Ratios</h3>
+  <div class="row">
+    <div id="chart2_div"  class="col-sm">
     </div>
-
-    <h2 style="color: red">This stuff should go in the "dashboard" box</h2>
-    <h2 style="color: red">Assets: {{ assets }}</h2>
-    <h2 style="color: red">Liabilities: {{ liabilities }}</h2>
-    <h2 style="color: red">Current ratio: {{ current_ratio }}</h2>
-    <h2 style="color: red">Working capital: {{ working_capital }}</h2>
-    <h2 style="color: red">Debt to equity: {{ debt_to_equity }}</h2>
-    <h2 style="color: red">Equity ratio: {{ equity_ratio }}</h2>
+    <div id="Test_chart_div" class="col-sm">
+    </div>
+    <div class="col-sm" id="chart_div" >
+    </div>
+      <div class="col-sm" id="chart3_div"></div>
+  </div>
+</div>
+</div>
+    <div class="card">
+        <div class="card-body">
+            <h3>My Information</h3>
+            <p style="color: black">My journal entries awaiting authorization:
+            <table>
+                {% for entry in my_journal_entries %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('journaling.journal') }}#entry_{{ entry['id_num'] }}">{{ entry['id_num'] }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            </p>
+            <p style="color: black">Password expires: {{ password_expires }}</p>
+            <p style="color: black">Next suspension: {{ next_suspension }}</p>
+        </div>
+    </div>
     <br>
-    <br>
-    <h2 style="color: greenyellow">This stuff should go in the "My Info" box</h2>
-    <h2 style="color: greenyellow">My journal entries awaiting authorization:</h2>
-    <table>
-        {% for entry in my_journal_entries %}
-            <tr>
-                <td><a href="{{ url_for('journaling.journal') }}#entry_{{ entry['id_num'] }}">{{ entry['id_num']}}</a></td>
-            </tr>
-        {% endfor %}
-    </table>
-    <h2 style="color: greenyellow">Password expires: {{ password_expires }}</h2>
-    <h2 style="color: greenyellow">Next suspension: {{ next_suspension }}</h2>
-
-
     </body>
 
     </html>
+    <script type="text/javascript">
+        // Load google charts
+        // Load Charts and the corechart and guage packages.
+      google.charts.load('current', {'packages':['corechart', 'gauge']});
+
+      // Draw the pie chart and bar chart when Charts is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Account');
+        data.addColumn('number', 'Amount');
+        data.addRows([
+          ['Assets', {{ assets }}],
+          ['Liability', {{ liabilities }}],
+        ]);
+
+        var piechart_options = {title:'Assets and Liability Distribution',
+                       width:500,
+                       height:300,
+                       };
+        var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+        piechart.draw(data, piechart_options);
+
+        // Current Ratio gauge chart.
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Current Ratio', {{ current_ratio }}],
+        ]);
+
+        var options = {
+           max: 10, min: -2,
+                width: 400, height: 200,
+                redFrom: -1, redTo: 0,
+                yellowFrom: 0, yellowTo: 1,
+                greenFrom: 1, greenTo: 10
+        };
+
+        var CurrentRatiochart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        CurrentRatiochart.draw(data, options);
+
+        // Working capital gauge chart.
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Working Capital', {{ working_capital }}],
+        ]);
+
+        var options = {
+            max: 10, min: -2,
+            width: 400, height: 200,
+            redFrom: -1, redTo: 1,
+            yellowFrom: 2, yellowTo: 9,
+            greenFrom: 1, greenTo: 2
+        };
+
+        var WorkingCapitalchart = new google.visualization.Gauge(document.getElementById('Test_chart_div'));
+
+        WorkingCapitalchart.draw(data, options);
+
+        // Debt to Equity gauge chart.
+          var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Debt to Equity', {{ debt_to_equity }}],
+        ]);
+
+        var options = {
+          max: 10, min: -2,
+        width: 400, height: 200,
+        redFrom: -1, redTo: 2,
+        yellowFrom: 2.5, yellowTo: 9,
+        greenFrom: 2, greenTo: 2.5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart2_div'));
+
+        chart.draw(data, options);
+
+        // Equity Ratio gauge chart.
+         var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Equity Ratio', {{ equity_ratio }}]
+        ]);
+
+        var options = {
+          max: 10, min: -2,
+        width: 400, height: 200,
+        redFrom: -1, redTo: 0.5,
+        yellowFrom: 2, yellowTo: 10,
+        greenFrom: 0.5, greenTo: 3
+        };
+
+        var Equitychart = new google.visualization.Gauge(document.getElementById('chart3_div'));
+
+        Equitychart.draw(data, options);
+      }
+    </script>
 {% endblock %}
 
 
