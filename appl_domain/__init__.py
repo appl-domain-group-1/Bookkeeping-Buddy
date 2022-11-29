@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import flask
 from flask import Flask, g
 
-import appl_domain.dashboard
+from appl_domain import dashboard
 
 
 def create_app(test_config=None):
