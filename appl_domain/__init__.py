@@ -1,10 +1,11 @@
+import base64
 import os
+from datetime import datetime, timedelta
 
 import flask
-import base64
 from flask import Flask, g
+
 import appl_domain.dashboard
-from datetime import datetime, timedelta
 
 
 def create_app(test_config=None):

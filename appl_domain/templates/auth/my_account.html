@@ -1,273 +1,314 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<style>
- body{
-    align-items:center;
-    justify-content: center;
-}
-.container{
-    position: relative;
-    max-width: 500px;
-    width: 80%;
-    border-radius: 6px;
-    padding: 30px;
-    margin-top: 10vh;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: black;
-}
-.container h1{
-    font-size : x-large;
-    font-weight: bold;
-    color: white;
-    text-align: center;
-}
-.container form{
-    position: relative;
-    margin-top:16px;
-    min-height: 400px;
-    background: black;
-}
-.container form .personal{
-    margin-top: 30px;
-}
-.container form .fields{
-   display: flex;
-    align-content: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-form .fields .input-field{
-     display: block;
-        width: 100%;
-}
-.input-field label{
-     font-size: 14px;
-    font-weight: bold;
-    color: #185DFF;
+    <style>
+        body {
+            align-items: center;
+            justify-content: center;
+        }
 
-}
-.input-field .picture{
-        width:70px;
-        height:70px;
-        margin-top: 10px;
-        margin-left: -84px;
-    }
-.input-field .file{
-    border: none;
-    outline: none;
-    height: 42px;
-    color: #185DFF;
-}
-.input-field input{
-     width: 100%;
-    outline: none;
-    color: #333;
-    font-size: 14px;
-    border: 1px solid #F89E19;
-    border-radius: 5px;
-    color: black;
-    height: 42px;
-    margin: 8px 0;
-}
-.container form .submit{
-   background-color: #185DFF;
-    color: white;
-    padding: 10px 20px;
-    margin-top: 10px;
-    margin-left: 75px;
-    margin-bottom: 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 300px;
-    opacity: 0.9;
-    font-size: 14px;
+        .container {
+            position: relative;
+            max-width: 500px;
+            width: 80%;
+            border-radius: 6px;
+            padding: 30px;
+            margin-top: 10vh;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: black;
+        }
 
-}
+        .container h1 {
+            font-size: x-large;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+        }
 
-.container form p{
-    margin-top: -20px;
-}
- @media screen and (max-width: 830px) {
-  .container {
-    position: relative;
-    max-width: 380px;
-    width: 80%;
-    border-radius: 6px;
-    padding: 30px;
-    margin-top: 10vh;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: black;
-  }
-     .container form{
-    position: relative;
-    margin-top:16px;
-    min-height: 400px;
-    background: black;
-}
-    .input-field label{
-        font-size: 14px;
-        font-weight: bold;
-        color: #185DFF;
-    }
-    .input-field input{
-        width: 100%;
-        outline: none;
-        color: #333;
-        font-size: 14px;
-        border: 1px solid #F89E19;
-        border-radius: 5px;
-        height: 42px;
-        margin: 8px 0;
-    }
-    form .fields .input-field{
-        display: block;
-        width: 100%;
-    }
+        .container form {
+            position: relative;
+            margin-top: 16px;
+            min-height: 400px;
+            background: black;
+        }
 
-    .container form .fields{
-        display: block;
-        width: 100%
-    }
-    .container form .submit{
-        margin-left: 0px;
-        width: 100%;
-        margin-bottom: 10px;
-        margin-top: 0px;
-    }
-    .input-field .picture{
-        width:70px;
-        height:70px;
-        margin-top: 10px;
-        margin-left: -84px;
-    }
-    .container form p{
-        margin-top: 30px;
-    }
+        .container form .personal {
+            margin-top: 30px;
+        }
+
+        .container form .fields {
+            display: flex;
+            align-content: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        form .fields .input-field {
+            display: block;
+            width: 100%;
+        }
+
+        .input-field label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #185DFF;
+
+        }
+
+        .input-field .picture {
+            width: 70px;
+            height: 70px;
+            margin-top: 10px;
+            margin-left: -84px;
+        }
+
+        .input-field .file {
+            border: none;
+            outline: none;
+            height: 42px;
+            color: #185DFF;
+        }
+
+        .input-field input {
+            width: 100%;
+            outline: none;
+            color: #333;
+            font-size: 14px;
+            border: 1px solid #F89E19;
+            border-radius: 5px;
+            color: black;
+            height: 42px;
+            margin: 8px 0;
+        }
+
+        .container form .submit {
+            background-color: #185DFF;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 10px;
+            margin-left: 75px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 300px;
+            opacity: 0.9;
+            font-size: 14px;
+
+        }
+
+        .container form p {
+            margin-top: -20px;
+        }
+
+        @media screen and (max-width: 830px) {
+            .container {
+                position: relative;
+                max-width: 380px;
+                width: 80%;
+                border-radius: 6px;
+                padding: 30px;
+                margin-top: 10vh;
+                margin-left: auto;
+                margin-right: auto;
+                background-color: black;
+            }
+
+            .container form {
+                position: relative;
+                margin-top: 16px;
+                min-height: 400px;
+                background: black;
+            }
+
+            .input-field label {
+                font-size: 14px;
+                font-weight: bold;
+                color: #185DFF;
+            }
+
+            .input-field input {
+                width: 100%;
+                outline: none;
+                color: #333;
+                font-size: 14px;
+                border: 1px solid #F89E19;
+                border-radius: 5px;
+                height: 42px;
+                margin: 8px 0;
+            }
+
+            form .fields .input-field {
+                display: block;
+                width: 100%;
+            }
+
+            .container form .fields {
+                display: block;
+                width: 100%
+            }
+
+            .container form .submit {
+                margin-left: 0px;
+                width: 100%;
+                margin-bottom: 10px;
+                margin-top: 0px;
+            }
+
+            .input-field .picture {
+                width: 70px;
+                height: 70px;
+                margin-top: 10px;
+                margin-left: -84px;
+            }
+
+            .container form p {
+                margin-top: 30px;
+            }
 
 
-}
+        }
 
-@media screen and (max-width: 600px) {
-  .container {
-    position: relative;
-    max-width: 380px;
-    width: 80%;
-    border-radius: 6px;
-    padding: 30px;
-    margin-top:10vh;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: black;
-  }
-    .input-field label{
-        font-size: 14px;
-        font-weight: bold;
-        color: #185DFF;
-    }
-    .input-field input{
-        width: 100%;
-        outline: none;
-        color: #333;
-        font-size: 14px;
-        border: 1px solid #F89E19;
-        border-radius: 5px;
-        height: 42px;
-        margin: 8px 0;
-    }
-    form .fields .input-field{
-        display: block;
-        width: 100%;
-    }
+        @media screen and (max-width: 600px) {
+            .container {
+                position: relative;
+                max-width: 380px;
+                width: 80%;
+                border-radius: 6px;
+                padding: 30px;
+                margin-top: 10vh;
+                margin-left: auto;
+                margin-right: auto;
+                background-color: black;
+            }
 
-    .container form .fields{
-        display: block;
-        width: 100%
-    }
-    .container form .submit{
-        margin-left: 0px;
-        width: 100%;
-        margin-bottom: 10px;
-        margin-top: 0px;
-    }
-    .input-field .picture{
-        width:70px;
-        height:70px;
-        margin-top: 10px;
-        margin-left: -84px;
-    }
-    .container form p{
-        margin-top: 30px;
-    }
+            .input-field label {
+                font-size: 14px;
+                font-weight: bold;
+                color: #185DFF;
+            }
 
-}
-@media screen and (max-width: 390px) {
-  .container {
-      margin-top: 10vh;
-  }}
+            .input-field input {
+                width: 100%;
+                outline: none;
+                color: #333;
+                font-size: 14px;
+                border: 1px solid #F89E19;
+                border-radius: 5px;
+                height: 42px;
+                margin: 8px 0;
+            }
 
-</style>
-<div class="container">
-     <h1>{% block title %}Account settings for {{ g.user['username'] }}{% endblock %}</h1>
-    <form method="post" enctype="multipart/form-data">
-        <div class = "form-first">
-            <div class = "personal details">
-                <div class = "fields">
-                    <div class = "input-field">
-                    <label for="first_name">First Name</label>
-                    <input name="first_name" id="first_name" required value="{{ g.user['first_name'] }}">
-                    </div>
-                    <div class = "input-field">
-                        <label for="last_name">Last Name</label>
-                    <input name="last_name" id="last_name" required value="{{ g.user['last_name'] }}">
-                    </div>
-                    <div class = "input-field">
-                    <label for="email_address">Email Address</label>
-                    <input name="email_address" id="email_address" required value="{{ g.user['email_address'] }}">
-                    </div>
-                        <div class = "input-field">
-                    <label for="address">Address</label>
-                    <input name="address" id="address" required value="{{ g.user['address'] }}">
+            form .fields .input-field {
+                display: block;
+                width: 100%;
+            }
+
+            .container form .fields {
+                display: block;
+                width: 100%
+            }
+
+            .container form .submit {
+                margin-left: 0px;
+                width: 100%;
+                margin-bottom: 10px;
+                margin-top: 0px;
+            }
+
+            .input-field .picture {
+                width: 70px;
+                height: 70px;
+                margin-top: 10px;
+                margin-left: -84px;
+            }
+
+            .container form p {
+                margin-top: 30px;
+            }
+
+        }
+
+        @media screen and (max-width: 390px) {
+            .container {
+                margin-top: 10vh;
+            }
+        }
+
+    </style>
+    <div class="container">
+        <h1>{% block title %}Account settings for {{ g.user['username'] }}{% endblock %}</h1>
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-first">
+                <div class="personal details">
+                    <div class="fields">
+                        <div class="input-field">
+                            <label for="first_name">First Name</label>
+                            <input name="first_name" id="first_name" required value="{{ g.user['first_name'] }}">
                         </div>
-                    <div class = "input-field">
-                        <label for="DOB">Date of birth (YYYY-MM-DD)</label>
-                        <input name="DOB" id="DOB" required value="{{ g.user['DOB'] }}">
+                        <div class="input-field">
+                            <label for="last_name">Last Name</label>
+                            <input name="last_name" id="last_name" required value="{{ g.user['last_name'] }}">
                         </div>
-                    <div class = "input-field" style="float: left">
-                    <label for="profile_pic" style="float: left">Profile picture</label>
-                    {% if g.user['picture'] %}
-                        <span ><img class = "picture" src="data:image/png;base64, {{ g.user["picture"] | make_image }}"  id = "userImage" style="width:100px;height:100px;margin-top: 20px;" alt="User's profile picture"/></span>
-                    {% else %}
-                        <span ><img class = "picture" src="{{ url_for('static', filename='no_photo.png') }}" style="width:100px;height:100px;margin-top: 20px;"  alt="Placeholder profile picture"/></span>
-                    {% endif %}
-                    </div>
-                    <div class = "input-field">
-                        <label for="uploaded_pic">Upload new photo</label>
-                         <input class ="file" type="file" name="uploaded_pic" id="uploaded_pic">
-                    </div>
-                    <div class="btn-group-vertical-justified" style="margin-bottom: 10px">
-                      <button data-toggle="tooltip" data-placement="top" title="Save changes made to user account"  type="submit" class="btn btn-secondary" style = "color: white; background-color: #185DFF">Save changes</button>
-                      <button data-toggle="tooltip" data-placement="top" title="Change user password" type="button" class="btn btn-secondary" style = "color: white; background-color: #185DFF" onclick="window.location.href='{{ url_for('auth.reset_password')}}'" >Change password</button>
-                    </div>
-                    <div class="instructions" style="color: white; margin-top: 12px">
-                        <p style="margin-left: 0px">
-                    Password last reset on {{ g.user['password_refresh_date'] }}<br>
-                    Your password will expire on {{ password_expires }}<br>
-                    {% if g.user['suspend_start_date'] %}
-                        Your account is set to be suspended starting on {{ g.user['suspend_start_date'] }}.
-                        It will be reactivated on {{ g.user['suspend_end_date'] }}
-                    {% endif %}
-                        </p>
-                        <br>
-                    </div>
+                        <div class="input-field">
+                            <label for="email_address">Email Address</label>
+                            <input name="email_address" id="email_address" required
+                                   value="{{ g.user['email_address'] }}">
+                        </div>
+                        <div class="input-field">
+                            <label for="address">Address</label>
+                            <input name="address" id="address" required value="{{ g.user['address'] }}">
+                        </div>
+                        <div class="input-field">
+                            <label for="DOB">Date of birth (YYYY-MM-DD)</label>
+                            <input name="DOB" id="DOB" required value="{{ g.user['DOB'] }}">
+                        </div>
+                        <div class="input-field" style="float: left">
+                            <label for="profile_pic" style="float: left">Profile picture</label>
+                            {% if g.user['picture'] %}
+                                <span><img class="picture"
+                                           src="data:image/png;base64, {{ g.user["picture"] | make_image }}"
+                                           id="userImage" style="width:100px;height:100px;margin-top: 20px;"
+                                           alt="User's profile picture"/></span>
+                            {% else %}
+                                <span><img class="picture" src="{{ url_for('static', filename='no_photo.png') }}"
+                                           style="width:100px;height:100px;margin-top: 20px;"
+                                           alt="Placeholder profile picture"/></span>
+                            {% endif %}
+                        </div>
+                        <div class="input-field">
+                            <label for="uploaded_pic">Upload new photo</label>
+                            <input class="file" type="file" name="uploaded_pic" id="uploaded_pic">
+                        </div>
+                        <div class="btn-group-vertical-justified" style="margin-bottom: 10px">
+                            <button data-toggle="tooltip" data-placement="top" title="Save changes made to user account"
+                                    type="submit" class="btn btn-secondary"
+                                    style="color: white; background-color: #185DFF">Save changes
+                            </button>
+                            <button data-toggle="tooltip" data-placement="top" title="Change user password"
+                                    type="button" class="btn btn-secondary"
+                                    style="color: white; background-color: #185DFF"
+                                    onclick="window.location.href='{{ url_for('auth.reset_password') }}'">Change
+                                password
+                            </button>
+                        </div>
+                        <div class="instructions" style="color: white; margin-top: 12px">
+                            <p style="margin-left: 0px">
+                                Password last reset on {{ g.user['password_refresh_date'] }}<br>
+                                Your password will expire on {{ password_expires }}<br>
+                                {% if g.user['suspend_start_date'] %}
+                                    Your account is set to be suspended starting on {{ g.user['suspend_start_date'] }}.
+                                    It will be reactivated on {{ g.user['suspend_end_date'] }}
+                                {% endif %}
+                            </p>
+                            <br>
+                        </div>
 
 
-    </div>
-</div>
-</div>
+                    </div>
+                </div>
+            </div>
         </form>
-</div>
+    </div>
 {% endblock %}

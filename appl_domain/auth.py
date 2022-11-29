@@ -1,14 +1,15 @@
 import functools
+import json
 import re
+from datetime import date, datetime, timedelta
+from io import BytesIO
 
-from appl_domain.email_tasks import email_registration, send_approval
+from PIL import Image
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 from werkzeug.security import check_password_hash, generate_password_hash
+
 from appl_domain.db import get_db
-from datetime import date, datetime, timedelta
-import json
-from PIL import Image
-from io import BytesIO
+from appl_domain.email_tasks import email_registration, send_approval
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -530,7 +531,8 @@ def edit_user(username):
                 suspend_start_date = request.form['suspend_start_date']
                 suspend_end_date = request.form['suspend_end_date']
             # If user doesn't give us both a start and an end date, don't commit either
-            if (request.form['suspend_start_date'] and not request.form['suspend_end_date']) or (request.form['suspend_end_date'] and not request.form['suspend_start_date']):
+            if (request.form['suspend_start_date'] and not request.form['suspend_end_date']) or (
+                    request.form['suspend_end_date'] and not request.form['suspend_start_date']):
                 error = "To set a suspension period, you must supply both a start date and an end date."
             # Only write to the database if there are no errors
             if error is None:

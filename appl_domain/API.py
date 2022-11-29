@@ -1,11 +1,12 @@
+from datetime import date, datetime, timedelta
+
 from flask import (
     Blueprint, request, jsonify, g
 )
 from werkzeug.exceptions import abort
-from appl_domain.db import get_db
-from datetime import date, datetime, timedelta
-from appl_domain.auth import login_required
 
+from appl_domain.auth import login_required
+from appl_domain.db import get_db
 
 # Get today's date
 today = datetime.today().date()

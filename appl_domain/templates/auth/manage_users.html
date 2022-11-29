@@ -3,10 +3,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <style>
-    h1, h3{
-      background-color: #CFCFCF;
-      color:#185DFF;
-}
+    h1, h3 {
+        background-color: #CFCFCF;
+        color: #185DFF;
+    }
 </style>
 <head>
     <meta charset="UTF-8">
@@ -14,34 +14,34 @@
 </head>
 <body>
 {% block content %}
-<div class = "h1-h3">
-    <h1 >User management</h1>
-    <h3 >Current users:</h3>
+    <div class="h1-h3">
+        <h1>User management</h1>
+        <h3>Current users:</h3>
     </div>
-<div style="overflow-x:auto; margin-top: -7px">
-    <table class = "table table-light table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
-        <tr class = "table-header">
-            <th style="border:1px solid black">Full Name</th>
-            <th style="border:1px solid black">Username</th>
-            <th style="border:1px solid black">Email</th>
-            <th style="border:1px solid black">Active?</th>
-            <th style="border:1px solid black">Role</th>
+    <div style="overflow-x:auto; margin-top: -7px">
+        <table class="table table-light table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+            <tr class="table-header">
+                <th style="border:1px solid black">Full Name</th>
+                <th style="border:1px solid black">Username</th>
+                <th style="border:1px solid black">Email</th>
+                <th style="border:1px solid black">Active?</th>
+                <th style="border:1px solid black">Role</th>
 
-        </tr>
-    {% if users %}
-        {% set row = namespace(counter = 0) %}
-        {% for user in users %}
-            {% set row.counter = row.counter + 1 %}
-            {% if user['incorrect_login_attempts'] >= 3 %}
-                <tr style="background-color: goldenrod">
-            {% elif row.counter % 2 == 1 %}
-                <tr style="background-color:#CFCFCF; color: white">
-            {% else %}
-                <tr>
-            {% endif %}
-                <td>{{user['first_name']}} {{user['last_name']}}</td>
-                <td>{{user['username']}}</td>
-                <td><a href="mailto:{{user['email_address']}}">{{user['email_address']}}</a></td>
+            </tr>
+            {% if users %}
+                {% set row = namespace(counter = 0) %}
+                {% for user in users %}
+                    {% set row.counter = row.counter + 1 %}
+                    {% if user['incorrect_login_attempts'] >= 3 %}
+                        <tr style="background-color: goldenrod">
+                            {% elif row.counter % 2 == 1 %}
+                        <tr style="background-color:#CFCFCF; color: white">
+                            {% else %}
+                        <tr>
+                    {% endif %}
+                <td>{{ user['first_name'] }} {{ user['last_name'] }}</td>
+                <td>{{ user['username'] }}</td>
+                <td><a href="mailto:{{ user['email_address'] }}">{{ user['email_address'] }}</a></td>
 
                 {% if user['active'] == 1 %}
                     <td style="background-color: green">
@@ -65,18 +65,27 @@
                         User
                     </td>
                 {% endif %}
-                <td style="background-color: white"><button  data-toggle="tooltip" data-placement="top" title="Edit existing user account" type="button" style="display: block; margin: auto" onclick="window.location.href='{{ url_for('auth.edit_user', username=user['username'])}}'">Edit</button></td>
-            </tr>
-        {% endfor %}
-    {% else %}
-        <tr>
-            <td>No users found!</td>
-        </tr>
-    {% endif %}
+                <td style="background-color: white">
+                    <button data-toggle="tooltip" data-placement="top" title="Edit existing user account" type="button"
+                            style="display: block; margin: auto"
+                            onclick="window.location.href='{{ url_for('auth.edit_user', username=user['username']) }}'">
+                        Edit
+                    </button>
+                </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>No users found!</td>
+                </tr>
+            {% endif %}
 
-    </table>
+        </table>
     </div>
- <button  data-toggle="tooltip" data-placement="top" title="Create a new user account" type="button" style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 150px" onclick="window.location.href='{{ url_for('auth.register')}}'">Create user</button>
+    <button data-toggle="tooltip" data-placement="top" title="Create a new user account" type="button"
+            style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 150px"
+            onclick="window.location.href='{{ url_for('auth.register') }}'">Create user
+    </button>
 {% endblock %}
 
 

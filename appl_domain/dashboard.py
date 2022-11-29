@@ -1,5 +1,4 @@
 from appl_domain.db import get_db
-import datetime
 
 
 def get_assets():
@@ -86,7 +85,6 @@ def get_journal_entries(username):
     ).fetchall()
 
     return entries
-
 
 
 def get_next_suspension(username):

@@ -1,9 +1,11 @@
 import smtplib
 import ssl
-from flask import url_for
-from appl_domain.db import get_db
 from email.message import EmailMessage
 from email.mime.text import MIMEText
+
+from flask import url_for
+
+from appl_domain.db import get_db
 
 EMAIL_PASSWORD = 'gfiwyydznrfioixh'
 SENDER = 'noreply.bookkeepingbuddy@gmail.com'

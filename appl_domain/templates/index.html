@@ -50,14 +50,14 @@
             </div>
         </div>
     {% else %}
-        <div class = "Welcome-text">
+        <div class="Welcome-text">
             <p style="font-weight: bolder; color: white">Welcome to Bookkeeping Buddy!</p>
             <br>
             <p>Please log in or register for an account to continue</p>
         </div>
     {% endif %}
-</body>
-</html>
+    </body>
+    </html>
     <script type="text/javascript">
         // Load google charts
         // Load Charts and the corechart and guage packages.
@@ -73,11 +73,11 @@
             data.addColumn('number', 'Amount');
             data.addRows([
                 ['Assets', {{ assets }}],
-                ['Liability', {{ liabilities }}],
+                ['Liabilities', {{ liabilities }}],
             ]);
 
             var piechart_options = {
-                title: 'Assets and Liability Distribution',
+                title: 'Asset and Liability Distribution',
                 width: 500,
                 height: 300,
             };
@@ -156,7 +156,7 @@
 
             Equitychart.draw(data, options);
         }
-</script>
+    </script>
 {% endblock %}
 
 

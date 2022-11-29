@@ -1,245 +1,278 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<style>
- body{
-    align-items:center;
-    justify-content: center;
-}
-.container{
-   position: relative;
-    max-width: 500px;
-    width: 80%;
-    border-radius: 6px;
-    padding: 30px;
-    margin-top: 10vh;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: black;
-}
-.container h1{
-    font-size : x-large;
-    font-weight: bold;
-    color: white;
-    text-align: center;
-}
-.container form{
-    position: relative;
-    margin-top:16px;
-    min-height: 400px;
-    background: black;
-}
-.container form .personal{
-    margin-top: 30px;
-}
-.container form .fields{
-    display: flex;
-    align-content: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-form .fields .input-field{
-    display: block;
-        width: 100%;
-}
-.input-field label{
-    font-size: 14px;
-    font-weight: bold;
-    color: #185DFF;
+    <style>
+        body {
+            align-items: center;
+            justify-content: center;
+        }
 
-}
-.input-field input{
-     width: 100%;
-    outline: none;
-    color: #333;
-    font-size: 14px;
-    border: 1px solid #F89E19;
-    border-radius: 5px;
-    color: black;
-    height: 42px;
-    margin: 8px 0;
-}
-.container form .submit{
-    background-color: #185DFF;
-        color: white;
-        padding: 10px 20px;
-        margin-top: 20px;
-        margin-bottom: 30px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        width: 100%;
-        opacity: 0.9;
-        font-size: 14px;
-}
-.container button{
-    background-color: #185DFF;
-        color: white;
-        padding: 10px 20px;
-        margin-top: 20px;
-        margin-bottom: 30px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        width: 100%;
-        opacity: 0.9;
-        font-size: 14px;
-}
-.container form p{
-    margin-top: -45px;
-}
- @media screen and (max-width: 830px) {
-  .container {
-    position: relative;
-    max-width: 380px;
-    width: 80%;
-    border-radius: 6px;
-    padding: 30px;
-    margin-top: 10vh;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: black;
-  }
-     .container form{
-    position: relative;
-    margin-top:16px;
-    min-height: 400px;
-    background: black;
-}
-    .input-field label{
-        font-size: 14px;
-        font-weight: bold;
-        color: #185DFF;
-    }
-    .input-field input{
-        width: 85%;
-        outline: none;
-        color: #333;
-        font-size: 14px;
-        border: 1px solid #F89E19;
-        border-radius: 5px;
-        height: 42px;
-        margin: 8px 0;
-    }
-    form .fields .input-field{
-        display: block;
-        width: 100%;
-    }
+        .container {
+            position: relative;
+            max-width: 500px;
+            width: 80%;
+            border-radius: 6px;
+            padding: 30px;
+            margin-top: 10vh;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: black;
+        }
 
-    .container form .fields{
-        display: block;
-        width: 100%
-    }
-    .container form .submit{
-        margin-left: 0px;
-        width: 100%;
-        margin-bottom: 10px;
-        margin-top: 0px;
-    }
-    .container form p{
-        margin-top: 30px;
-    }
-    .container form button{
-        margin-left: 0px;
-        width: 100%;
-    }
+        .container h1 {
+            font-size: x-large;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+        }
 
-}
+        .container form {
+            position: relative;
+            margin-top: 16px;
+            min-height: 400px;
+            background: black;
+        }
 
-@media screen and (max-width: 600px) {
-  .container {
-    position: relative;
-    max-width: 380px;
-    width: 80%;
-    border-radius: 6px;
-    padding: 30px;
-    margin-top:10vh;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: black;
-  }
-    .input-field label{
-        font-size: 14px;
-        font-weight: bold;
-        color: #185DFF;
-    }
-    .input-field input{
-        width: 100%;
-        outline: none;
-        color: #333;
-        font-size: 14px;
-        border: 1px solid #F89E19;
-        border-radius: 5px;
-        height: 42px;
-        margin: 8px 0;
-    }
+        .container form .personal {
+            margin-top: 30px;
+        }
 
-    form .fields .input-field{
-        display: block;
-        width: 100%;
-    }
+        .container form .fields {
+            display: flex;
+            align-content: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
 
-    .container form .fields{
-        display: block;
-        width: 100%
-    }
-    .container form .submit{
-        margin-left: 0px;
-        width: 100%;
-        margin-bottom: 10px;
-        margin-top: 0px;
-    }
-    .container form p{
-        margin-top: 30px;
-    }
-    .container form button{
-        margin-left: 0px;
-        width: 100%;
-    }
+        form .fields .input-field {
+            display: block;
+            width: 100%;
+        }
 
-}
-@media screen and (max-width: 390px) {
-  .container {
-      margin-top: 10vh;
-  }}
+        .input-field label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #185DFF;
 
-</style>
-<div class="container">
-     <h1>{% block title %}Account settings for {{ user['username'] }}{% endblock %}</h1>
-    <form method="post" enctype="multipart/form-data">
-        <div class = "form-first">
-            <div class = "personal details">
-                <div class = "fields">
-                    <div class = "input-field">
-                    <label for="email_address">Email Address</label>
-                        <input name="email_address" type = "email" id="email_address" required value="{{ user['email_address'] }}">
-                    </div>
-                    <div class = "input-field">
-                         <label for="first_name">First Name</label>
-                        <input name="first_name" id="first_name" required value="{{ user['first_name'] }}">
-                    </div>
-                    <div class = "input-field">
-                     <label for="last_name">Last Name</label>
-                        <input name="last_name" id="last_name" required value="{{ user['last_name'] }}">
-                    </div>
-                        <div class = "input-field">
-                    {% if user['active'] == 1 %}
-                            <label class = "show" for="active">Active?</label>
-                            <input type="checkbox" id="active" name= "active" value="active" checked style="height: 30px; ">
-                        {% else %}
-                            <label  class = "show" for="active">Active?</label>
-                            <input type="checkbox" id="active" name="active" value="active" style="height: 30px; ">
-                        {% endif %}
-                        {% if user['incorrect_login_attempts'] and user['incorrect_login_attempts'] >= 3 %}
-                        <p style="color: #185DFF; font-weight: bold; font-size: 16px">User account suspended for too many incorrect logins.</p>
-                            <br>
-                        <p style="color: #185DFF; font-weight: bold; font-size: 16px">Reset login attempts and activate account?</p>
-                        <button type="button" onclick="if (confirm('Are you sure you want to reactivate user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.reset_user', username=user['username'])}}'}">Reset</button>
-                        {% endif %}
+        }
+
+        .input-field input {
+            width: 100%;
+            outline: none;
+            color: #333;
+            font-size: 14px;
+            border: 1px solid #F89E19;
+            border-radius: 5px;
+            color: black;
+            height: 42px;
+            margin: 8px 0;
+        }
+
+        .container form .submit {
+            background-color: #185DFF;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .container button {
+            background-color: #185DFF;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .container form p {
+            margin-top: -45px;
+        }
+
+        @media screen and (max-width: 830px) {
+            .container {
+                position: relative;
+                max-width: 380px;
+                width: 80%;
+                border-radius: 6px;
+                padding: 30px;
+                margin-top: 10vh;
+                margin-left: auto;
+                margin-right: auto;
+                background-color: black;
+            }
+
+            .container form {
+                position: relative;
+                margin-top: 16px;
+                min-height: 400px;
+                background: black;
+            }
+
+            .input-field label {
+                font-size: 14px;
+                font-weight: bold;
+                color: #185DFF;
+            }
+
+            .input-field input {
+                width: 85%;
+                outline: none;
+                color: #333;
+                font-size: 14px;
+                border: 1px solid #F89E19;
+                border-radius: 5px;
+                height: 42px;
+                margin: 8px 0;
+            }
+
+            form .fields .input-field {
+                display: block;
+                width: 100%;
+            }
+
+            .container form .fields {
+                display: block;
+                width: 100%
+            }
+
+            .container form .submit {
+                margin-left: 0px;
+                width: 100%;
+                margin-bottom: 10px;
+                margin-top: 0px;
+            }
+
+            .container form p {
+                margin-top: 30px;
+            }
+
+            .container form button {
+                margin-left: 0px;
+                width: 100%;
+            }
+
+        }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                position: relative;
+                max-width: 380px;
+                width: 80%;
+                border-radius: 6px;
+                padding: 30px;
+                margin-top: 10vh;
+                margin-left: auto;
+                margin-right: auto;
+                background-color: black;
+            }
+
+            .input-field label {
+                font-size: 14px;
+                font-weight: bold;
+                color: #185DFF;
+            }
+
+            .input-field input {
+                width: 100%;
+                outline: none;
+                color: #333;
+                font-size: 14px;
+                border: 1px solid #F89E19;
+                border-radius: 5px;
+                height: 42px;
+                margin: 8px 0;
+            }
+
+            form .fields .input-field {
+                display: block;
+                width: 100%;
+            }
+
+            .container form .fields {
+                display: block;
+                width: 100%
+            }
+
+            .container form .submit {
+                margin-left: 0px;
+                width: 100%;
+                margin-bottom: 10px;
+                margin-top: 0px;
+            }
+
+            .container form p {
+                margin-top: 30px;
+            }
+
+            .container form button {
+                margin-left: 0px;
+                width: 100%;
+            }
+
+        }
+
+        @media screen and (max-width: 390px) {
+            .container {
+                margin-top: 10vh;
+            }
+        }
+
+    </style>
+    <div class="container">
+        <h1>{% block title %}Account settings for {{ user['username'] }}{% endblock %}</h1>
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-first">
+                <div class="personal details">
+                    <div class="fields">
+                        <div class="input-field">
+                            <label for="email_address">Email Address</label>
+                            <input name="email_address" type="email" id="email_address" required
+                                   value="{{ user['email_address'] }}">
                         </div>
-                    <div class = "input-field">
-                        <label for="role">Role</label><br>
-                        <select name="role" id="role" style="width: 100%;
+                        <div class="input-field">
+                            <label for="first_name">First Name</label>
+                            <input name="first_name" id="first_name" required value="{{ user['first_name'] }}">
+                        </div>
+                        <div class="input-field">
+                            <label for="last_name">Last Name</label>
+                            <input name="last_name" id="last_name" required value="{{ user['last_name'] }}">
+                        </div>
+                        <div class="input-field">
+                            {% if user['active'] == 1 %}
+                                <label class="show" for="active">Active?</label>
+                                <input type="checkbox" id="active" name="active" value="active" checked
+                                       style="height: 30px; ">
+                            {% else %}
+                                <label class="show" for="active">Active?</label>
+                                <input type="checkbox" id="active" name="active" value="active" style="height: 30px; ">
+                            {% endif %}
+                            {% if user['incorrect_login_attempts'] and user['incorrect_login_attempts'] >= 3 %}
+                                <p style="color: #185DFF; font-weight: bold; font-size: 16px">User account suspended for
+                                    too many incorrect logins.</p>
+                                <br>
+                                <p style="color: #185DFF; font-weight: bold; font-size: 16px">Reset login attempts and
+                                    activate account?</p>
+                                <button type="button"
+                                        onclick="if (confirm('Are you sure you want to reactivate user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.reset_user', username=user['username']) }}'}">
+                                    Reset
+                                </button>
+                            {% endif %}
+                        </div>
+                        <div class="input-field">
+                            <label for="role">Role</label><br>
+                            <select name="role" id="role" style="width: 100%;
                         outline: none;
                         color: #333;
                         font-size: 14px;
@@ -248,91 +281,106 @@ form .fields .input-field{
                         color: black;
                         height: 42px;
                         margin: 8px 0;">
-                        <option value="0" {% if user['role'] == 0 %} selected {% endif %}>User</option>
-                        <option value="1" {% if user['role'] == 1 %} selected {% endif %}>Manager</option>
-                        <option value="2" {% if user['role'] == 2 %} selected {% endif %}>Administrator</option>
-                    </select>
+                                <option value="0" {% if user['role'] == 0 %} selected {% endif %}>User</option>
+                                <option value="1" {% if user['role'] == 1 %} selected {% endif %}>Manager</option>
+                                <option value="2" {% if user['role'] == 2 %} selected {% endif %}>Administrator</option>
+                            </select>
                         </div>
-                    <div class = "input-field">
+                        <div class="input-field">
                             <label for="address">Address</label>
-                        <input name="address" id="address" required value="{{ user['address'] }}">
-                    </div><br>
-
-                   <div class = "input-field">
-                        <label for="DOB">Date of birth (YYYY-MM-DD)</label>
-                        <input name="DOB" id="DOB" required value="{{ user['DOB'] }}">
-                    </div>
-
-                     <label for = "heading" style = "font-size: 16px; font-weight: bold; color: #185DFF; margin-left: 0px">Suspend user account from:</label>
-                    <div class = "input-field">
-                       <label for="suspend_start_date">Start</label>
-                            {% if user['suspend_start_date'] %}
-                            <input type="date" name="suspend_start_date" id="suspend_start_date" value="{{ user['suspend_start_date'] }}" style="width: 100%;
-                                outline: none;
-                                color: #333;
-                                font-size: 14px;
-                                border: 1px solid #F89E19;
-                                border-radius: 5px;
-                                color: black;
-                                height: 42px;
-                                margin: 8px 0;">
-                            {% else %}
-                            <input type="date" name="suspend_start_date" id="suspend_start_date" style="width: 100%;
-                                outline: none;
-                                color: #333;
-                                font-size: 14px;
-                                border: 1px solid #F89E19;
-                                border-radius: 5px;
-                                color: black;
-                                height: 42px;
-                                margin: 8px 0;">
-                            {% endif %}
-                    </div>
-                    <div class = "input-field">
-                         <label for="suspend_end_date">End</label>
-                            {% if user['suspend_end_date'] %}
-                            <input type="date" name="suspend_end_date" id="suspend_end_date" value="{{ user['suspend_end_date'] }}" style="width: 100%;
-                                outline: none;
-                                color: #333;
-                                font-size: 14px;
-                                border: 1px solid #F89E19;
-                                border-radius: 5px;
-                                color: black;
-                                height: 42px;
-                                margin: 8px 0;">
-                            {% else %}
-                            <input type="date" name="suspend_end_date" id="suspend_end_date" style="width: 100%;
-                                outline: none;
-                                color: #333;
-                                font-size: 14px;
-                                border: 1px solid #F89E19;
-                                border-radius: 5px;
-                                color: black;
-                                height: 42px;
-                                margin: 8px 0;">
-                            {% endif %}
-                    </div>
-                    <div>
-                     <input  data-toggle="tooltip" data-placement="top" title="Save changes to user account" type="submit" class = "submit" value="Save changes">
-                    </div>
-                    <div>
-                     <button  data-toggle="tooltip" data-placement="top" title="Delete user account" class = "submit" style="margin-right: 30px; color: white" type="button" onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username'])}}'}">Delete user</button>
-                    </div>
-                    <div>
-                     <button  data-toggle="tooltip" data-placement="top" title="Go to previous page" class = "submit" id = "back" type="button" onclick="window.location.href='{{ url_for('auth.manage_users')}}'" style="margin-right: 30px; ">Back</button>
-                    </div>
-                    <div class="instructions" style="color: white; margin-top: 12px;margin-left: 15px;text-align: center">
-                        <p style="color: white; margin-top: 12px;margin-left: -20px;text-align: left">
-                            Password last refreshed on {{ user['password_refresh_date'] }}<br>
-                            Password will expire on {{ password_expires }}
-                        </p>
+                            <input name="address" id="address" required value="{{ user['address'] }}">
+                        </div>
                         <br>
+
+                        <div class="input-field">
+                            <label for="DOB">Date of birth (YYYY-MM-DD)</label>
+                            <input name="DOB" id="DOB" required value="{{ user['DOB'] }}">
+                        </div>
+
+                        <label for="heading"
+                               style="font-size: 16px; font-weight: bold; color: #185DFF; margin-left: 0px">Suspend user
+                            account from:</label>
+                        <div class="input-field">
+                            <label for="suspend_start_date">Start</label>
+                            {% if user['suspend_start_date'] %}
+                                <input type="date" name="suspend_start_date" id="suspend_start_date"
+                                       value="{{ user['suspend_start_date'] }}" style="width: 100%;
+                                outline: none;
+                                color: #333;
+                                font-size: 14px;
+                                border: 1px solid #F89E19;
+                                border-radius: 5px;
+                                color: black;
+                                height: 42px;
+                                margin: 8px 0;">
+                            {% else %}
+                                <input type="date" name="suspend_start_date" id="suspend_start_date" style="width: 100%;
+                                outline: none;
+                                color: #333;
+                                font-size: 14px;
+                                border: 1px solid #F89E19;
+                                border-radius: 5px;
+                                color: black;
+                                height: 42px;
+                                margin: 8px 0;">
+                            {% endif %}
+                        </div>
+                        <div class="input-field">
+                            <label for="suspend_end_date">End</label>
+                            {% if user['suspend_end_date'] %}
+                                <input type="date" name="suspend_end_date" id="suspend_end_date"
+                                       value="{{ user['suspend_end_date'] }}" style="width: 100%;
+                                outline: none;
+                                color: #333;
+                                font-size: 14px;
+                                border: 1px solid #F89E19;
+                                border-radius: 5px;
+                                color: black;
+                                height: 42px;
+                                margin: 8px 0;">
+                            {% else %}
+                                <input type="date" name="suspend_end_date" id="suspend_end_date" style="width: 100%;
+                                outline: none;
+                                color: #333;
+                                font-size: 14px;
+                                border: 1px solid #F89E19;
+                                border-radius: 5px;
+                                color: black;
+                                height: 42px;
+                                margin: 8px 0;">
+                            {% endif %}
+                        </div>
+                        <div>
+                            <input data-toggle="tooltip" data-placement="top" title="Save changes to user account"
+                                   type="submit" class="submit" value="Save changes">
+                        </div>
+                        <div>
+                            <button data-toggle="tooltip" data-placement="top" title="Delete user account"
+                                    class="submit" style="margin-right: 30px; color: white" type="button"
+                                    onclick="if (confirm('Are you sure you want to delete user {{ user['username'] }}?')) {window.location.href='{{ url_for('auth.delete_user', username=user['username']) }}'}">
+                                Delete user
+                            </button>
+                        </div>
+                        <div>
+                            <button data-toggle="tooltip" data-placement="top" title="Go to previous page"
+                                    class="submit" id="back" type="button"
+                                    onclick="window.location.href='{{ url_for('auth.manage_users') }}'"
+                                    style="margin-right: 30px; ">Back
+                            </button>
+                        </div>
+                        <div class="instructions"
+                             style="color: white; margin-top: 12px;margin-left: 15px;text-align: center">
+                            <p style="color: white; margin-top: 12px;margin-left: -20px;text-align: left">
+                                Password last refreshed on {{ user['password_refresh_date'] }}<br>
+                                Password will expire on {{ password_expires }}
+                            </p>
+                            <br>
+                        </div>
+
+
                     </div>
-
-
                 </div>
             </div>
-            </div>
         </form>
-</div>
+    </div>
 {% endblock %}

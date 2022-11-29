@@ -1,326 +1,350 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<style>
-    *{
-        box-sizing: border-box;
-    }
-    body{
-    align-items:center;
-    justify-content: center;
-}
-.container{
-    position: relative;
-    max-width: 900px;
-    width: 100%;
-    border-radius: 6px;
-    padding: 30px;
-    margin-top: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: black;
-}
-.container header{
-    font-size : x-large;
-    font-weight: bold;
-    color: white;
-    text-align: center;
-}
-.container form{
-    position: relative;
-    margin-top:16px;
-    min-height: 400px;
-    background: black;
-}
-.container form .personal{
-    margin-top: 30px;
-}
-.container form .fields{
-    display: flex;
-    align-content: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-form .fields .input-field{
-    display: flex;
-    width: calc(100%/3 - 15px);
-    flex-direction: column;
-    margin: 4px 0;
-}
-.input-field label{
-   font-size: 14px;
-    font-weight: bold;
-    color: #185DFF;
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-}
-.input-field input{
-    outline: none;
-    font-size: 14px;
-    font-weight: 400;
-    color: #333;
-    border-radius: 5px;
-    border: 1px solid #F89E19;
-    padding:  0 15px;
-    height: 42px;
-    margin: 8px 0;
-}
-.container form .submit{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 40px;
-    max-width: 300px;
-    width:100%;
-    border: none;
-    outline: none;
-    color: white;
-    border-radius: 6px;
-    background-color: #185DFF;
-    margin-left: 300px;
-    margin: auto;
-}
-#message {
-  display:none;
-  background: #000000;
-  color: #000;
-  position: relative;
-  padding: 10px;
-  margin-top: 10px;
-}
+        body {
+            align-items: center;
+            justify-content: center;
+        }
 
-#message p {
-  padding: 5px 35px;
-  font-size: 18px;
-}
+        .container {
+            position: relative;
+            max-width: 900px;
+            width: 100%;
+            border-radius: 6px;
+            padding: 30px;
+            margin-top: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: black;
+        }
 
-/* Add a green text color and a checkmark when the requirements are right */
-.valid {
-  color: green;
-}
+        .container header {
+            font-size: x-large;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+        }
 
-.valid:before {
-  position: relative;
-  left: -35px;
-  content: "✔";
-}
+        .container form {
+            position: relative;
+            margin-top: 16px;
+            min-height: 400px;
+            background: black;
+        }
 
-/* Add a red text color and an "x" when the requirements are wrong */
-.invalid {
-  color: red;
-}
+        .container form .personal {
+            margin-top: 30px;
+        }
 
-.invalid:before {
-  position: relative;
-  left: -35px;
-  content: "✖";
-}
-@media screen and (max-width: 600px) {
-  .container {
-    position: relative;
-    max-width: 380px;
-    width: 90%;
-    border-radius: 6px;
-    padding: 30px;
-    margin-top: 10vh;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: black;
-  }
-    .container form{
-    position: relative;
-    margin-top:16px;
-    min-height: 400px;
-    background: black;
-}
-    .input-field label{
-        font-size: 14px;
-        font-weight: bold;
-        color: #185DFF;
-    }
-    .input-field input{
-        width: 100%;
-        outline: none;
-        color: #333;
-        font-size: 14px;
-        border: 1px solid #F89E19;
-        border-radius: 5px;
-        height: 42px;
-        margin: 8px 0;
-    }
-    form .fields .input-field{
-        display: block;
-        width: 100%;
-    }
+        .container form .fields {
+            display: flex;
+            align-content: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
 
-    .container form .fields{
-        display: block;
-        width: 100%
-    }
-    .container form .submit{
-        margin-left: 0px;
-        width: 100%;
+        form .fields .input-field {
+            display: flex;
+            width: calc(100% / 3 - 15px);
+            flex-direction: column;
+            margin: 4px 0;
+        }
 
-    }
-}
-@media screen and (max-width: 390px) {
-  .container {
-      margin-top: 10vh;
-  }}
+        .input-field label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #185DFF;
+
+        }
+
+        .input-field input {
+            outline: none;
+            font-size: 14px;
+            font-weight: 400;
+            color: #333;
+            border-radius: 5px;
+            border: 1px solid #F89E19;
+            padding: 0 15px;
+            height: 42px;
+            margin: 8px 0;
+        }
+
+        .container form .submit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            max-width: 300px;
+            width: 100%;
+            border: none;
+            outline: none;
+            color: white;
+            border-radius: 6px;
+            background-color: #185DFF;
+            margin-left: 300px;
+            margin: auto;
+        }
+
+        #message {
+            display: none;
+            background: #000000;
+            color: #000;
+            position: relative;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        #message p {
+            padding: 5px 35px;
+            font-size: 18px;
+        }
+
+        /* Add a green text color and a checkmark when the requirements are right */
+        .valid {
+            color: green;
+        }
+
+        .valid:before {
+            position: relative;
+            left: -35px;
+            content: "✔";
+        }
+
+        /* Add a red text color and an "x" when the requirements are wrong */
+        .invalid {
+            color: red;
+        }
+
+        .invalid:before {
+            position: relative;
+            left: -35px;
+            content: "✖";
+        }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                position: relative;
+                max-width: 380px;
+                width: 90%;
+                border-radius: 6px;
+                padding: 30px;
+                margin-top: 10vh;
+                margin-left: auto;
+                margin-right: auto;
+                background-color: black;
+            }
+
+            .container form {
+                position: relative;
+                margin-top: 16px;
+                min-height: 400px;
+                background: black;
+            }
+
+            .input-field label {
+                font-size: 14px;
+                font-weight: bold;
+                color: #185DFF;
+            }
+
+            .input-field input {
+                width: 100%;
+                outline: none;
+                color: #333;
+                font-size: 14px;
+                border: 1px solid #F89E19;
+                border-radius: 5px;
+                height: 42px;
+                margin: 8px 0;
+            }
+
+            form .fields .input-field {
+                display: block;
+                width: 100%;
+            }
+
+            .container form .fields {
+                display: block;
+                width: 100%
+            }
+
+            .container form .submit {
+                margin-left: 0px;
+                width: 100%;
+
+            }
+        }
+
+        @media screen and (max-width: 390px) {
+            .container {
+                margin-top: 10vh;
+            }
+        }
 
 
-</style>
+    </style>
 
-<div class = container>
-    <header>
-    {% block title %}
-    {% if (g.user) and (g.user['role'] == 2) %}
-        Create a new account
-    {% else %}
-        Register for a new account
-    {% endif %}
-    {% endblock %}
-    </header>
-    <form method="post">
-            <div class = "personal details">
-                <div class = "fields">
-                    <div class = "input-field">
-                        <label for="email_address" >Email Address</label>
-                        <input name="email_address" type ="email" placeholder="Enter email address" id="email_address" required>
+    <div class=container>
+        <header>
+            {% block title %}
+                {% if (g.user) and (g.user['role'] == 2) %}
+                    Create a new account
+                {% else %}
+                    Register for a new account
+                {% endif %}
+            {% endblock %}
+        </header>
+        <form method="post">
+            <div class="personal details">
+                <div class="fields">
+                    <div class="input-field">
+                        <label for="email_address">Email Address</label>
+                        <input name="email_address" type="email" placeholder="Enter email address" id="email_address"
+                               required>
                     </div>
-                    <div class = "input-field">
-                        <label for="password" >Password</label>
+                    <div class="input-field">
+                        <label for="password">Password</label>
                         <input type="password" name="password" placeholder="Enter password" id="password"
-                               title="Must start with a letter, contain at least one number and one special character and have at least 8 or more characters" required>
+                               title="Must start with a letter, contain at least one number and one special character and have at least 8 or more characters"
+                               required>
                     </div>
-                    <div class = "input-field">
-                        <label for="first_name" >First Name</label>
-                        <input name="first_name" placeholder="Enter first name" id="first_name" required >
+                    <div class="input-field">
+                        <label for="first_name">First Name</label>
+                        <input name="first_name" placeholder="Enter first name" id="first_name" required>
                     </div>
-                    <div class = "input-field">
-                        <label for="last_name" >Last Name</label>
-                        <input name="last_name" placeholder="Enter last name" id="last_name" required >
+                    <div class="input-field">
+                        <label for="last_name">Last Name</label>
+                        <input name="last_name" placeholder="Enter last name" id="last_name" required>
                     </div>
-                    <div class = "input-field">
-                        <label for="address" >Address</label>
-                        <input name="address" placeholder="Enter address" id="address" required >
+                    <div class="input-field">
+                        <label for="address">Address</label>
+                        <input name="address" placeholder="Enter address" id="address" required>
                     </div>
-                    <div class = "input-field">
-                        <label for="DOB" >Date of birth (MM-DD-YYYY)</label>
-                        <input type = "date" name="DOB" id="DOB" required >
+                    <div class="input-field">
+                        <label for="DOB">Date of birth (MM-DD-YYYY)</label>
+                        <input type="date" name="DOB" id="DOB" required>
                     </div>
-                    <div class = "input-field">
-                        <label for="first_pet" >Name of your first pet</label>
-                        <input name="first_pet" placeholder="Enter first pet" id="first_pet" required >
+                    <div class="input-field">
+                        <label for="first_pet">Name of your first pet</label>
+                        <input name="first_pet" placeholder="Enter first pet" id="first_pet" required>
                     </div>
-                    <div class = "input-field">
-                        <label for="city_born" >City you were born in</label>
-                        <input name="city_born" placeholder="Enter city born" id="city_born" required >
+                    <div class="input-field">
+                        <label for="city_born">City you were born in</label>
+                        <input name="city_born" placeholder="Enter city born" id="city_born" required>
                     </div>
-                    <div class = "input-field">
-                        <label for="year_graduated_hs" >Year you graduated highschool</label>
-                        <input name="year_graduated_hs" placeholder="Enter graduation year" id="year_graduated_hs" required >
+                    <div class="input-field">
+                        <label for="year_graduated_hs">Year you graduated highschool</label>
+                        <input name="year_graduated_hs" placeholder="Enter graduation year" id="year_graduated_hs"
+                               required>
                     </div>
-                        {% if (g.user) and (g.user['role'] == 2) %}
-                            <input  data-toggle="tooltip" data-placement="top" title="Create new user account" class = "submit" type="submit" value="Create" >
-                        {% else %}
-                            <input  data-toggle="tooltip" data-placement="top" title="Register new user account" class = "submit" type="submit" value="Register"  >
-                        {% endif %}
+                    {% if (g.user) and (g.user['role'] == 2) %}
+                        <input data-toggle="tooltip" data-placement="top" title="Create new user account" class="submit"
+                               type="submit" value="Create">
+                    {% else %}
+                        <input data-toggle="tooltip" data-placement="top" title="Register new user account"
+                               class="submit" type="submit" value="Register">
+                    {% endif %}
                 </div>
             </div>
 
-       <div id="message" style="color:#185DFF">
-          <h3>Password must contain the following:</h3>
-          <p id="length" class="invalid">A <b>minimum of 8 characters</b></p>
-          <p id="letter" class="invalid">Must <b>start with a letter</b> </p>
-          <p id="alphabet" class="invalid"><b>Must have a letter</b></p>
-          <p id="number" class="invalid">At least <b>1 number </b></p>
-           <p id="specialChar" class="invalid">At least <b>1 special character from this list: !@#$%^&*</b></p>
-       </div>
-    </form>
+            <div id="message" style="color:#185DFF">
+                <h3>Password must contain the following:</h3>
+                <p id="length" class="invalid">A <b>minimum of 8 characters</b></p>
+                <p id="letter" class="invalid">Must <b>start with a letter</b></p>
+                <p id="alphabet" class="invalid"><b>Must have a letter</b></p>
+                <p id="number" class="invalid">At least <b>1 number </b></p>
+                <p id="specialChar" class="invalid">At least <b>1 special character from this list: !@#$%^&*</b></p>
+            </div>
+        </form>
     </div>
 
 
     <script>
 
-            var myInput = document.getElementById("password");
-            var letter = document.getElementById("letter");
-            var alphabet = document.getElementById("alphabet");
-            var number = document.getElementById("number");
-            var length = document.getElementById("length");
-            var specialChar = document.getElementById("specialChar");
+        var myInput = document.getElementById("password");
+        var letter = document.getElementById("letter");
+        var alphabet = document.getElementById("alphabet");
+        var number = document.getElementById("number");
+        var length = document.getElementById("length");
+        var specialChar = document.getElementById("specialChar");
 
         // When the user clicks on the password field, show the message box
-        myInput.onfocus = function() {
-          document.getElementById("message").style.display = "block";
+        myInput.onfocus = function () {
+            document.getElementById("message").style.display = "block";
         }
 
         // When the user clicks outside of the password field, hide the message box
-        myInput.onblur = function() {
-          document.getElementById("message").style.display = "none";
+        myInput.onblur = function () {
+            document.getElementById("message").style.display = "none";
         }
 
         // When the user starts to type something inside the password field
-        myInput.onkeyup = function() {
-          // Validate starts with a letter
-          var lowerCaseLetters = /^[a-zA-Z]/g;
-          if(myInput.value.match(lowerCaseLetters)) {
-            letter.classList.remove("invalid");
-            letter.classList.add("valid");
-          } else {
-            letter.classList.remove("valid");
-            letter.classList.add("invalid");
-          }
+        myInput.onkeyup = function () {
+            // Validate starts with a letter
+            var lowerCaseLetters = /^[a-zA-Z]/g;
+            if (myInput.value.match(lowerCaseLetters)) {
+                letter.classList.remove("invalid");
+                letter.classList.add("valid");
+            } else {
+                letter.classList.remove("valid");
+                letter.classList.add("invalid");
+            }
 
-          // Validate contains a letter other than the first letter
-          var upperCaseLetters = /[a-zA-Z]/g;
-          if(myInput.value.match(upperCaseLetters)) {
-            alphabet.classList.remove("invalid");
-            alphabet.classList.add("valid");
-          } else {
-            alphabet.classList.remove("valid");
-            alphabet.classList.add("invalid");
-          }
+            // Validate contains a letter other than the first letter
+            var upperCaseLetters = /[a-zA-Z]/g;
+            if (myInput.value.match(upperCaseLetters)) {
+                alphabet.classList.remove("invalid");
+                alphabet.classList.add("valid");
+            } else {
+                alphabet.classList.remove("valid");
+                alphabet.classList.add("invalid");
+            }
 
-          // Validate numbers
-          var numbers = /[0-9]/g;
-          if(myInput.value.match(numbers)) {
-            number.classList.remove("invalid");
-            number.classList.add("valid");
-          } else {
-            number.classList.remove("valid");
-            number.classList.add("invalid");
-          }
+            // Validate numbers
+            var numbers = /[0-9]/g;
+            if (myInput.value.match(numbers)) {
+                number.classList.remove("invalid");
+                number.classList.add("valid");
+            } else {
+                number.classList.remove("valid");
+                number.classList.add("invalid");
+            }
 
-          // Validate length is above 8
-          if(myInput.value.length >= 8) {
-            length.classList.remove("invalid");
-            length.classList.add("valid");
-          } else {
-            length.classList.remove("valid");
-            length.classList.add("invalid");
-          }
-          // Validate Special characters
+            // Validate length is above 8
+            if (myInput.value.length >= 8) {
+                length.classList.remove("invalid");
+                length.classList.add("valid");
+            } else {
+                length.classList.remove("valid");
+                length.classList.add("invalid");
+            }
+            // Validate Special characters
             var specialChars = /[!@#$%^&*]/g;
-            if(myInput.value.match(specialChars)){
+            if (myInput.value.match(specialChars)) {
                 specialChar.classList.remove("invalid");
                 specialChar.classList.add("valid");
-              } else {
+            } else {
                 specialChar.classList.remove("valid");
                 specialChar.classList.add("invalid");
-          }
+            }
         }
 
 
-          // Get the value of the input field with id="numb"
-          /*let x = document.getElementById("year_graduated_hs").value;
-          // If x is Not a Number or less than one or greater than 10
-          let text;
-          if (isNaN(x) || x < 1930 || x > 2011) {
-            text = "Input not valid";
-          } else {
-            text = "Input OK";
-          }
-          document.getElementById("error").innerHTML = text;*/
-        
+        // Get the value of the input field with id="numb"
+        /*let x = document.getElementById("year_graduated_hs").value;
+        // If x is Not a Number or less than one or greater than 10
+        let text;
+        if (isNaN(x) || x < 1930 || x > 2011) {
+          text = "Input not valid";
+        } else {
+          text = "Input OK";
+        }
+        document.getElementById("error").innerHTML = text;*/
+
     </script>
 {% endblock %}

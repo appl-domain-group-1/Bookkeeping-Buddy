@@ -7,10 +7,13 @@ import json
 import pickle
 
 import requests
+
 from appl_domain.email_tasks import send_email, SITE_URL
 
 # Uncomment based on where this is running
 HOST = "http://eexley1.pythonanywhere.com"
+
+
 # HOST = "http://localhost:5000"
 
 

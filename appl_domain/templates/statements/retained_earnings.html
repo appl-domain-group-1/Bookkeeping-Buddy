@@ -25,9 +25,9 @@
         </table>
         <br>
         <input style="display: block; border-color: #F89E19; padding: 10px; background-color: #185DFF; color: white; border-radius: 6px; width: 200px"
-                           data-toggle="tooltip" data-placement="top"
-                           title="View retained earnings statement for specified date range"
-                           class="submit" type="submit" value="View by date range">
+               data-toggle="tooltip" data-placement="top"
+               title="View retained earnings statement for specified date range"
+               class="submit" type="submit" value="View by date range">
     </form>
     <br>
 
@@ -77,7 +77,8 @@
                     </tr>
                     <tr>
                         <td style="width: 50%"><h6>Net Income</h6></td>
-                        <td style="width: 50%;font-weight: bold" class="show-comma"><h6>{{ total_revenue - total_expenses }}</h6></td>
+                        <td style="width: 50%;font-weight: bold" class="show-comma">
+                            <h6>{{ total_revenue - total_expenses }}</h6></td>
                     </tr>
                 </table>
             </td>
@@ -106,7 +107,8 @@
             <tfoot>
             <tr>
                 <th>Retained Earnings</th>
-                <th style="font-weight: bold" class="show-comma">{{ temp1.total_re + (total_revenue - total_expenses) - temp2.total_div }}</th>
+                <th style="font-weight: bold"
+                    class="show-comma">{{ temp1.total_re + (total_revenue - total_expenses) - temp2.total_div }}</th>
             </tr>
             </tfoot>
         </table>

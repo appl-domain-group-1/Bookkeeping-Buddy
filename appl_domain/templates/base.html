@@ -1,29 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
-  <head>
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-     <link rel="stylesheet" href="{{url_for('static', filename = 'index.css') }}"/>
-      <link rel="stylesheet" href="{{url_for('static', filename = 'datatable.css') }}"/>
-      <link rel="stylesheet" href="{{url_for('static', filename = 'dateTime.css') }}"/>
-      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-      <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src = "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
-    <script src = "https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
-          <link rel = "stylesheet" href = "https://cdn.datatables.net/fixedheader/3.2.3/css/fixedHeader.dataTables.min.css">
-        <script src = "https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"> </script>
-        <script src = "https://cdn.datatables.net/fixedheader/3.2.3/js/dataTables.fixedHeader.min.js"></script>
-      <script src="{{url_for('static', filename = 'sorttable.js') }}"></script>
-      <title>{% block title %}{% endblock %} - Bookkeeping Buddy</title>
-  </head>
-
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'index.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'datatable.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'dateTime.css') }}"/>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+          integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+          integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
+            integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.2.3/css/fixedHeader.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.2.3/js/dataTables.fixedHeader.min.js"></script>
+    <script src="{{ url_for('static', filename = 'sorttable.js') }}"></script>
+    <title>{% block title %}{% endblock %} - Bookkeeping Buddy</title>
+</head>
 
 
 <script type="text/javascript">
@@ -55,7 +64,9 @@
             var input_val = input.val();
 
             // don't validate empty input
-            if (input_val === "") { return; }
+            if (input_val === "") {
+                return;
+            }
 
             // original length
             var original_len = input_val.length;
@@ -127,7 +138,7 @@
         $(function () {
             $('.show-comma').each(function () {
                 let num = $(this).text();
-                let commaNum = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(num/100);
+                let commaNum = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(num / 100);
                 $(this).text(commaNum);
             });
         });
@@ -135,7 +146,7 @@
 
 </script>
 <style>
-    *{
+    * {
         margin: 0;
         padding: 0;
     }
@@ -143,12 +154,16 @@
 </style>
 <body>
 
-<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white" style="position: relative; z-index: 999; overflow: visible">
-    <a class="navbar-brand" href = {{ url_for('mainpage') }} > <img src="{{ url_for('static', filename='logo_cropped.png') }}" width="30" height="30" class="d-inline-block align-top" alt="Site logo">
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white"
+     style="position: relative; z-index: 999; overflow: visible">
+    <a class="navbar-brand" href={{ url_for('mainpage') }}> <img
+            src="{{ url_for('static', filename='logo_cropped.png') }}" width="30" height="30"
+            class="d-inline-block align-top" alt="Site logo">
         Bookkeeping Buddy
     </a>
-    {%  if g.user %}
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    {% if g.user %}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -158,27 +173,31 @@
                     <a class="nav-link" href="{{ url_for('auth.help') }}">Help</a>
                 </li>
             </ul>
-            <div id="username" >{{ g.user['username'] }}</div>
+            <div id="username">{{ g.user['username'] }}</div>
             <ul class="navbar-nav mr-right">
                 <li class="nav-item dropdown" style="position: relative; z-index: 999; overflow: visible">
                     {% if g.user['picture'] %}
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src="data:image/png;base64, {{ g.user["picture"] | make_image }}" class = "rounded-circle" width="30" height="30" alt="User's profile picture"/>
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="data:image/png;base64, {{ g.user["picture"] | make_image }}"
+                                 class="rounded-circle" width="30" height="30" alt="User's profile picture"/>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ url_for('auth.my_account') }}">My Account</a>
-                            <a class="dropdown-item" href="{{ url_for('auth.manage_users')}}" >Manage Users</a>
+                            <a class="dropdown-item" href="{{ url_for('auth.manage_users') }}">Manage Users</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log Out</a>
                         </div>
                     {% else %}
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src="{{ url_for('static', filename='no_photo.png') }}" class = "rounded-circle" width="30" height="30" alt="Placeholder profile picture"/>
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{{ url_for('static', filename='no_photo.png') }}" class="rounded-circle"
+                                 width="30" height="30" alt="Placeholder profile picture"/>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ url_for('auth.my_account') }}">My Account</a>
                             {% if g.user['role'] == 2 %}
-                                <a class="dropdown-item" href="{{ url_for('auth.manage_users')}}" >Manage Users</a>
+                                <a class="dropdown-item" href="{{ url_for('auth.manage_users') }}">Manage Users</a>
                             {% endif %}
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log Out</a>
@@ -189,7 +208,8 @@
         </div>
 
     {% else %}
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -207,58 +227,69 @@
         </div>
     {% endif %}
 </nav>
-{%  if g.user %}
+{% if g.user %}
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-        <div id="fullname" style="text-align: left; margin-right: 5vh; color: white">{{ g.user['first_name'] }} {{ g.user['last_name'] }}</div>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div id="fullname"
+             style="text-align: left; margin-right: 5vh; color: white">{{ g.user['first_name'] }} {{ g.user['last_name'] }}</div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-          <form  class="form-inline">
-        <div class = "row form-group">
-               <div>
-                   <i id = "datepicker" class = "fa fa-calendar" style="color: white"></i>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <form class="form-inline">
+                        <div class="row form-group">
+                            <div>
+                                <i id="datepicker" class="fa fa-calendar" style="color: white"></i>
 
-               </div>
-
-                        </div>
-      </li>
-        <li class="nav-item active">
-                        <div >
-                            <a href={{ url_for('fin_accts.email') }}><i class="fa fa-envelope" style="font-size:24px; color:white; padding-left:30px"></i></a>
+                            </div>
 
                         </div>
-        </li>
-                    </form>
-                    <script type="text/javascript">
-                        $(function(){
-                            $('#datepicker').datepicker();
-                        });
-                    </script>
+                </li>
+                <li class="nav-item active">
+                    <div>
+                        <a href={{ url_for('fin_accts.email') }}><i class="fa fa-envelope"
+                                                                    style="font-size:24px; color:white; padding-left:30px"></i></a>
+
+                    </div>
+                </li>
+                </form>
+                <script type="text/javascript">
+                    $(function () {
+                        $('#datepicker').datepicker();
+                    });
+                </script>
 
 
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-       <div class="dropdown">
-              <button  data-placement="top" title="Create and view financial account statements" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: white; color: #185DFF">Statements
-              <span class="caret"></span></button>
-              <ul class="dropdown-menu">
-                <li><a href="{{ url_for('statements.income_statement') }}">Income statement</a></li>
-                <li><a href="{{ url_for('statements.retained_earnings') }}">Retained earnings statement</a></li>
-                <li><a href="{{ url_for('statements.balance_sheet') }}">Balance sheet</a></li>
-                  <li><a href="{{ url_for('statements.trial_balance') }}">Trial Balance</a></li>
-              </ul>
-            </div>
- <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="View chart of accounts or create a new account" style = "background-color: white; color: #185DFF"  onclick="window.location.href='{{ url_for('fin_accts.view_accounts')}}'">Accounts</button>
-        <button type="button" class="btn btn-outline-primary" style = "background-color: white; color: #185DFF" data-toggle="tooltip" data-placement="top" title="Create and view journal entries" onclick="window.location.href='{{ url_for('journaling.journal') }}'">Journaling</button>
-{#            <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="View dashboard" style = "background-color: white; color: #185DFF" >Dashboard</button>#}
-    </form>
-  </div>
-</nav>
-   {% else %}
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <div class="dropdown">
+                    <button data-placement="top" title="Create and view financial account statements"
+                            class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
+                            style="background-color: white; color: #185DFF">Statements
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('statements.income_statement') }}">Income Statement</a></li>
+                        <li><a href="{{ url_for('statements.retained_earnings') }}">Retained Earnings</a></li>
+                        <li><a href="{{ url_for('statements.balance_sheet') }}">Balance Sheet</a></li>
+                        <li><a href="{{ url_for('statements.trial_balance') }}">Trial Balance</a></li>
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top"
+                        title="View chart of accounts or create a new account"
+                        style="background-color: white; color: #185DFF"
+                        onclick="window.location.href='{{ url_for('fin_accts.view_accounts') }}'">Accounts
+                </button>
+                <button type="button" class="btn btn-outline-primary" style="background-color: white; color: #185DFF"
+                        data-toggle="tooltip" data-placement="top" title="Create and view journal entries"
+                        onclick="window.location.href='{{ url_for('journaling.journal') }}'">Journaling
+                </button>
+            </form>
+        </div>
+    </nav>
+{% else %}
 {% endif %}
 </body>
 <section class="content">

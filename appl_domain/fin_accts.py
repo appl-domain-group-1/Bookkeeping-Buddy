@@ -1,13 +1,14 @@
-from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
+import json
+from datetime import datetime
+
+from flask import Blueprint, flash, g, redirect, render_template, request, url_for, abort
+
+from appl_domain.auth import login_required
 from appl_domain.db import get_db
 from appl_domain.email_tasks import send_email
-from datetime import date, datetime, timedelta
-from appl_domain.auth import login_required
-import json
-
-from appl_domain.statements import balance_sheet
 
 bp = Blueprint('fin_accts', __name__, url_prefix='/fin_accts')
+
 
 @bp.route('/create_acct', methods=('GET', 'POST'))
 @login_required
@@ -240,10 +241,10 @@ def edit_account(account_num):
                     # Update the row
                     db.execute(
                         "UPDATE accounts SET acct_name = ?, acct_desc = ?, acct_category = ?, acct_subcategory = ?, debit = ?, "
-                        "statement = ?, comment = ? WHERE acct_num = ?", (acct_name, acct_desc, acct_category, acct_subcategory,
-                                                                          debit, statement, comment, account_num)
+                        "statement = ?, comment = ? WHERE acct_num = ?",
+                        (acct_name, acct_desc, acct_category, acct_subcategory,
+                         debit, statement, comment, account_num)
                     )
-
 
                     # Log the change in the event logs table
                     db.execute(
@@ -420,6 +421,7 @@ def view_logs(account_num=None):
                            subcategories=subcat_dict,
                            statements=statements_dict)
 
+
 @bp.route('/email', methods=('GET', 'POST'))
 @login_required
 def email():
@@ -431,7 +433,7 @@ def email():
 
     # Get users' names and email addresses
     admins = db.execute(
-        "SELECT first_name, last_name, email_address FROM users WHERE role = ?", (2, )
+        "SELECT first_name, last_name, email_address FROM users WHERE role = ?", (2,)
     ).fetchall()
     managers = db.execute(
         "SELECT first_name, last_name, email_address FROM users WHERE role = ?", (1,)
